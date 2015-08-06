@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1"
+    android:background="#ffffff"
+    android:clickable="true">
+
+    <Button
+        android:layout_width="173dp"
+        android:layout_height="wrap_content"
+        android:text="Continue"
+        android:id="@+id/continue_button"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.03"
+        android:layout_marginTop="170dp"
+        />
+
+    <Button
+        android:layout_width="173dp"
+        android:layout_height="wrap_content"
+        android:text="New Cat"
+        android:id="@+id/new_cat_button"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.03"
+        android:layout_marginTop="10dp"
+        />
+
+    <Button
+        android:layout_width="174dp"
+        android:layout_height="wrap_content"
+        android:text="tutorial"
+        android:id="@+id/tutorial_button"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.03"
+        android:layout_marginTop="10dp"
+        />
+
+    <Button
+        android:layout_width="172dp"
+        android:layout_height="wrap_content"
+        android:text="Settings"
+        android:id="@+id/settings_button"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.04"
+        android:layout_marginTop="10dp"
+        />
+
+</LinearLayout>
