@@ -38,6 +38,23 @@ public class CatActivity extends Activity {
         super.onConfigurationChanged(newConfig);
 
     }
+
+    @Override
+    public void onBackPressed(){
+        int count = getFragmentManager().getBackStackEntryCount();
+
+        if (count == 0) {
+            //go to main activity and exit
+            Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.putExtra("EXIT", true);
+            startActivity(intent);
+            finish();
+            //additional code
+        } else {
+            getFragmentManager().popBackStack();
+        }
+    }
     /*
     startup methods, navigate to cat
      */
@@ -101,7 +118,7 @@ public class CatActivity extends Activity {
         if(catf!=null){
             ft.hide(catf);
         }
-
+        ft.addToBackStack("MAP");
         ft.commit();
     }
     public void toArt(){
@@ -116,7 +133,7 @@ public class CatActivity extends Activity {
         if(catf!=null){
             ft.hide(catf);
         }
-
+        ft.addToBackStack("ART");
         ft.commit();
     }
     public void toExtra(){

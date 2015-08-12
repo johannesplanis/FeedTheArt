@@ -36,7 +36,16 @@ public class MenuActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-        startup();
+        Intent intent = getIntent();
+        Boolean exit = intent.getBooleanExtra("EXIT",false);
+        System.out.println(exit);
+        if (exit==true){
+            finish();
+            System.out.println("Trouble!");
+        } else{
+            startup();
+        }
+
 
     }
 
@@ -56,6 +65,7 @@ public class MenuActivity extends Activity {
     Startup methods
      */
     public void startup(){
+
         Intent intent = getIntent();
         String type = intent.getStringExtra("TYPE");
 
@@ -104,7 +114,7 @@ public class MenuActivity extends Activity {
         if(mef.isAdded()){
             ft.show(mef);
         } else{
-            ft.add(R.id.menu_container, mef,"MEF");
+            ft.add(R.id.menu_container, mef, "MEF");
         }
 
         spf = (SplashFragment) getFragmentManager().findFragmentByTag("SPF");
@@ -119,6 +129,7 @@ public class MenuActivity extends Activity {
         if(ncf!=null){
             ft.hide(ncf);
         }
+
         ft.commit();
     }
     /*
@@ -134,12 +145,13 @@ public class MenuActivity extends Activity {
         if(ncf.isAdded()){
             ft.show(ncf);
         } else{
-            ft.add(R.id.menu_container,ncf,"NCF");
+            ft.add(R.id.menu_container, ncf, "NCF");
         }
         mef = (MenuFragment) getFragmentManager().findFragmentByTag("MEF");
         if(mef!=null){
             ft.hide(mef);
         }
+        ft.addToBackStack("NEWCAT");
         ft.commit();
     }
     public void toTutorial(){
@@ -154,7 +166,7 @@ public class MenuActivity extends Activity {
         if(mef!=null){
             ft.hide(mef);
         }
-
+        ft.addToBackStack("TUTORIAL");
         ft.commit();
     }
     public void toSettings(){
@@ -169,6 +181,7 @@ public class MenuActivity extends Activity {
         if(mef!=null){
             ft.hide(mef);
         }
+        ft.addToBackStack("SETTINGS");
         ft.commit();
     }
     /*
@@ -186,6 +199,7 @@ public class MenuActivity extends Activity {
         if(ncf!=null){
             ft.hide(ncf);
         }
+        ft.addToBackStack("CHOOSETONAME");
         ft.commit();
     }
     public void nameToChoose(){
