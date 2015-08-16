@@ -2,11 +2,13 @@ package catactivity;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.planis.johannes.catprototype.R;
 
@@ -54,7 +56,9 @@ public class CatFragment extends Fragment {
                 toExtra();
             }
         });
-
+        Typeface customFont = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/AustieBostKittenKlub.ttf");
+        TextView tv = (TextView) view.findViewById(R.id.cat_feedme_text);
+        tv.setTypeface(customFont);
         return view;
 
     }

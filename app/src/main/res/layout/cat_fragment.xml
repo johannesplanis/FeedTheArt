@@ -29,7 +29,16 @@
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal"
         android:layout_weight="1"
-        android:id="@+id/cat_container"></FrameLayout>
+        android:id="@+id/cat_container">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/cat_placeholder_image_view"
+            android:layout_gravity="center"
+            android:src="@drawable/placeholder_kitty"
+            android:padding="20dp" />
+    </FrameLayout>
 
     <TextView
         android:layout_width="wrap_content"
