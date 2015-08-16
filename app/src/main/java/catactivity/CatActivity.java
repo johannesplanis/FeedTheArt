@@ -57,6 +57,7 @@ public class CatActivity extends Activity implements CatArtFragment.OnRefreshCat
 
 
     }
+
     @Override
     protected void onSaveInstanceState(Bundle out){
         super.onSaveInstanceState(out);
@@ -361,4 +362,5 @@ public class CatActivity extends Activity implements CatArtFragment.OnRefreshCat
 
         return art;
     }
+
 }
