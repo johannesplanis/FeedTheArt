@@ -6,11 +6,29 @@
     android:background="#ffffff">
 
     <FrameLayout
+        android:id="@+id/cat_map_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_weight="1"
-        android:id="@+id/cat_map_container"></FrameLayout>
+        android:layout_weight="1" >
+        <fragment
+            xmlns:map="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/google_maps_fragment"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+
+            map:cameraBearing="0"
+            map:cameraTilt="0"
+            map:cameraZoom="0"
+            map:mapType="terrain"
+            map:uiCompass="true"
+            map:uiRotateGestures="true"
+            map:uiScrollGestures="true"
+            map:uiTiltGestures="true"
+            map:uiZoomControls="false"
+            map:uiZoomGestures="true" />
+    </FrameLayout>
+
 
     <Button
         android:layout_width="wrap_content"
