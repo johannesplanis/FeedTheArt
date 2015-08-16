@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.FragmentActivity;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -26,7 +27,7 @@ import menuactivity.MenuActivity;
 import menuactivity.SplashFragment;
 
 
-public class CatActivity extends Activity implements CatArtFragment.OnRefreshCatArtListener {
+public class CatActivity extends FragmentActivity implements CatArtFragment.OnRefreshCatArtListener {
 
     public CatFragment catf;
     public CatArtFragment artf;

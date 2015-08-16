@@ -73,9 +73,9 @@ public class CatMapFragment extends Fragment implements OnMapReadyCallback {
                 public void onClick(DialogInterface dialogInterface, int i) {
                     Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                     startActivity(intent);
-                    //finish();
+                    toCat();
                 }
-            }).setMessage("Ta czêœæ aplikacji wymaga dostêpu do Twojej aktualnej lokalizacji. Jednak¿e do jednej z tych rzeczy nie mo¿na uzyskaæ dostêpu. SprawdŸ, czy masz w³¹czon¹ funkcje lokalizacja w ustawieniach systemowych. Po tym zabiegu w³¹cz aplikacjê jeszcze raz!").show();
+            }).setMessage("Ta czêœæ aplikacji wymaga dostêpu do Twojej aktualnej lokalizacji. SprawdŸ, czy masz w³¹czon¹ funkcje lokalizacja w ustawieniach systemowych. Po tym wróæ i ponów wykonywanie tej operacji.").show();
         } else {
 
             if (map == null) {
