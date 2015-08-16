@@ -43,21 +43,37 @@ public class ArtDownloader {
     //create new ArtObject, fill with fields read from jsonObject, read url of preview image
     //download image based on the url !!!
     //add image to ArtObject
+    //catch all cases associated with incomplete JSON response
     public ArtObject getArtObjectFromJSON(JSONObject jsonObject){
         ArtObject artObject = new ArtObject();
-
+        try {
+            String url = stripBackslashAndBraces(jsonObject.getString("edmPreview"));
+            artObject.setUrl(url);
+        } catch(JSONException e){
+            e.printStackTrace();
+            System.out.println("No URL associated with JSON object");
+            artObject.setUrl("http://orig05.deviantart.net/6651/f/2009/210/7/2/dead_face_by_krasus.jpg");
+            }
         try{
-            artObject.setUrl(stripBackslashAndBraces(jsonObject.getString("edmPreview")));
-            artObject.setName(stripQuotesBraces(jsonObject.getString("title")));
-            artObject.setAuthor(stripBracesQuotes(jsonObject.getString("dcCreator")));
+            String name = stripQuotesBraces(jsonObject.getString("title"));
+            artObject.setName(name);
+        } catch(JSONException e){
+            e.printStackTrace();
+            System.out.println("No name associated with piece");
+            artObject.setName("NN");
+        }
+        try{
 
+
+            artObject.setAuthor(stripBracesQuotes(jsonObject.getString("dcCreator")));
 
             //artObject.setImage(image);
             System.out.println("Art for today" + artObject.getName() + " " + artObject.getAuthor());
             //System.out.println("Art for today"+jsonObject.getString("title")+" "+jsonObject.getString("dcCreator"));
         } catch (JSONException e) {
             e.printStackTrace();
-            System.out.println("Error reading JSON");
+            System.out.println("No author name associated with JSON");
+            artObject.setAuthor("NN");
         }
         return artObject;
     }

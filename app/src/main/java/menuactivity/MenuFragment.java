@@ -3,11 +3,13 @@ package menuactivity;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.planis.johannes.catprototype.R;
 
@@ -55,10 +57,16 @@ public class MenuFragment extends Fragment {
          */
         Activity act = getActivity();
         SharedPreferences shared = act.getSharedPreferences("INSTANCES_COUNT", act.MODE_PRIVATE);
+
+        //check if app is opened for the first time
         int COUNT = shared.getInt("COUNT",0);
         if(COUNT==0){
             continueButton.setVisibility(View.INVISIBLE);
         }
+        TextView tv = (TextView) view.findViewById(R.id.menu_title_text_field);
+        Typeface customFont = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/AustieBostKittenKlub.ttf");
+        tv.setText("Feed The Art!");
+        tv.setTypeface(customFont);
         return view;
 
 
