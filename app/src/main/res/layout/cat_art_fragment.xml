@@ -18,14 +18,27 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_weight="1"
-        android:id="@+id/cat_art_container"></FrameLayout>
+        android:id="@+id/cat_art_container">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/cat_art_image_view" />
+    </FrameLayout>
 
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Medium Text"
-        android:id="@+id/cat_art_text"
+        android:id="@+id/cat_art_title"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:id="@+id/cat_art_author"
         android:layout_gravity="center_horizontal"
         android:layout_weight="0.5" />
 
@@ -44,7 +57,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="share"
+            android:text="temp refresh"
             android:id="@+id/cat_art_share_button" />
     </LinearLayout>
 </LinearLayout>

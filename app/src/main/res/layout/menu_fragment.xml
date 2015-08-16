@@ -6,44 +6,56 @@
     android:background="#ffffff"
     android:clickable="true">
 
-    <Button
-        android:layout_width="173dp"
+    <FrameLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Continue"
-        android:id="@+id/continue_button"
-        android:layout_gravity="center_horizontal"
-        android:layout_weight="0.03"
-        android:layout_marginTop="170dp"
-        />
+        android:layout_weight="0.5"></FrameLayout>
 
-    <Button
-        android:layout_width="173dp"
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="New Cat"
-        android:id="@+id/new_cat_button"
-        android:layout_gravity="center_horizontal"
-        android:layout_weight="0.03"
-        android:layout_marginTop="10dp"
-        />
+        android:layout_weight="0.5">
 
-    <Button
-        android:layout_width="174dp"
-        android:layout_height="wrap_content"
-        android:text="tutorial"
-        android:id="@+id/tutorial_button"
-        android:layout_gravity="center_horizontal"
-        android:layout_weight="0.03"
-        android:layout_marginTop="10dp"
-        />
+        <Button
+            android:layout_width="173dp"
+            android:layout_height="wrap_content"
+            android:text="Continue"
+            android:id="@+id/continue_button"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="0.01"
+            android:layout_marginTop="0dp"
+            />
 
-    <Button
-        android:layout_width="172dp"
-        android:layout_height="wrap_content"
-        android:text="Settings"
-        android:id="@+id/settings_button"
-        android:layout_gravity="center_horizontal"
-        android:layout_weight="0.04"
-        android:layout_marginTop="10dp"
-        />
+        <Button
+            android:layout_width="173dp"
+            android:layout_height="wrap_content"
+            android:text="New Cat"
+            android:id="@+id/new_cat_button"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="0.01"
+            android:layout_marginTop="10dp"
+            />
+
+        <Button
+            android:layout_width="174dp"
+            android:layout_height="wrap_content"
+            android:text="tutorial"
+            android:id="@+id/tutorial_button"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="0.01"
+            android:layout_marginTop="10dp"
+            />
+
+        <Button
+            android:layout_width="172dp"
+            android:layout_height="wrap_content"
+            android:text="Settings"
+            android:id="@+id/settings_button"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="0.01"
+            android:layout_marginTop="10dp"
+            />
+    </LinearLayout>
 
 </LinearLayout>

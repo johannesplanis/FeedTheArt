@@ -75,4 +75,6 @@ public class CatFragment extends Fragment {
         Activity act = getActivity(); if (act instanceof CatActivity)
             ((CatActivity) act).toExtra();
     }
+
+
 }
