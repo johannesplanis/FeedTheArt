@@ -4,10 +4,12 @@
     android:layout_height="fill_parent"
     android:background="#ffffff">
 
-    <AnalogClock
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/analogClock"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/splash_text_center"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:textColor="#000000" />
 </RelativeLayout>
