@@ -1,6 +1,5 @@
 package catactivity;
 
-import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -178,6 +177,7 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
         Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
         intent.putExtra("TYPE", "APP");
         startActivity(intent);
+        //finish();
 
     }
     public void toMap(){

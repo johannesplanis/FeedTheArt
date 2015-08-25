@@ -4,25 +4,40 @@
     android:background="#ffffff"
     android:clickable="true">
 
-    <Button
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="finish"
-        android:id="@+id/newcat_name_finish"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginRight="25dp"
-        android:layout_marginBottom="15dp"
-        android:onClick="finishCreator"/>
+        android:layout_alignParentStart="true">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="back"
-        android:id="@+id/newcat_name_back"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="25dp"
-        android:layout_marginBottom="15dp"
-        android:onClick="continueCreator"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="back"
+            android:id="@+id/newcat_name_back"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:onClick="continueCreator"
+            android:background="#ededda"
+            android:layout_weight="1"
+            android:paddingRight="0dp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/button3"
+            android:visibility="invisible" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="finish"
+            android:id="@+id/newcat_name_finish"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:onClick="finishCreator"
+            android:background="#ededda"
+            android:layout_weight="1" />
+    </LinearLayout>
 </RelativeLayout>

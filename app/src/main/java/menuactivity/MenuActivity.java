@@ -9,10 +9,17 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 
 import com.planis.johannes.catprototype.R;
+import com.squareup.otto.Bus;
+import com.squareup.otto.Produce;
+import com.squareup.otto.Subscribe;
+
+import javax.inject.Inject;
 
 import catactivity.CatActivity;
+import modules.BusModule;
 
 /*
 * ISSUE 1: one fragment after being replaced by another, remains clickable
@@ -20,6 +27,7 @@ import catactivity.CatActivity;
 * SOLUTION: add android:clickable="true" property to layout files for every fragment.
 * Why ?!? Probably it removes all background fragments' clickability.
 * */
+
 public class MenuActivity extends Activity {
     public SplashFragment spf;
     public MenuFragment mef;
@@ -31,11 +39,20 @@ public class MenuActivity extends Activity {
     private int COUNT;
     private Handler handler = new Handler();
 
+
+    @Inject
+    protected Bus bus;
+
     public static final String APP = "APP";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+
+        //dependency injection games
+        BusModule.getObjectGraph().inject(this);
+
+
         Intent intent = getIntent();
         Boolean exit = intent.getBooleanExtra("EXIT",false);
         System.out.println(exit);
@@ -47,6 +64,18 @@ public class MenuActivity extends Activity {
         }
 
 
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        //BusProvider.getInstance().register(sendEventHandler);
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+       // BusProvider.getInstance().unregister(sendEventHandler);
     }
 
     @Override
@@ -138,6 +167,7 @@ public class MenuActivity extends Activity {
 
     public void continueGame(){
         toCatActivity();
+        //finish();
     }
     public void newCat(){
         FragmentTransaction ft = getFragmentManager().beginTransaction();
@@ -195,7 +225,7 @@ public class MenuActivity extends Activity {
         } else{
             ft.add(R.id.menu_container,nnf,"NNF");
         }
-        ncf = (NewcatChooseFragment) getFragmentManager().findFragmentByTag("ncf");
+        ncf = (NewcatChooseFragment) getFragmentManager().findFragmentByTag("NCF");
         if(ncf!=null){
             ft.hide(ncf);
         }
@@ -237,6 +267,47 @@ public class MenuActivity extends Activity {
         Intent intent = new Intent(getApplicationContext(), CatActivity.class);
         startActivity(intent);
     }
+
+    /*
+    Test if database works correctly
+     */
+    /*
+    Otto tests
+     */
+    private Object sendEventHandler = new Object(){
+        @Produce
+        public String produceEvent(){
+            return "Fuck fuck yeah!";
+        }
+        @Subscribe
+        public void localTest(String msg){
+            Log.i("Otto","Local "+msg);
+        }
+    };
+
+
+
+
+    public void testDatabase(){
+
+        //BusProvider.getInstance().post("Fuck yeah!");
+        bus.post("Fuck yeah, injection!");
+        Log.i("Otto","test database!");
+
+
+    }
+    //class to carry the message
+    public class MessageAvailableEvent{
+        private String msg;
+        MessageAvailableEvent(){
+            this.msg = "Fuck yeah!";
+        }
+
+        public String getMsg(){
+            return msg;
+        }
+    }
+
 
 
 

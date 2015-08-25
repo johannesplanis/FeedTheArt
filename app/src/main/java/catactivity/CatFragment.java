@@ -12,10 +12,22 @@ import android.widget.TextView;
 
 import com.planis.johannes.catprototype.R;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * Created by JOHANNES on 8/5/2015.
  */
+
 public class CatFragment extends Fragment {
+
+    @Bind(R.id.cat_name_field)
+    TextView catDialogTop;
+    @Bind(R.id.cat_feedme_text)
+    TextView catDialogBottom;
+
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -28,6 +40,7 @@ public class CatFragment extends Fragment {
 
         final View view = inflater.inflate(R.layout.cat_fragment,
                 container, false);
+        ButterKnife.bind(this,view);
         Button menuButton = (Button) view.findViewById(R.id.cat_menu_button);
         Button mapButton = (Button) view.findViewById(R.id.cat_map_button);
         Button artButton = (Button) view.findViewById(R.id.cat_art_button);
@@ -56,9 +69,11 @@ public class CatFragment extends Fragment {
                 toExtra();
             }
         });
+
         Typeface customFont = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/AustieBostKittenKlub.ttf");
-        TextView tv = (TextView) view.findViewById(R.id.cat_feedme_text);
-        tv.setTypeface(customFont);
+
+        catDialogTop.setTypeface(customFont);
+        catDialogBottom.setTypeface(customFont);
         return view;
 
     }
