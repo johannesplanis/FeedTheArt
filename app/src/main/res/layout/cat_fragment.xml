@@ -20,7 +20,7 @@ http://design-seeds.com/home/entry/pinwheel-color
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="menu"
+            android:text="MENU"
             android:id="@+id/cat_menu_button"
             android:background="#ededda"
             android:enabled="true"
@@ -101,7 +101,7 @@ http://design-seeds.com/home/entry/pinwheel-color
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="map"
+            android:text="MAP"
             android:id="@+id/cat_map_button"
             android:background="#2cd1a0"
             android:layout_weight="1"
@@ -110,7 +110,7 @@ http://design-seeds.com/home/entry/pinwheel-color
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="art"
+            android:text="ART"
             android:id="@+id/cat_art_button"
             android:background="#d44846"
             android:textColor="#ededda"
@@ -120,7 +120,7 @@ http://design-seeds.com/home/entry/pinwheel-color
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="extra"
+            android:text="EXTRA"
             android:id="@+id/cat_extra_button"
             android:background="#614687"
             android:textColor="#ffd333"

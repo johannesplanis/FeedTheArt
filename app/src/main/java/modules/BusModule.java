@@ -9,6 +9,8 @@ import dagger.Module;
 import dagger.ObjectGraph;
 import dagger.Provides;
 import menuactivity.MenuActivity;
+import menuactivity.NewcatChooseFragment;
+import menuactivity.NewcatNameFragment;
 import menuactivity.TutorialFragment;
 
 /**
@@ -19,7 +21,9 @@ import menuactivity.TutorialFragment;
 @Module(
         injects = {
                 MenuActivity.class,
-                TutorialFragment.class
+                TutorialFragment.class,
+                NewcatChooseFragment.class,
+                NewcatNameFragment.class
         }
 )
 public class BusModule{

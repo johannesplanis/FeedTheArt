@@ -23,7 +23,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import menuactivity.MenuActivity;
-import menuactivity.SplashFragment;
 
 
 public class CatActivity extends FragmentActivity implements CatArtFragment.OnRefreshCatArtListener {
@@ -31,7 +30,7 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
     public CatFragment catf;
     public CatArtFragment artf;
     public CatMapFragment mapf;
-    public SplashFragment splash;
+    public CatSplashFragment splash;
     public Handler handler = new Handler();
     public ArtDownloader ad;
     public ArtObject artObject;
@@ -120,7 +119,7 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
      */
     public void startup(){
         FragmentTransaction ft = getFragmentManager().beginTransaction();
-        splash = new SplashFragment();
+        splash = new CatSplashFragment();
 
         if(splash.isAdded()){
             ft.show(splash);

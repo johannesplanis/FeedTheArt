@@ -40,7 +40,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="back"
+            android:text="BACK"
             android:id="@+id/menu_settings_back_button"
             android:background="#eaeaad"
             android:padding="10dp"

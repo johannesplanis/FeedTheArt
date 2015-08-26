@@ -48,7 +48,7 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Continue"
+            android:text="CONTINUE"
             android:id="@+id/continue_button"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="0dp"
@@ -61,7 +61,7 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="New Cat"
+            android:text="NEW CAT"
             android:id="@+id/new_cat_button"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
@@ -74,7 +74,7 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="tutorial"
+            android:text="TUTORIAL"
             android:id="@+id/tutorial_button"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
@@ -87,7 +87,7 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Settings"
+            android:text="SETTINGS"
             android:id="@+id/settings_button"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"

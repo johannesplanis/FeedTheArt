@@ -1,7 +1,7 @@
 package menuactivity;
 
 import android.app.Activity;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
@@ -62,7 +62,7 @@ public class TutorialFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedState){
         super.onCreate(savedState);
-        //dependency injection games
+
         BusModule.getObjectGraph().inject(this);
 
     }
