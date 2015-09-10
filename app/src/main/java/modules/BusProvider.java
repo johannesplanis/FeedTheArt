@@ -1,4 +1,4 @@
-package menuactivity;
+package modules;
 
 import com.squareup.otto.Bus;
 

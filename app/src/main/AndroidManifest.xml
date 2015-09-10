@@ -48,6 +48,11 @@
             android:label="@string/title_activity_maps" >
         </activity>
         -->
+        <service android:name="backgroundcat.FoodLevelUpdateService"
+                 android:exported="false"/>
+        <receiver
+            android:name="backgroundcat.AlarmReceiver"
+            android:process=":remote"/>
     </application>
 
 </manifest>

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+color palette:
+http://design-seeds.com/home/entry/pinwheel-color
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:background="#ffffff">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Feed me!"
+            android:id="@+id/cat_feedme_text"
+            android:padding="7dp"
+            android:textSize="24dp" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="MENU"
+            android:id="@+id/cat_menu_button"
+            android:background="#ededda"
+            android:enabled="true"
+            style="?android:attr/borderlessButtonStyle"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="MAP"
+            android:id="@+id/cat_map_button"
+            android:background="#2cd1a0"
+            android:layout_weight="1"
+            style="?android:attr/borderlessButtonStyle"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ART"
+            android:id="@+id/cat_art_button"
+            android:background="#d44846"
+            android:textColor="#ededda"
+            android:layout_weight="1"
+            style="?android:attr/borderlessButtonStyle"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="EXTRA"
+            android:id="@+id/cat_extra_button"
+            android:background="#614687"
+            android:textColor="#ffd333"
+            android:layout_weight="1"
+            style="?android:attr/borderlessButtonStyle"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:baselineAligned="false"
+        android:layout_gravity="center_horizontal">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:weightSum="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="It&apos;s me, Czarek!"
+                android:id="@+id/cat_name_field"
+                android:layout_gravity="center"
+                android:padding="10dp"
+                android:textSize="28dp"
+                android:focusable="false"
+                android:enabled="true"
+                android:textColor="#000000" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/imageView"
+                android:src="@drawable/battery_low"
+                android:layout_gravity="right"
+                android:padding="5dp" />
+
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:id="@+id/cat_container">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/cat_placeholder_image_view"
+                android:layout_gravity="center"
+                android:src="@drawable/placeholder_kitty"
+                android:padding="20dp" />
+        </FrameLayout>
+    </LinearLayout>
+
+</LinearLayout>

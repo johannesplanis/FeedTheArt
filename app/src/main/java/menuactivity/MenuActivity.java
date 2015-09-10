@@ -2,6 +2,7 @@
 
 package menuactivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -10,7 +11,9 @@ import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.planis.johannes.catprototype.R;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Produce;
@@ -18,6 +21,8 @@ import com.squareup.otto.Subscribe;
 
 import javax.inject.Inject;
 
+import cat.Cat;
+import cat.Flags;
 import catactivity.CatActivity;
 import modules.BusModule;
 
@@ -39,8 +44,10 @@ public class MenuActivity extends FragmentActivity {
     private int COUNT;
     private Handler handler = new Handler();
 
-    private static final String CHARACTER = "CHARACTER";
+
+
     public int character;
+    public String name;
 
     @Inject
     protected Bus bus;
@@ -55,7 +62,8 @@ public class MenuActivity extends FragmentActivity {
         BusModule.getObjectGraph().inject(this);
 
         if(savedInstanceState != null){
-            character = savedInstanceState.getInt(CHARACTER);
+            character = savedInstanceState.getInt(Flags.CHARACTER);
+            name = savedInstanceState.getString(Flags.NAME);
         }
 
         Intent intent = getIntent();
@@ -85,10 +93,9 @@ public class MenuActivity extends FragmentActivity {
 
     @Override
     protected void onSaveInstanceState(Bundle out){
-        out.putInt(CHARACTER,character);
-
+        out.putInt(Flags.CHARACTER,character);
+        out.putString(Flags.NAME,name);
         super.onSaveInstanceState(out);
-
     }
     /*
     Handling orientation changes. Shitty way, to be improved.
@@ -112,6 +119,8 @@ public class MenuActivity extends FragmentActivity {
         shared = getSharedPreferences("INSTANCES_COUNT", MODE_PRIVATE);
         COUNT = shared.getInt("COUNT",0);
 
+
+
         /*
         Handling different cases of first launch, non-first launch, going back to menu from Cat Activity
          */
@@ -125,6 +134,8 @@ public class MenuActivity extends FragmentActivity {
         } else{
             System.out.println("Error! Impossible test case!");
         }
+
+
     }
     public void splashStartup(){
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -133,7 +144,7 @@ public class MenuActivity extends FragmentActivity {
         if(spf.isAdded()){
             ft.show(spf);
         } else{
-            ft.add(R.id.menu_container, spf, "SPF");
+            ft.add(R.id.menu_container, spf, Flags.SPLASH_FRAGMENT);
         }
         ft.commit();
         handler.postDelayed(new Runnable() {
@@ -143,36 +154,40 @@ public class MenuActivity extends FragmentActivity {
             }
         }, 3000);
     }
-    /*
+    /**
     Navigate to Menu from all possible locations
      */
     public void toMenu(){
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        //FragmentTransaction ft = getFragmentManager().beginTransaction();
+
 
         mef = new MenuFragment();
         if(mef.isAdded()){
             ft.show(mef);
         } else{
-            ft.add(R.id.menu_container, mef, "MEF");
+            ft.add(R.id.menu_container, mef, Flags.MENU_FRAGMENT);
         }
 
-        spf = (SplashFragment) getSupportFragmentManager().findFragmentByTag("SPF");
+        spf = (SplashFragment) getSupportFragmentManager().findFragmentByTag(Flags.SPLASH_FRAGMENT);
         if (spf!=null){
             ft.hide(spf);
         }
-        tuf = (TutorialFragment) getSupportFragmentManager().findFragmentByTag("TUF");
+        tuf = (TutorialFragment) getSupportFragmentManager().findFragmentByTag(Flags.TUTORIAL_FRAGMENT);
         if(tuf!=null){
             ft.hide(tuf);
         }
-        ncf = (NewcatChooseFragment) getSupportFragmentManager().findFragmentByTag("NCF");
+        ncf = (NewcatChooseFragment) getSupportFragmentManager().findFragmentByTag(Flags.NEWCAT_CHOOSE_FRAGMENT);
         if(ncf!=null){
             ft.hide(ncf);
+        }
+        msf = (MenuSettingsFragment) getSupportFragmentManager().findFragmentByTag(Flags.SETTINGS_FRAGMENT);
+        if(msf!=null){
+            ft.hide(msf);
         }
 
         ft.commit();
     }
-    /*
+    /**
     Menu navigation methods
      */
 
@@ -186,13 +201,13 @@ public class MenuActivity extends FragmentActivity {
         if(ncf.isAdded()){
             ft.show(ncf);
         } else{
-            ft.add(R.id.menu_container, ncf, "NCF");
+            ft.add(R.id.menu_container, ncf, Flags.NEWCAT_CHOOSE_FRAGMENT);
         }
-        mef = (MenuFragment) getSupportFragmentManager().findFragmentByTag("MEF");
+        mef = (MenuFragment) getSupportFragmentManager().findFragmentByTag(Flags.MENU_FRAGMENT);
         if(mef!=null){
             ft.hide(mef);
         }
-        ft.addToBackStack("NEWCAT");
+        ft.addToBackStack(Flags.NEWCAT_CHOOSE_FRAGMENT);
         ft.commit();
     }
     public void toTutorial(){
@@ -201,13 +216,13 @@ public class MenuActivity extends FragmentActivity {
         if(tuf.isAdded()){
             ft.show(tuf);
         } else{
-            ft.add(R.id.menu_container,tuf,"TUF");
+            ft.add(R.id.menu_container,tuf,Flags.TUTORIAL_FRAGMENT);
         }
-        mef = (MenuFragment) getSupportFragmentManager().findFragmentByTag("MEF");
+        mef = (MenuFragment) getSupportFragmentManager().findFragmentByTag(Flags.MENU_FRAGMENT);
         if(mef!=null){
             ft.hide(mef);
         }
-        ft.addToBackStack("TUTORIAL");
+        ft.addToBackStack(Flags.TUTORIAL_FRAGMENT);
         ft.commit();
     }
     public void toSettings(){
@@ -216,13 +231,13 @@ public class MenuActivity extends FragmentActivity {
         if(msf.isAdded()){
             ft.show(msf);
         } else{
-            ft.add(R.id.menu_container,msf,"MSF");
+            ft.add(R.id.menu_container,msf,Flags.SETTINGS_FRAGMENT);
         }
-        mef = (MenuFragment) getSupportFragmentManager().findFragmentByTag("MEF");
+        mef = (MenuFragment) getSupportFragmentManager().findFragmentByTag(Flags.MENU_FRAGMENT);
         if(mef!=null){
             ft.hide(mef);
         }
-        ft.addToBackStack("SETTINGS");
+        ft.addToBackStack(Flags.SETTINGS_FRAGMENT);
         ft.commit();
     }
     /*
@@ -234,13 +249,13 @@ public class MenuActivity extends FragmentActivity {
         if(nnf.isAdded()){
             ft.show(nnf);
         } else{
-            ft.add(R.id.menu_container,nnf,"NNF");
+            ft.add(R.id.menu_container,nnf,Flags.NEWCAT_NAME_FRAGMENT);
         }
-        ncf = (NewcatChooseFragment) getSupportFragmentManager().findFragmentByTag("NCF");
+        ncf = (NewcatChooseFragment) getSupportFragmentManager().findFragmentByTag(Flags.NEWCAT_CHOOSE_FRAGMENT);
         if(ncf!=null){
             ft.hide(ncf);
         }
-        ft.addToBackStack("CHOOSETONAME");
+        ft.addToBackStack(Flags.NEWCAT_NAME_FRAGMENT);
         ft.commit();
     }
     public void nameToChoose(){
@@ -249,33 +264,68 @@ public class MenuActivity extends FragmentActivity {
         if(ncf.isAdded()){
             ft.show(ncf);
         } else{
-            ft.add(R.id.menu_container,ncf,"NCF");
+            ft.add(R.id.menu_container,ncf,Flags.NEWCAT_CHOOSE_FRAGMENT);
         }
-        nnf = (NewcatNameFragment) getSupportFragmentManager().findFragmentByTag("NNF");
+        nnf = (NewcatNameFragment) getSupportFragmentManager().findFragmentByTag(Flags.NEWCAT_NAME_FRAGMENT);
         if(nnf!=null){
             ft.hide(nnf);
         }
         ft.commit();
     }
-    public void finishCreator(){
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        nnf = (NewcatNameFragment) getSupportFragmentManager().findFragmentByTag("NNF");
-        if(nnf!=null){
-            ft.hide(nnf);
-        }
+
+    //check if there was an input, update cat's name, finish creator
+    public void finishCreator(String inputName){
+
+        if(inputName!=null&&!inputName.isEmpty()&&!inputName.equals("SAY MY NAME!")){
+
+            setName(inputName);
+
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            nnf = (NewcatNameFragment) getSupportFragmentManager().findFragmentByTag(Flags.NEWCAT_NAME_FRAGMENT);
+            if(nnf!=null){
+                ft.hide(nnf);
+            }
         /*
         Indicate that new game was already created. Preference used in MenuFragment and startup();
          */
-        SharedPreferences.Editor editor = getSharedPreferences("INSTANCES_COUNT", MODE_PRIVATE).edit();
-        editor.putInt("COUNT",1);
-        editor.commit();
-        toCatActivity();
+            SharedPreferences.Editor editor = getSharedPreferences("INSTANCES_COUNT", MODE_PRIVATE).edit();
+            editor.putInt("COUNT", 1);
+            editor.commit();
+
+            //create Cat instance, put into separate shared preferences using gson under its ID as key
+            //
+            Cat cat = new Cat();
+            cat.setName(inputName);
+            cat.setCharacter(character);
+
+
+            SharedPreferences.Editor instanceEditor = getSharedPreferences(Flags.CAT_INSTANCES,MODE_PRIVATE).edit();
+            Gson gson = new Gson();
+            String json = gson.toJson(cat);
+            instanceEditor.putString(String.valueOf(cat.getID()),json);
+            instanceEditor.commit();
+
+
+            //put current instance into sharedpreferences
+            SharedPreferences.Editor currentInfoEditor= getSharedPreferences(Flags.CURRENT_GAME_INFO, Context.MODE_PRIVATE).edit();
+            currentInfoEditor.putString(Flags.CURRENT_GAME_INSTANCE, json);
+            currentInfoEditor.commit();
+
+            toCatActivity();
+
+
+        } else {
+            Toast.makeText(this, "Put something here!", Toast.LENGTH_LONG).show();
+        }
+
+
     }
     /*
     Navigate to cat Activity
      */
     public void toCatActivity(){
         Intent intent = new Intent(getApplicationContext(), CatActivity.class);
+        intent.putExtra("START_MODE","MENU_ACTIVITY");
         startActivity(intent);
     }
 
@@ -326,4 +376,7 @@ public class MenuActivity extends FragmentActivity {
     public void setCharacter(int character) {
         this.character = character;
     }
+    public void setName(String name){this.name = name;}
+
+
 }

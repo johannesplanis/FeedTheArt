@@ -6,7 +6,8 @@
     android:background="#ffffff"
     android:clickable="true">
 
-    <ScrollView
+    <view
+        class="modules.OverscrolledScrollView"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:id="@+id/scrollView2"
@@ -43,7 +44,7 @@
                 android:nestedScrollingEnabled="true" />
 
         </LinearLayout>
-    </ScrollView>
+    </view>
 
     <LinearLayout
         android:orientation="horizontal"

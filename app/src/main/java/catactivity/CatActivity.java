@@ -1,6 +1,8 @@
 package catactivity;
 
 import android.app.FragmentTransaction;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -9,6 +11,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -22,6 +26,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
+import backgroundcat.BackgroundAlarmManager;
+import backgroundcat.FoodLevelUpdateService;
+import cat.Cat;
+import cat.Flags;
 import menuactivity.MenuActivity;
 
 
@@ -38,6 +49,14 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
     public SharedPreferences prefs;
     public String dir;
     Bitmap bitmap;
+    public Cat cat;
+    private String name;
+    public BackgroundAlarmManager bam;
+    private Handler foodHandler;
+    private Runnable foodHandlerTask;
+    Timer timer;
+    public static final int INTERVAL_FOREGROUND = 100;
+    public static final int INTERVAL_BACKGROUND = 1000*10;
 
     public static final String STORAGE_KEY = "SHARED_PREFERENCES_KEY";
     private static final String SEARCH_TERM = "/search.json?wskey=NQc7GcL5M&query=guitar&start=1&rows=24&profile=breadcrumb"; //qf=animals
@@ -46,15 +65,60 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cat);
-        startup();
+        Intent intent = getIntent();
+        String startMode = intent.getStringExtra("START_MODE");
+
+        startup(startMode);
+        cat = new Cat();
+
+        name = "Czarek";
+        loadGameInstance();
         //preloadArt();
         artObject = new ArtObject();
         jsonObject = new JSONObject();
         ad = new ArtDownloader(getApplicationContext());
-
+        bam = new BackgroundAlarmManager(getApplicationContext());
         getJSON(SEARCH_TERM);
 
+        //alternative to timer
+        /*foodHandler = new Handler();
+        foodHandlerTask = new Runnable() {
+            @Override
+            public void run() {
+                computeInForeground();
+                foodHandler.postDelayed(this,INTERVAL_FOREGROUND);
+            }
+        };
+*/
+    }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+        Log.i("ACTIVITY", "RESUMED");
+        //make updates more frequent to make score dynamically change in UI
+        bam.cancelAlarm();
+
+        //while in foreground, score is computed more frequently to show it in UI. Due to Lollipop restrictions, alarm cannot run more frequently than once a minute
+
+        timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                computeInForeground();
+            }
+        },0,INTERVAL_FOREGROUND);
+        //foodHandlerTask.run();
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        Log.i("ACTIVITY", "PAUSED");
+        //make updates less frequent to save battery but run from time to time
+        bam.setupAlarm(INTERVAL_BACKGROUND);
+        //foodHandler.removeCallbacks(foodHandlerTask);
+        timer.cancel();
     }
 
     @Override
@@ -117,22 +181,29 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
     /*
     startup methods, navigate to cat
      */
-    public void startup(){
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        splash = new CatSplashFragment();
+    public void startup(String startMode){
 
-        if(splash.isAdded()){
-            ft.show(splash);
+
+        if(startMode.equals("NOTIFICATION")){
+            toCat();
         } else{
-            ft.add(R.id.cat_container, splash, "SPLASH");
-        }
-        ft.commit();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                toCat();
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            splash = new CatSplashFragment();
+
+            if(splash.isAdded()){
+                ft.show(splash);
+            } else{
+                ft.add(R.id.cat_container, splash, "SPLASH");
             }
-        }, 1000);
+            ft.commit();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    toCat();
+                }
+            }, 1000);
+        }
+
     }
     /*
     preload daily art either from web, or internal storage, currently not in use
@@ -146,6 +217,23 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
         } else{
             new LoadImage().execute("http://europeanastatic.eu/api/image?uri=http%3A%2F%2Fhdl.handle.net%2F10107%2F1458373-13&size=LARGE&type=IMAGE");
         }
+    }
+
+    //read current instance of game, and translate from json into Object
+    public void loadGameInstance(){
+        SharedPreferences sp = getSharedPreferences(Flags.CURRENT_GAME_INFO,MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = sp.getString(Flags.CURRENT_GAME_INSTANCE, "");
+        if(json!=null&&!json.isEmpty()){
+            cat = gson.fromJson(json,Cat.class);
+        }
+        if(cat!=null) {
+            if (cat.getName() != null) {
+                Log.i("KITTY", cat.getName());
+                this.name = cat.getName();
+            }
+        }
+
     }
     public void toCat(){
         FragmentTransaction ft = getFragmentManager().beginTransaction();
@@ -211,7 +299,33 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
         ft.addToBackStack("ART");
         ft.commit();
     }
+
+    //TEST
+    //increment food level by some value
     public void toExtra(){
+
+
+        SharedPreferences sp = getSharedPreferences(Flags.CURRENT_GAME_INFO,MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = sp.getString(Flags.CURRENT_GAME_INSTANCE, "");
+        if(json!=null&&!json.isEmpty()){
+            cat = gson.fromJson(json,Cat.class);
+        }
+
+        if(cat!=null) {
+            cat.feedTheArtByValue(5);
+            Log.i("FOOD_LEVEL",String.valueOf(cat.getFoodLevel()));
+        }
+
+        Intent broadcastIntent = new Intent(FoodLevelUpdateService.UPDATE_FOODLEVEL_ACTION);
+        //int randomInt = (int) (Math.random()*100)+1;
+        broadcastIntent.putExtra("SERVICE_BROADCAST",cat.getFoodLevel());
+        LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
+
+        String updatedJson = gson.toJson(cat);
+        SharedPreferences.Editor currentInfoEditor= getSharedPreferences(Flags.CURRENT_GAME_INFO, MODE_PRIVATE).edit();
+        currentInfoEditor.putString(Flags.CURRENT_GAME_INSTANCE, updatedJson);
+        currentInfoEditor.commit();
 
     }
 
@@ -254,7 +368,7 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
      */
     public void getJSON(String address){
 
-        ArtDownloadRestClient.get(address,null,new JsonHttpResponseHandler(){
+        ArtDownloadRestClient.get(address, null, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 // If the response is JSONObject
@@ -263,12 +377,11 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
                 try {
                     JSONArray array = response.getJSONArray("items");
                     //get random search result
-                    item = (JSONObject) array.get((int) Math.floor(Math.random()*24));
+                    item = (JSONObject) array.get((int) Math.floor(Math.random() * 24));
                     jsonObject = item;
 
                     artObject = ad.getArtObjectFromJSON(jsonObject);
                     cacheObject(artObject, STORAGE_KEY);
-
 
 
                     Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -282,7 +395,6 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
                     e.printStackTrace();
                 }
                 //System.out.println("object" + item);
-
 
 
             }
@@ -301,10 +413,12 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
                 // Do something with the response
 
             }
+
             @Override
             public void onFailure(int statusCode, Header[] headers, String res, Throwable t) {
                 Toast.makeText(getApplicationContext(), "Unable to download now", Toast.LENGTH_LONG).show();
             }
+
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable t, JSONObject json) {
                 Toast.makeText(getApplicationContext(), "Unable to download now", Toast.LENGTH_LONG).show();
@@ -358,9 +472,49 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
         art.setName(prefs.getString("NAME", ""));
         art.setAuthor(prefs.getString("AUTHOR", ""));
         art.setUrl(prefs.getString("URL", ""));
-        art.setStorageUri(prefs.getString("STORAGE_PATH",""));
+        art.setStorageUri(prefs.getString("STORAGE_PATH", ""));
 
         return art;
     }
+
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+        }
+    };
+    public String getName(){
+        return this.name;
+    }
+
+    public void computeInForeground(){
+
+            SharedPreferences sp = getSharedPreferences(Flags.CURRENT_GAME_INFO,MODE_PRIVATE);
+            Gson gson = new Gson();
+            String json = sp.getString(Flags.CURRENT_GAME_INSTANCE, "");
+            if(json!=null&&!json.isEmpty()){
+                cat = gson.fromJson(json,Cat.class);
+            }
+
+            if(cat!=null) {
+                cat.updateFoodLevel(getApplicationContext());
+                Log.i("FOOD_LEVEL",String.valueOf(cat.getFoodLevel()));
+            }
+
+            Intent broadcastIntent = new Intent(FoodLevelUpdateService.UPDATE_FOODLEVEL_ACTION);
+            //int randomInt = (int) (Math.random()*100)+1;
+            broadcastIntent.putExtra("SERVICE_BROADCAST",cat.getFoodLevel());
+            LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
+
+            String updatedJson = gson.toJson(cat);
+            SharedPreferences.Editor currentInfoEditor= getSharedPreferences(Flags.CURRENT_GAME_INFO, MODE_PRIVATE).edit();
+            currentInfoEditor.putString(Flags.CURRENT_GAME_INSTANCE, updatedJson);
+            currentInfoEditor.commit();
+
+
+
+    }
+
+
+
 
 }
