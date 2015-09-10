@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!--
+color palette:
+http://design-seeds.com/home/entry/pinwheel-color
+-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,20 +14,55 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal">
+        android:layout_gravity="center_horizontal"
+        android:weightSum="1">
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="menu"
-            android:id="@+id/cat_menu_button" />
+            android:text="MENU"
+            android:id="@+id/cat_menu_button"
+            android:background="#ededda"
+            android:enabled="true"
+            style="?android:attr/borderlessButtonStyle"/>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="battery"
-            android:id="@+id/cat_battery" />
+            android:text="New Button"
+            android:id="@+id/button"
+            android:visibility="invisible" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="NewButt"
+            android:id="@+id/button2"
+            android:visibility="invisible"
+            android:background="#ededda" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/imageView"
+            android:src="@drawable/battery_low"
+            android:layout_gravity="right"
+            android:padding="5dp" />
+
     </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="It&apos;s me, Czarek!"
+        android:id="@+id/cat_name_field"
+        android:layout_gravity="center"
+        android:padding="10dp"
+        android:textSize="28dp"
+        android:focusable="false"
+        android:enabled="true"
+        android:textColor="#000000" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -46,33 +86,46 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Feed me!"
         android:id="@+id/cat_feedme_text"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:padding="7dp"
+        android:textSize="24dp" />
 
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0"
         android:baselineAligned="false"
         android:layout_gravity="center_horizontal">
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="map"
-            android:id="@+id/cat_map_button" />
+            android:text="MAP"
+            android:id="@+id/cat_map_button"
+            android:background="#2cd1a0"
+            android:layout_weight="1"
+            style="?android:attr/borderlessButtonStyle"/>
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="art"
-            android:id="@+id/cat_art_button" />
+            android:text="ART"
+            android:id="@+id/cat_art_button"
+            android:background="#d44846"
+            android:textColor="#ededda"
+            android:layout_weight="1"
+            style="?android:attr/borderlessButtonStyle"/>
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="extra"
-            android:id="@+id/cat_extra_button" />
+            android:text="EXTRA"
+            android:id="@+id/cat_extra_button"
+            android:background="#614687"
+            android:textColor="#ffd333"
+            android:layout_weight="1"
+            style="?android:attr/borderlessButtonStyle"/>
     </LinearLayout>
 
 </LinearLayout>

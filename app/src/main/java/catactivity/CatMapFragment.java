@@ -3,7 +3,6 @@ package catactivity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -21,10 +20,8 @@ import android.widget.Button;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -68,14 +65,14 @@ public class CatMapFragment extends Fragment implements OnMapReadyCallback {
         boolean gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
         if (!gps_enabled) {
-            AlertDialog alert = new AlertDialog.Builder(getActivity()).setTitle("Nie spe³niasz wymagañ aplikacji!").setCancelable(false).setNegativeButton("Zamknij", new DialogInterface.OnClickListener() {
+            AlertDialog alert = new AlertDialog.Builder(getActivity()).setTitle("Nie speÅ‚niasz aplikacji!").setCancelable(false).setNegativeButton("Zamknij", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                     startActivity(intent);
                     toCat();
                 }
-            }).setMessage("Ta czêœæ aplikacji wymaga dostêpu do Twojej aktualnej lokalizacji. SprawdŸ, czy masz w³¹czon¹ funkcje lokalizacja w ustawieniach systemowych. Po tym wróæ i ponów wykonywanie tej operacji.").show();
+            }).setMessage("Ta czÄ™Å›Ä‡ aplikacji wymaga dostÄ™pu do Twojej aktualnej lokalizacji. SprawdÅº, czy masz wÅ‚Ä…czonÄ… funkcje lokalizacja w ustawieniach systemowych. Po tym wrÃ³Ä‡ i kontynuuj wykonywanie tej operacji.").show();
         } else {
 
             if (map == null) {

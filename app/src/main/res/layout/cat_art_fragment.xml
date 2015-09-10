@@ -10,8 +10,10 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Art for today"
-        android:id="@+id/cat_art_today"
-        android:layout_gravity="center_horizontal" />
+        android:id="@+id/cat_art_header"
+        android:layout_gravity="center_horizontal"
+        android:textSize="32dp"
+        android:layout_margin="25dp" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -51,13 +53,21 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="back"
-            android:id="@+id/cat_art_back_button" />
+            android:text="TEMP REFRESH"
+            android:id="@+id/cat_art_share_button"
+            android:background="#ededda"
+            android:padding="5dp"
+            style="?android:attr/borderlessButtonStyle"/>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="temp refresh"
-            android:id="@+id/cat_art_share_button" />
+            android:text="BACK"
+            android:id="@+id/cat_art_back_button"
+            android:background="#ededda"
+            android:layout_marginLeft="5dp"
+            android:padding="5dp"
+            style="?android:attr/borderlessButtonStyle"/>
+
     </LinearLayout>
 </LinearLayout>

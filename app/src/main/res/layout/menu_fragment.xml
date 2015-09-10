@@ -1,15 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/scrollView"
+    android:background="#ffffff">
+<LinearLayout
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:weightSum="1"
     android:background="#ffffff"
-    android:clickable="true">
+    android:clickable="true"
+    android:padding="10dp">
+
+
+
+    <ImageView
+        android:layout_width="96dp"
+        android:layout_height="97dp"
+        android:id="@+id/imageView2"
+        android:layout_gravity="center"
+        android:src="@drawable/logo_bw"
+        android:padding="5dp" />
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.5">
+        android:padding="25dp">
 
         <TextView
             android:layout_width="fill_parent"
@@ -18,54 +35,72 @@
             android:text="Feed The Art !"
             android:id="@+id/menu_title_text_field"
             android:layout_gravity="center"
-            android:gravity="center" />
+            android:gravity="center"
+            android:textSize="32dp" />
     </FrameLayout>
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="0.5">
+        android:layout_gravity="center_horizontal">
 
         <Button
-            android:layout_width="173dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Continue"
+            android:text="CONTINUE"
             android:id="@+id/continue_button"
             android:layout_gravity="center_horizontal"
-            android:layout_weight="0.01"
             android:layout_marginTop="0dp"
-            />
+            android:textSize="24dp"
+            android:background="#ededda"
+            android:padding="10dp"
+
+            style="?android:attr/borderlessButtonStyle"/>
 
         <Button
-            android:layout_width="173dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="New Cat"
+            android:text="NEW CAT"
             android:id="@+id/new_cat_button"
             android:layout_gravity="center_horizontal"
-            android:layout_weight="0.01"
             android:layout_marginTop="10dp"
-            />
+            android:textSize="24dp"
+            android:background="#ededda"
+            android:padding="10dp"
+
+            style="?android:attr/borderlessButtonStyle"/>
 
         <Button
-            android:layout_width="174dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="tutorial"
+            android:text="TUTORIAL"
             android:id="@+id/tutorial_button"
             android:layout_gravity="center_horizontal"
-            android:layout_weight="0.01"
             android:layout_marginTop="10dp"
-            />
+            android:textSize="24dp"
+            android:background="#ededda"
+            android:padding="10dp"
+
+            style="?android:attr/borderlessButtonStyle"/>
 
         <Button
-            android:layout_width="172dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Settings"
+            android:text="SETTINGS"
             android:id="@+id/settings_button"
             android:layout_gravity="center_horizontal"
-            android:layout_weight="0.01"
             android:layout_marginTop="10dp"
-            />
+            android:textSize="24dp"
+            android:background="#ededda"
+            android:padding="10dp"
+
+            style="?android:attr/borderlessButtonStyle"/>
     </LinearLayout>
 
 </LinearLayout>
+
+
+
+
+</ScrollView>

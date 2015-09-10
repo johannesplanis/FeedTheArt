@@ -1,9 +1,9 @@
-package menuactivity;
+package catactivity;
 
 import android.app.Activity;
-import android.support.v4.app.Fragment;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +15,7 @@ import com.planis.johannes.catprototype.R;
 /**
  * Created by JOHANNES on 8/5/2015.
  */
-public class SplashFragment extends Fragment{
+public class CatSplashFragment extends Fragment{
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
