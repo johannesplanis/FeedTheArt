@@ -23,6 +23,7 @@ public class BackgroundAlarmManager {
     public void setupAlarm(int interval){
 
         Intent intent = new Intent(context, AlarmReceiver.class);
+        //intent.putExtra("SETUP_GEOFENCE",setupGeofence);
         if (PendingIntent.getBroadcast(context, AlarmReceiver.CODE, intent, PendingIntent.FLAG_NO_CREATE)==null) {
 
             final PendingIntent pIntent =PendingIntent.getBroadcast(context, AlarmReceiver.CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);

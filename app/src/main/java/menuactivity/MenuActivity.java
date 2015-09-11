@@ -22,7 +22,7 @@ import com.squareup.otto.Subscribe;
 import javax.inject.Inject;
 
 import cat.Cat;
-import cat.Flags;
+import cat.Tags;
 import catactivity.CatActivity;
 import modules.BusModule;
 
@@ -62,8 +62,8 @@ public class MenuActivity extends FragmentActivity {
         BusModule.getObjectGraph().inject(this);
 
         if(savedInstanceState != null){
-            character = savedInstanceState.getInt(Flags.CHARACTER);
-            name = savedInstanceState.getString(Flags.NAME);
+            character = savedInstanceState.getInt(Tags.CHARACTER);
+            name = savedInstanceState.getString(Tags.NAME);
         }
 
         Intent intent = getIntent();
@@ -93,8 +93,8 @@ public class MenuActivity extends FragmentActivity {
 
     @Override
     protected void onSaveInstanceState(Bundle out){
-        out.putInt(Flags.CHARACTER,character);
-        out.putString(Flags.NAME,name);
+        out.putInt(Tags.CHARACTER,character);
+        out.putString(Tags.NAME,name);
         super.onSaveInstanceState(out);
     }
     /*
@@ -144,7 +144,7 @@ public class MenuActivity extends FragmentActivity {
         if(spf.isAdded()){
             ft.show(spf);
         } else{
-            ft.add(R.id.menu_container, spf, Flags.SPLASH_FRAGMENT);
+            ft.add(R.id.menu_container, spf, Tags.SPLASH_FRAGMENT);
         }
         ft.commit();
         handler.postDelayed(new Runnable() {
@@ -165,22 +165,22 @@ public class MenuActivity extends FragmentActivity {
         if(mef.isAdded()){
             ft.show(mef);
         } else{
-            ft.add(R.id.menu_container, mef, Flags.MENU_FRAGMENT);
+            ft.add(R.id.menu_container, mef, Tags.MENU_FRAGMENT);
         }
 
-        spf = (SplashFragment) getSupportFragmentManager().findFragmentByTag(Flags.SPLASH_FRAGMENT);
+        spf = (SplashFragment) getSupportFragmentManager().findFragmentByTag(Tags.SPLASH_FRAGMENT);
         if (spf!=null){
             ft.hide(spf);
         }
-        tuf = (TutorialFragment) getSupportFragmentManager().findFragmentByTag(Flags.TUTORIAL_FRAGMENT);
+        tuf = (TutorialFragment) getSupportFragmentManager().findFragmentByTag(Tags.TUTORIAL_FRAGMENT);
         if(tuf!=null){
             ft.hide(tuf);
         }
-        ncf = (NewcatChooseFragment) getSupportFragmentManager().findFragmentByTag(Flags.NEWCAT_CHOOSE_FRAGMENT);
+        ncf = (NewcatChooseFragment) getSupportFragmentManager().findFragmentByTag(Tags.NEWCAT_CHOOSE_FRAGMENT);
         if(ncf!=null){
             ft.hide(ncf);
         }
-        msf = (MenuSettingsFragment) getSupportFragmentManager().findFragmentByTag(Flags.SETTINGS_FRAGMENT);
+        msf = (MenuSettingsFragment) getSupportFragmentManager().findFragmentByTag(Tags.SETTINGS_FRAGMENT);
         if(msf!=null){
             ft.hide(msf);
         }
@@ -201,13 +201,13 @@ public class MenuActivity extends FragmentActivity {
         if(ncf.isAdded()){
             ft.show(ncf);
         } else{
-            ft.add(R.id.menu_container, ncf, Flags.NEWCAT_CHOOSE_FRAGMENT);
+            ft.add(R.id.menu_container, ncf, Tags.NEWCAT_CHOOSE_FRAGMENT);
         }
-        mef = (MenuFragment) getSupportFragmentManager().findFragmentByTag(Flags.MENU_FRAGMENT);
+        mef = (MenuFragment) getSupportFragmentManager().findFragmentByTag(Tags.MENU_FRAGMENT);
         if(mef!=null){
             ft.hide(mef);
         }
-        ft.addToBackStack(Flags.NEWCAT_CHOOSE_FRAGMENT);
+        ft.addToBackStack(Tags.NEWCAT_CHOOSE_FRAGMENT);
         ft.commit();
     }
     public void toTutorial(){
@@ -216,13 +216,13 @@ public class MenuActivity extends FragmentActivity {
         if(tuf.isAdded()){
             ft.show(tuf);
         } else{
-            ft.add(R.id.menu_container,tuf,Flags.TUTORIAL_FRAGMENT);
+            ft.add(R.id.menu_container,tuf, Tags.TUTORIAL_FRAGMENT);
         }
-        mef = (MenuFragment) getSupportFragmentManager().findFragmentByTag(Flags.MENU_FRAGMENT);
+        mef = (MenuFragment) getSupportFragmentManager().findFragmentByTag(Tags.MENU_FRAGMENT);
         if(mef!=null){
             ft.hide(mef);
         }
-        ft.addToBackStack(Flags.TUTORIAL_FRAGMENT);
+        ft.addToBackStack(Tags.TUTORIAL_FRAGMENT);
         ft.commit();
     }
     public void toSettings(){
@@ -231,13 +231,13 @@ public class MenuActivity extends FragmentActivity {
         if(msf.isAdded()){
             ft.show(msf);
         } else{
-            ft.add(R.id.menu_container,msf,Flags.SETTINGS_FRAGMENT);
+            ft.add(R.id.menu_container,msf, Tags.SETTINGS_FRAGMENT);
         }
-        mef = (MenuFragment) getSupportFragmentManager().findFragmentByTag(Flags.MENU_FRAGMENT);
+        mef = (MenuFragment) getSupportFragmentManager().findFragmentByTag(Tags.MENU_FRAGMENT);
         if(mef!=null){
             ft.hide(mef);
         }
-        ft.addToBackStack(Flags.SETTINGS_FRAGMENT);
+        ft.addToBackStack(Tags.SETTINGS_FRAGMENT);
         ft.commit();
     }
     /*
@@ -249,13 +249,13 @@ public class MenuActivity extends FragmentActivity {
         if(nnf.isAdded()){
             ft.show(nnf);
         } else{
-            ft.add(R.id.menu_container,nnf,Flags.NEWCAT_NAME_FRAGMENT);
+            ft.add(R.id.menu_container,nnf, Tags.NEWCAT_NAME_FRAGMENT);
         }
-        ncf = (NewcatChooseFragment) getSupportFragmentManager().findFragmentByTag(Flags.NEWCAT_CHOOSE_FRAGMENT);
+        ncf = (NewcatChooseFragment) getSupportFragmentManager().findFragmentByTag(Tags.NEWCAT_CHOOSE_FRAGMENT);
         if(ncf!=null){
             ft.hide(ncf);
         }
-        ft.addToBackStack(Flags.NEWCAT_NAME_FRAGMENT);
+        ft.addToBackStack(Tags.NEWCAT_NAME_FRAGMENT);
         ft.commit();
     }
     public void nameToChoose(){
@@ -264,9 +264,9 @@ public class MenuActivity extends FragmentActivity {
         if(ncf.isAdded()){
             ft.show(ncf);
         } else{
-            ft.add(R.id.menu_container,ncf,Flags.NEWCAT_CHOOSE_FRAGMENT);
+            ft.add(R.id.menu_container,ncf, Tags.NEWCAT_CHOOSE_FRAGMENT);
         }
-        nnf = (NewcatNameFragment) getSupportFragmentManager().findFragmentByTag(Flags.NEWCAT_NAME_FRAGMENT);
+        nnf = (NewcatNameFragment) getSupportFragmentManager().findFragmentByTag(Tags.NEWCAT_NAME_FRAGMENT);
         if(nnf!=null){
             ft.hide(nnf);
         }
@@ -281,7 +281,7 @@ public class MenuActivity extends FragmentActivity {
             setName(inputName);
 
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            nnf = (NewcatNameFragment) getSupportFragmentManager().findFragmentByTag(Flags.NEWCAT_NAME_FRAGMENT);
+            nnf = (NewcatNameFragment) getSupportFragmentManager().findFragmentByTag(Tags.NEWCAT_NAME_FRAGMENT);
             if(nnf!=null){
                 ft.hide(nnf);
             }
@@ -299,7 +299,7 @@ public class MenuActivity extends FragmentActivity {
             cat.setCharacter(character);
 
 
-            SharedPreferences.Editor instanceEditor = getSharedPreferences(Flags.CAT_INSTANCES,MODE_PRIVATE).edit();
+            SharedPreferences.Editor instanceEditor = getSharedPreferences(Tags.CAT_INSTANCES,MODE_PRIVATE).edit();
             Gson gson = new Gson();
             String json = gson.toJson(cat);
             instanceEditor.putString(String.valueOf(cat.getID()),json);
@@ -307,8 +307,8 @@ public class MenuActivity extends FragmentActivity {
 
 
             //put current instance into sharedpreferences
-            SharedPreferences.Editor currentInfoEditor= getSharedPreferences(Flags.CURRENT_GAME_INFO, Context.MODE_PRIVATE).edit();
-            currentInfoEditor.putString(Flags.CURRENT_GAME_INSTANCE, json);
+            SharedPreferences.Editor currentInfoEditor= getSharedPreferences(Tags.CURRENT_GAME_INFO, Context.MODE_PRIVATE).edit();
+            currentInfoEditor.putString(Tags.CURRENT_GAME_INSTANCE, json);
             currentInfoEditor.commit();
 
             toCatActivity();

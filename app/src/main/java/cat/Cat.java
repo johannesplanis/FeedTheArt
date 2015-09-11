@@ -1,20 +1,13 @@
 package cat;
 
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
-import com.planis.johannes.catprototype.R;
-
 import java.util.concurrent.atomic.AtomicInteger;
 
-import catactivity.CatActivity;
+import backgroundcat.CatNotifications;
 
 /**
  * Created by JOHANNES on 9/8/2015.
@@ -128,7 +121,7 @@ public class Cat {
         this.lastTimestamp = timestamp;
         double previousFoodLevel = this.foodLevel;
         this.foodLevel = this.foodLevel - this.coefficient*timeElapsed;
-        int color = 0xFF919185;
+
 
         Intent broadcastIntent = new Intent(ALARMING_FOODLEVEL_ACTION);
         if(foodLevel<0){
@@ -145,8 +138,7 @@ public class Cat {
             LocalBroadcastManager.getInstance(context).sendBroadcast(broadcastIntent);
             Log.i(LEVEL_OF_ALARM, "NUDGE");
             //color yellow
-            color = 0xFFE8ED00;
-            issueNotification(context ,"Cat's getting hungry",color);
+            CatNotifications.issueNotification(context,"Hurry!", "Cat's getting hungry", Tags.APP_COLOR_NUDGE);
 
 
         }else if(previousFoodLevel>=ALARM_LEVEL&&foodLevel<=ALARM_LEVEL&&foodLevel>=CRITICAL_LEVEL){
@@ -154,16 +146,14 @@ public class Cat {
             LocalBroadcastManager.getInstance(context).sendBroadcast(broadcastIntent);
             Log.i(LEVEL_OF_ALARM, "ALARM");
             //color orange
-            color = 0xFFED7800;
-            issueNotification(context, "Cat's really hungry",color);
+            CatNotifications.issueNotification(context,"Hurry!", "Cat's really hungry", Tags.APP_COLOR_ALARM);
 
         }else if(previousFoodLevel>=CRITICAL_LEVEL&&foodLevel<=CRITICAL_LEVEL&&foodLevel>=DEAD){
             broadcastIntent.putExtra("LEVEL_OF_ALARM", CRITICAL_LEVEL);
             LocalBroadcastManager.getInstance(context).sendBroadcast(broadcastIntent);
             Log.i(LEVEL_OF_ALARM, "CRITICAL");
             //red color
-            color = 0xFFED1000;
-            issueNotification(context ,"Kitty is starving!",color);
+            CatNotifications.issueNotification(context,"Hurry!", "Kitty is starving!", Tags.APP_COLOR_CRITICAL);
 
         } else if(foodLevel>NUDGE_LEVEL){
             Log.i(LEVEL_OF_ALARM,"NONE");
@@ -204,31 +194,5 @@ public class Cat {
         return this.foodLevel;
     }
 
-    /**
-     * handy method to issue notification in multiple places
-     * @param context
-     * @param message
-     */
-    private void issueNotification(Context context, String message,int color){
-
-        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(),R.drawable.hipsterska_burgernia_dla_kotow_transparent);
-        long[] pattern = {0,500};
-
-        NotificationCompat.Builder nBuilder = new NotificationCompat.Builder(context)
-                .setSmallIcon(R.drawable.notificationicon)
-                .setLargeIcon(bitmap)
-                .setContentTitle("Hurry")
-                .setContentText(message)
-                .setColor(color)
-                .setVibrate(pattern);
-                //.setDefaults(NotificationCompat.DEFAULT_VIBRATE);
-        Intent intent = new Intent(context, CatActivity.class);
-        intent.putExtra("START_MODE","NOTIFICATION");
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
-        nBuilder.setContentIntent(pendingIntent);
-        int nNotificationID = 1111;
-        NotificationManager nNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        nNotificationManager.notify(nNotificationID,nBuilder.build());
-    }
 
 }

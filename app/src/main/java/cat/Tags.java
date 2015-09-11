@@ -3,7 +3,8 @@ package cat;
 /**
  * flags for accessing storage, fragment manipulation
  */
-public class Flags {
+public class Tags {
+
     //Fragment tags
     public static final String MENU_FRAGMENT = "MEF";
     public static final String SPLASH_FRAGMENT = "SPF";
@@ -22,6 +23,11 @@ public class Flags {
     public static final String NAME = "NAME";
 
 
+    public static final int APP_COLOR_SUCCESS = 0xFF40D211;
+
+    public static final int APP_COLOR_NUDGE = 0xFFE8ED00;
+    public static final int APP_COLOR_ALARM = 0xFFED7800;
+    public static final int APP_COLOR_CRITICAL = 0xFFED1000;
 
 
 }
