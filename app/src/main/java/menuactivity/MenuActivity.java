@@ -8,9 +8,11 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.widget.SeekBar;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -33,7 +35,7 @@ import modules.BusModule;
 * Why ?!? Probably it removes all background fragments' clickability.
 * */
 
-public class MenuActivity extends FragmentActivity {
+public class MenuActivity extends FragmentActivity implements SeekBar.OnSeekBarChangeListener {
     public SplashFragment spf;
     public MenuFragment mef;
     public TutorialFragment tuf;
@@ -75,7 +77,7 @@ public class MenuActivity extends FragmentActivity {
         } else{
             startup();
         }
-
+        setupPreferences();
 
     }
 
@@ -93,8 +95,8 @@ public class MenuActivity extends FragmentActivity {
 
     @Override
     protected void onSaveInstanceState(Bundle out){
-        out.putInt(Tags.CHARACTER,character);
-        out.putString(Tags.NAME,name);
+        out.putInt(Tags.CHARACTER, character);
+        out.putString(Tags.NAME, name);
         super.onSaveInstanceState(out);
     }
     /*
@@ -114,11 +116,8 @@ public class MenuActivity extends FragmentActivity {
 
         Intent intent = getIntent();
         String type = intent.getStringExtra("TYPE");
-
-
         shared = getSharedPreferences("INSTANCES_COUNT", MODE_PRIVATE);
         COUNT = shared.getInt("COUNT",0);
-
 
 
         /*
@@ -134,8 +133,25 @@ public class MenuActivity extends FragmentActivity {
         } else{
             System.out.println("Error! Impossible test case!");
         }
-
-
+    }
+    /**
+     * stup default shared preferences once and only once
+     */
+    private void setupPreferences(){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        if(!prefs.getBoolean("firstTime", false)) {
+            SharedPreferences.Editor ed = getSharedPreferences(SettingsController.SETTINGS_PREFS, MODE_PRIVATE).edit();
+            ed.putFloat(SettingsController.SETTINGS_STARVING_SPEED_COEFF, SettingsController.DEFAULT_STARVING_SPEED);
+            ed.putInt(SettingsController.SETTINGS_DEFAULT_ALARM_LEVELS_SIZE,3);
+            float[] alarmLevels = SettingsController.DEFAULT_ALARM_LEVELS;
+            for(int i=0;i<alarmLevels.length;i++){
+                ed.putFloat(SettingsController.SETTINGS_DEFAULT_ALARM_LEVELS + "_" + i, alarmLevels[i]);
+            }
+            ed.commit();
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putBoolean("firstTime", true);
+            editor.commit();
+        }
     }
     public void splashStartup(){
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -216,7 +232,7 @@ public class MenuActivity extends FragmentActivity {
         if(tuf.isAdded()){
             ft.show(tuf);
         } else{
-            ft.add(R.id.menu_container,tuf, Tags.TUTORIAL_FRAGMENT);
+            ft.add(R.id.menu_container, tuf, Tags.TUTORIAL_FRAGMENT);
         }
         mef = (MenuFragment) getSupportFragmentManager().findFragmentByTag(Tags.MENU_FRAGMENT);
         if(mef!=null){
@@ -264,7 +280,7 @@ public class MenuActivity extends FragmentActivity {
         if(ncf.isAdded()){
             ft.show(ncf);
         } else{
-            ft.add(R.id.menu_container,ncf, Tags.NEWCAT_CHOOSE_FRAGMENT);
+            ft.add(R.id.menu_container, ncf, Tags.NEWCAT_CHOOSE_FRAGMENT);
         }
         nnf = (NewcatNameFragment) getSupportFragmentManager().findFragmentByTag(Tags.NEWCAT_NAME_FRAGMENT);
         if(nnf!=null){
@@ -294,7 +310,7 @@ public class MenuActivity extends FragmentActivity {
 
             //create Cat instance, put into separate shared preferences using gson under its ID as key
             //
-            Cat cat = new Cat();
+            Cat cat = new Cat(this);//jeżeli zserializujemy z tym kontekstem to odczytując w drugiej activity będzie dupa
             cat.setName(inputName);
             cat.setCharacter(character);
 
@@ -325,7 +341,7 @@ public class MenuActivity extends FragmentActivity {
      */
     public void toCatActivity(){
         Intent intent = new Intent(getApplicationContext(), CatActivity.class);
-        intent.putExtra("START_MODE","MENU_ACTIVITY");
+        intent.putExtra("START_MODE", "MENU_ACTIVITY");
         startActivity(intent);
     }
 
@@ -353,10 +369,13 @@ public class MenuActivity extends FragmentActivity {
 
         //BusProvider.getInstance().post("Fuck yeah!");
         bus.post("Fuck yeah, injection!");
-        Log.i("Otto","test database!");
+        Log.i("Otto", "test database!");
 
 
     }
+
+
+
     //class to carry the message
     public class MessageAvailableEvent{
         private String msg;
@@ -379,4 +398,24 @@ public class MenuActivity extends FragmentActivity {
     public void setName(String name){this.name = name;}
 
 
+    /**
+     * settings section
+     */
+
+
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+
+    }
 }
+

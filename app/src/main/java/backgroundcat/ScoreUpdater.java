@@ -17,7 +17,7 @@ import cat.Tags;
 public class ScoreUpdater {
 
     static public void update(Context context, double increment){
-        Cat cat = new Cat();
+        Cat cat = new Cat(context);
         SharedPreferences sp = context.getSharedPreferences(Tags.CURRENT_GAME_INFO, Context.MODE_PRIVATE);
         Gson gson = new Gson();
         String json = sp.getString(Tags.CURRENT_GAME_INSTANCE, "");

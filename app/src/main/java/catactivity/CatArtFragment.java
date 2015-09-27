@@ -134,7 +134,12 @@ public class CatArtFragment extends Fragment{
         }   else{
             System.out.println("No reference to image found!");
         }
-        Picasso.with(context).load(art.getUrl()).into(artContainer);
+        try{
+            Picasso.with(context).load(art.getUrl()).into(artContainer);
+        } catch(IllegalArgumentException e){
+            e.printStackTrace();
+        }
+
     }
 
 

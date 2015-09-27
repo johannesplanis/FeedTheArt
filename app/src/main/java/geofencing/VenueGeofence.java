@@ -57,7 +57,7 @@ public class VenueGeofence {
                 .setTransitionTypes(mTransitionType)
                 .setCircularRegion(mLatitude, mLongitude, mRadius)
                 .setExpirationDuration(mExpirationDuration)
-                .setLoiteringDelay(10000)
+                .setLoiteringDelay(3000)
                 .build();
 
     }

@@ -17,7 +17,8 @@
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
         android:layout_gravity="center_horizontal"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:padding="25dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -28,6 +29,39 @@
             android:layout_gravity="center_horizontal|bottom"
             android:padding="10dp"
             android:singleLine="false" />
+
+        <Switch
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Notifications"
+            android:id="@+id/settings_notification_permission_switch"
+            android:layout_gravity="center_horizontal|top"
+            android:checked="true" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="Starving speed"
+                android:id="@+id/settings_starving_speed_text"
+                android:layout_gravity="left|center_vertical"
+                android:textColor="#000000"
+                android:paddingBottom="10dp" />
+
+            <SeekBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:indeterminate="false"
+                android:id="@+id/settings_starving_speed"
+                android:max="100" />
+        </LinearLayout>
 
     </FrameLayout>
 

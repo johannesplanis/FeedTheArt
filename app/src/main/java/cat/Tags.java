@@ -29,5 +29,5 @@ public class Tags {
     public static final int APP_COLOR_ALARM = 0xFFED7800;
     public static final int APP_COLOR_CRITICAL = 0xFFED1000;
 
-
+    public static final String SETTINGS = "SETTINGS";
 }

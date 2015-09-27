@@ -33,26 +33,26 @@ public class Constants {
     public static final String YERBA_BUENA_ID = "2";
     public static final double YERBA_BUENA_LATITUDE = 37.784886;
     public static final double YERBA_BUENA_LONGITUDE = -122.402671;
-    public static final float YERBA_BUENA_RADIUS_METERS = 72.0f;
+    public static final float YERBA_BUENA_RADIUS_METERS = 100.0f;
 
     //Geofence parameters for Retoryka
     public static final String RETORYKA_ID = "3";
     public static final double RETORYKA_LATITUDE = 50.0574927 ;
     public static final double RETORYKA_LONGITUDE = 19.9284563;
-    public static final float RETORYKA_RADIUS_METERS = 72.0f;
+    public static final float RETORYKA_RADIUS_METERS = 100.0f;
 
 
     //Geofence parameters for Muzeum Narodowe
     public static final String MUZEUM_NARODOWE_ID = "4";
     public static final double MUZEUM_NARODOWE_LATITUDE = 50.0595709;
     public static final double MUZEUM_NARODOWE_LONGITUDE = 19.9252636;
-    public static final float MUZEUM_NARODOWE_RADIUS_METERS = 72.0f;
+    public static final float MUZEUM_NARODOWE_RADIUS_METERS = 100.0f;
 
     //Geofence parameters for Muzeum Witrażu
     public static final String MUZEUM_WITRAZU_ID = "5";
     public static final double MUZEUM_WITRAZU_LATITUDE = 50.0585207;
     public static final double MUZEUM_WITRAZU_LONGITUDE = 19.9222739;
-    public static final float MUZEUM_WITRAZU_RADIUS_METERS = 72.0f;
+    public static final float MUZEUM_WITRAZU_RADIUS_METERS = 100.0f;
 
 
     // The constants below are less interesting than those above.

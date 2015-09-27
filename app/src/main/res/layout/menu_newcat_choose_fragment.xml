@@ -24,8 +24,8 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/linearLayout"
         android:layout_below="@+id/newcat_choose_fragment_header"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
+        android:paddingLeft="0dp"
+        android:paddingRight="0dp"
         android:paddingBottom="15dp">
 
     </android.support.v4.view.ViewPager>

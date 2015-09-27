@@ -8,6 +8,7 @@ import android.util.Log;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import backgroundcat.CatNotifications;
+import menuactivity.SettingsController;
 
 /**
  * Created by JOHANNES on 9/8/2015.
@@ -21,16 +22,17 @@ public class Cat {
     private double lastTimestamp;
     private double coefficient; //how fast it's getting hungry
     private int level;
-
-    public static final double NUDGE_LEVEL = 100;
-    public static final double ALARM_LEVEL = 25;
-    public static final double CRITICAL_LEVEL = 5;
-    public static final double DEAD = 0.0;
-
+    private double NUDGE_LEVEL = 100;
+    private double ALARM_LEVEL = 25;
+    private double CRITICAL_LEVEL = 5;
+    private double DEAD = 0f;
+    private SettingsController sc;
     public static final String ALARMING_FOODLEVEL_ACTION = "com.planis.johannes.catprototype.cat.Cat";
     public static final String LEVEL_OF_ALARM = "LEVEL_OF_ALARM";
     //when you read cat fields from any storage
-    public Cat(double lastTimestamp, int ID,String name, int character, double foodLevel, double coefficient, int level) {
+    public Cat(double lastTimestamp, int ID,String name, int character, double foodLevel, double coefficient, int level,Context context) {
+
+        refreshSettings(context);
         this.lastTimestamp = lastTimestamp;
         this.ID = ID;
         this.name = name;
@@ -41,7 +43,9 @@ public class Cat {
     }
 
     //both constructors when you create new cat in creator and want to ensure unique ID
-    public Cat(String name, int character, double foodLevel, double coefficient, int level) {
+    public Cat(String name, int character, double foodLevel, double coefficient, int level,Context context) {
+
+        refreshSettings(context);
         this.lastTimestamp = System.currentTimeMillis();
         this.ID = nextID.incrementAndGet();
         this.name = name;
@@ -49,18 +53,21 @@ public class Cat {
         this.foodLevel = foodLevel;
         this.coefficient = coefficient;
         this.level = level;
-
     }
 
-    public Cat(){
+    public Cat(Context context){
+
+
         this.lastTimestamp = System.currentTimeMillis();
         this.ID = nextID.incrementAndGet();
         this.name = "Noname" ;
         this.character = 1;
         this.foodLevel = 101;
-        this.coefficient = 0.0001;
         this.level = 1;
+        refreshSettings(context);
     }
+
+
 
     public int getID(){
         return ID;
@@ -109,6 +116,35 @@ public class Cat {
     //
 
     /**
+     * read from settings info about current preferences
+     * useful with fast-paced gameplay
+     */
+    public void refreshSettings(Context context){
+
+        sc = new SettingsController(context);
+
+        if(sc!=null){
+            float[] levels = sc.getAlarmLevels();
+            float coeff = sc.getStarvingSpeed();
+            if(levels.length==3) {
+                this.NUDGE_LEVEL = Double.parseDouble(Float.toString(levels[0]));
+                this.ALARM_LEVEL = Double.parseDouble(Float.toString(levels[1]));
+                this.CRITICAL_LEVEL = Double.parseDouble(Float.toString(levels[2]));
+
+                Log.i("SETTINGS","Food levels loaded!");
+            }
+            if(coeff>0){
+                this.coefficient = coeff;
+            } else{
+                this.coefficient = 0.0001;
+            }
+        }   else{
+            Log.e("SETTINGS","Controller is null!");
+        }
+
+    }
+
+    /**
      * according to last known score and timestamp, calculate current score and return it
      * update values of last timestamp and food level
      * send broadcasts when food level is alarming
@@ -121,14 +157,15 @@ public class Cat {
         this.lastTimestamp = timestamp;
         double previousFoodLevel = this.foodLevel;
         this.foodLevel = this.foodLevel - this.coefficient*timeElapsed;
-
+        refreshSettings(context);
 
         Intent broadcastIntent = new Intent(ALARMING_FOODLEVEL_ACTION);
+
         if(foodLevel<0){
             this.foodLevel=0;
         }
-        if (previousFoodLevel>0&&foodLevel<=0){
 
+        if (previousFoodLevel>0&&foodLevel<=0){
             broadcastIntent.putExtra(LEVEL_OF_ALARM,DEAD);
             LocalBroadcastManager.getInstance(context).sendBroadcast(broadcastIntent);
             Log.i(LEVEL_OF_ALARM,"DEAD");
@@ -138,22 +175,27 @@ public class Cat {
             LocalBroadcastManager.getInstance(context).sendBroadcast(broadcastIntent);
             Log.i(LEVEL_OF_ALARM, "NUDGE");
             //color yellow
-            CatNotifications.issueNotification(context,"Hurry!", "Cat's getting hungry", Tags.APP_COLOR_NUDGE);
-
+            if(sc.isNotificationPermission()) {
+                CatNotifications.issueNotification(context, "Hurry!", "Cat's getting hungry", Tags.APP_COLOR_NUDGE);
+            }
 
         }else if(previousFoodLevel>=ALARM_LEVEL&&foodLevel<=ALARM_LEVEL&&foodLevel>=CRITICAL_LEVEL){
             broadcastIntent.putExtra("LEVEL_OF_ALARM", ALARM_LEVEL);
             LocalBroadcastManager.getInstance(context).sendBroadcast(broadcastIntent);
             Log.i(LEVEL_OF_ALARM, "ALARM");
             //color orange
-            CatNotifications.issueNotification(context,"Hurry!", "Cat's really hungry", Tags.APP_COLOR_ALARM);
+            if(sc.isNotificationPermission()) {
+                CatNotifications.issueNotification(context, "Hurry!", "Cat's really hungry", Tags.APP_COLOR_ALARM);
+            }
 
         }else if(previousFoodLevel>=CRITICAL_LEVEL&&foodLevel<=CRITICAL_LEVEL&&foodLevel>=DEAD){
             broadcastIntent.putExtra("LEVEL_OF_ALARM", CRITICAL_LEVEL);
             LocalBroadcastManager.getInstance(context).sendBroadcast(broadcastIntent);
             Log.i(LEVEL_OF_ALARM, "CRITICAL");
             //red color
-            CatNotifications.issueNotification(context,"Hurry!", "Kitty is starving!", Tags.APP_COLOR_CRITICAL);
+            if(sc.isNotificationPermission()) {
+                CatNotifications.issueNotification(context, "Hurry!", "Kitty is starving!", Tags.APP_COLOR_CRITICAL);
+            }
 
         } else if(foodLevel>NUDGE_LEVEL){
             Log.i(LEVEL_OF_ALARM,"NONE");
@@ -165,7 +207,7 @@ public class Cat {
 
 
     /**
-     *
+     * increase value by the certain factor
      */
     public double feedTheArtByPercent(double percent){
 
@@ -180,6 +222,7 @@ public class Cat {
 
     }
     /**
+     *
      * increment is the value between -101 and 101
      */
     public double feedTheArtByValue(double increment){
@@ -193,6 +236,7 @@ public class Cat {
         }
         return this.foodLevel;
     }
+
 
 
 }

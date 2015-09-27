@@ -13,12 +13,13 @@ import com.google.android.gms.location.GeofencingEvent;
 import backgroundcat.CatNotifications;
 import backgroundcat.ScoreUpdater;
 import cat.Tags;
+import menuactivity.SettingsController;
 
 /**
  * Created by JOHANNES on 9/11/2015.
  */
 public class GeofencesIntentService extends IntentService {
-
+    private SettingsController sc;
     public GeofencesIntentService() {
         super("GeofenceIntentService");
     }
@@ -34,7 +35,12 @@ public class GeofencesIntentService extends IntentService {
             if(Geofence.GEOFENCE_TRANSITION_DWELL == transitionType){
                 Log.i("GEOFENCE", "DWELLING INSIDE");
                 showOnMainThread(this, "DWELLING INSIDE!");
-                CatNotifications.issueNotification(getApplicationContext(), "Good job!", "You are inside! ", Tags.APP_COLOR_SUCCESS);
+
+
+                sc = new SettingsController(this);
+                if(sc.isNotificationPermission()) {
+                    CatNotifications.issueNotification(getApplicationContext(), "Good job!", "You are inside! ", Tags.APP_COLOR_SUCCESS);
+                }
                 ScoreUpdater.update(getApplicationContext(), 10);
             }
         }
