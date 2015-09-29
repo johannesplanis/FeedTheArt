@@ -1,10 +1,9 @@
 package menuactivity;
 
 import android.app.Activity;
-import android.support.v4.app.Fragment;
-import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,14 +12,17 @@ import android.widget.TextView;
 
 import com.planis.johannes.catprototype.R;
 
+import cat.Tags;
+import controllers.SharedPreferencesController;
+
 /**
  * Created by JOHANNES on 8/5/2015.
  */
 public class MenuFragment extends Fragment {
+    SharedPreferencesController spc;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
 
         final View view = inflater.inflate(R.layout.menu_fragment,
                 container, false);
@@ -56,10 +58,9 @@ public class MenuFragment extends Fragment {
         Check if the game is already created
          */
         Activity act = getActivity();
-        SharedPreferences shared = act.getSharedPreferences("INSTANCES_COUNT", act.MODE_PRIVATE);
-
+        spc = new SharedPreferencesController(act.getApplicationContext());
+        int COUNT = spc.getInt(Tags.CAT_INSTANCES_COUNT, 0);
         //check if app is opened for the first time
-        int COUNT = shared.getInt("COUNT",0);
         if(COUNT==0){
             continueButton.setVisibility(View.INVISIBLE);
         }
@@ -68,17 +69,9 @@ public class MenuFragment extends Fragment {
         tv.setText("Feed The Art!");
         tv.setTypeface(customFont);
         return view;
-
-
     }
-    public void checkIfFirstTime(){
-        Activity act = getActivity();
-        SharedPreferences shared = act.getSharedPreferences("INSTANCES_COUNT", act.MODE_PRIVATE);
-        int COUNT = shared.getInt("COUNT",0);
-        if(COUNT==0){
 
-        }
-    }
+
     public void continueGame(){
         Activity act = getActivity(); if (act instanceof MenuActivity)
             ((MenuActivity) act).continueGame();

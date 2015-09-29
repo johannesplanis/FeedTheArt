@@ -11,15 +11,22 @@ import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingEvent;
 
 import backgroundcat.CatNotifications;
-import backgroundcat.ScoreUpdater;
+import cat.Constants;
 import cat.Tags;
-import menuactivity.SettingsController;
+import controllers.SharedPreferencesController;
+import controllers.SettingsController;
 
 /**
  * Created by JOHANNES on 9/11/2015.
  */
 public class GeofencesIntentService extends IntentService {
     private SettingsController sc;
+    private SharedPreferencesController scp;
+    /**
+     * increment is fixed for now
+     */
+    private static final double INCREMENT = 10d;
+
     public GeofencesIntentService() {
         super("GeofenceIntentService");
     }
@@ -27,7 +34,7 @@ public class GeofencesIntentService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
-
+        scp = new SharedPreferencesController(getApplicationContext());
         if(geofencingEvent.hasError()){
             Log.i(Constants.APP_TAG, "Location services error: " + geofencingEvent.getErrorCode());
         } else{
@@ -41,7 +48,11 @@ public class GeofencesIntentService extends IntentService {
                 if(sc.isNotificationPermission()) {
                     CatNotifications.issueNotification(getApplicationContext(), "Good job!", "You are inside! ", Tags.APP_COLOR_SUCCESS);
                 }
-                ScoreUpdater.update(getApplicationContext(), 10);
+                Log.i("INCREMENT","SENDING_GOOD_NEWS");
+                //not elegant bc only one receiver can receive
+                Intent broadcastIntent = new Intent(Tags.SCORE_INCREMENT);
+                broadcastIntent.putExtra(Tags.SCORE_INCREMENT_FIELD, INCREMENT);
+                getApplicationContext().sendBroadcast(broadcastIntent);
             }
         }
     }

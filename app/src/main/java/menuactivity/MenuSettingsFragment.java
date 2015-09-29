@@ -19,6 +19,7 @@ import com.planis.johannes.catprototype.R;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import cat.Tags;
+import controllers.SettingsController;
 
 /**
  * Created by JOHANNES on 8/6/2015.
@@ -71,8 +72,8 @@ public class MenuSettingsFragment extends Fragment implements SeekBar.OnSeekBarC
         customFont = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/AustieBostKittenKlub.ttf");
         head.setTypeface(customFont);
         backButton.setTypeface(customFont);
-        float fspeed = sc.getStarvingSpeed()/2*1000000;
-        mSeekBar.setProgress(Math.round(fspeed)); //after loading settings, set current value of setting
+        double fspeed = sc.getStarvingSpeed()/2*1000000;
+        mSeekBar.setProgress((int)Math.ceil(fspeed)); //after loading settings, set current value of setting
         mSwitch.setChecked(sc.isNotificationPermission());
 
         return view;
@@ -98,7 +99,7 @@ public class MenuSettingsFragment extends Fragment implements SeekBar.OnSeekBarC
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
-        float fProgress = (float) progress;
+        double fProgress = (double) progress;
         sc.setStarvingSpeed(fProgress*2/1000000);//adjust to look nice in settings page, and work as designed as well
         Log.i(Tags.SETTINGS,"Progress:"+progress);
     }

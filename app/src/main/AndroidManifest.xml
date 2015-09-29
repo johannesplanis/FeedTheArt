@@ -54,6 +54,8 @@
                  android:exported="false"/>
         <service android:name="geofencing.GeofencesIntentService"
             android:exported="false"/>
+        <service android:name="geofencing.GeofencesSetupIntentService"
+            android:exported="false"/>
         <receiver
             android:name="backgroundcat.AlarmReceiver"
             android:process=":remote"/>
@@ -64,6 +66,15 @@
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name = "backgroundcat.ScoreIncrementReceiver"
+            android:exported="false">
+                <intent-filter>
+                    <action android:name="SCORE_INCREMENT"></action>
+                </intent-filter>
+
         </receiver>
 
     </application>

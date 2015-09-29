@@ -21,9 +21,9 @@ import com.planis.johannes.catprototype.R;
 
 import java.text.DecimalFormat;
 
-import backgroundcat.FoodLevelUpdateService;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import cat.Tags;
 
 /**
  * Created by JOHANNES on 8/5/2015.
@@ -75,7 +75,7 @@ public class CatFragment extends Fragment {
     @Override
     public void onResume(){
         super.onResume();
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver,new IntentFilter(FoodLevelUpdateService.UPDATE_FOODLEVEL_ACTION));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver,new IntentFilter(Tags.UPDATE_FOODLEVEL_ACTION));
     }
     @Override
     public void onPause(){
@@ -142,16 +142,20 @@ public class CatFragment extends Fragment {
         catDialogTop.setText("Hello, it's me, "+catName+" !");
     }
 
-    //receive broadcasted value from service and put into relevant field
-    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+    /**
+     *receive broadcasted value from service and put into relevant field
+     */
+     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            double result = intent.getDoubleExtra("SERVICE_BROADCAST", 0);
-            DecimalFormat formatter = new DecimalFormat("###.#");
-            String output = formatter.format(result);
 
-            Log.i("BROADCAST_RECEIVER",output);
             catDialogBottom.requestLayout();
+
+            DecimalFormat formatter = new DecimalFormat("###.#");
+            double result = intent.getDoubleExtra("SERVICE_BROADCAST", 0);
+            String output = formatter.format(result);
+            Log.i("CAT_FRAGMENT_RECEIVER", output);
+
             catDialogBottom.setText(output);
         }
     };

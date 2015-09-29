@@ -1,4 +1,4 @@
-package geofencing;
+package cat;
 
 import android.net.Uri;
 

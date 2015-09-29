@@ -8,31 +8,31 @@ import android.util.Log;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import backgroundcat.CatNotifications;
-import menuactivity.SettingsController;
+import controllers.SettingsController;
 
 /**
+ * PROTIP: If you need to serialize object later, make sure fields in it are only primitives, otherwise it will leak, gc will restart frequently, stack will overflow
  * Created by JOHANNES on 9/8/2015.
  */
-public class Cat {
+ public class Cat {
     static AtomicInteger nextID = new AtomicInteger();
     private int ID;
     private String name;
     private int character;
     private double foodLevel; //between 0 and 101(101 bc cat's gotta stay full for some time)
     private double lastTimestamp;
+    private static final double defaultCoefficient = 0.0001d;
     private double coefficient; //how fast it's getting hungry
     private int level;
-    private double NUDGE_LEVEL = 100;
-    private double ALARM_LEVEL = 25;
-    private double CRITICAL_LEVEL = 5;
-    private double DEAD = 0f;
-    private SettingsController sc;
-    public static final String ALARMING_FOODLEVEL_ACTION = "com.planis.johannes.catprototype.cat.Cat";
-    public static final String LEVEL_OF_ALARM = "LEVEL_OF_ALARM";
+    private double NUDGE_LEVEL = 100d;
+    private double ALARM_LEVEL = 25d;
+    private double CRITICAL_LEVEL = 5d;
+    private double DEAD = 0d;
+
     //when you read cat fields from any storage
     public Cat(double lastTimestamp, int ID,String name, int character, double foodLevel, double coefficient, int level,Context context) {
 
-        refreshSettings(context);
+        //refreshSettings(context);
         this.lastTimestamp = lastTimestamp;
         this.ID = ID;
         this.name = name;
@@ -45,7 +45,7 @@ public class Cat {
     //both constructors when you create new cat in creator and want to ensure unique ID
     public Cat(String name, int character, double foodLevel, double coefficient, int level,Context context) {
 
-        refreshSettings(context);
+        //refreshSettings(context);
         this.lastTimestamp = System.currentTimeMillis();
         this.ID = nextID.incrementAndGet();
         this.name = name;
@@ -55,8 +55,7 @@ public class Cat {
         this.level = level;
     }
 
-    public Cat(Context context){
-
+    public Cat(){
 
         this.lastTimestamp = System.currentTimeMillis();
         this.ID = nextID.incrementAndGet();
@@ -64,7 +63,7 @@ public class Cat {
         this.character = 1;
         this.foodLevel = 101;
         this.level = 1;
-        refreshSettings(context);
+        this.coefficient = 1;//0.0001;
     }
 
 
@@ -120,28 +119,14 @@ public class Cat {
      * useful with fast-paced gameplay
      */
     public void refreshSettings(Context context){
-
-        sc = new SettingsController(context);
-
-        if(sc!=null){
-            float[] levels = sc.getAlarmLevels();
-            float coeff = sc.getStarvingSpeed();
-            if(levels.length==3) {
-                this.NUDGE_LEVEL = Double.parseDouble(Float.toString(levels[0]));
-                this.ALARM_LEVEL = Double.parseDouble(Float.toString(levels[1]));
-                this.CRITICAL_LEVEL = Double.parseDouble(Float.toString(levels[2]));
-
-                Log.i("SETTINGS","Food levels loaded!");
-            }
-            if(coeff>0){
-                this.coefficient = coeff;
+        SettingsController sc = new SettingsController(context);
+        double coe = sc.getStarvingSpeed();
+        Log.i("CREATOR PUT",""+coe);
+            if(coe>0){
+                this.coefficient = coe;
             } else{
                 this.coefficient = 0.0001;
             }
-        }   else{
-            Log.e("SETTINGS","Controller is null!");
-        }
-
     }
 
     /**
@@ -151,29 +136,29 @@ public class Cat {
      * @param context
      * @return
      */
-    public double updateFoodLevel(Context context){
+    public double updateFoodLevel(Context context, double coeff){
+        SettingsController sc = new SettingsController(context);
         double timestamp = System.currentTimeMillis();
         double timeElapsed = timestamp-this.lastTimestamp;
         this.lastTimestamp = timestamp;
         double previousFoodLevel = this.foodLevel;
-        this.foodLevel = this.foodLevel - this.coefficient*timeElapsed;
-        refreshSettings(context);
+        this.foodLevel = this.foodLevel - 2*coeff*this.coefficient*timeElapsed;//2 bcin settings it will be as 0-100 and default will be 50
 
-        Intent broadcastIntent = new Intent(ALARMING_FOODLEVEL_ACTION);
+        Intent broadcastIntent = new Intent(Tags.ALARMING_FOODLEVEL_ACTION);
 
         if(foodLevel<0){
             this.foodLevel=0;
         }
 
         if (previousFoodLevel>0&&foodLevel<=0){
-            broadcastIntent.putExtra(LEVEL_OF_ALARM,DEAD);
+            broadcastIntent.putExtra(Tags.LEVEL_OF_ALARM,DEAD);
             LocalBroadcastManager.getInstance(context).sendBroadcast(broadcastIntent);
-            Log.i(LEVEL_OF_ALARM,"DEAD");
+            Log.i(Tags.LEVEL_OF_ALARM,"DEAD");
 
         }else if(previousFoodLevel>=NUDGE_LEVEL&&foodLevel<=NUDGE_LEVEL&&foodLevel>=ALARM_LEVEL){
             broadcastIntent.putExtra("LEVEL_OF_ALARM", NUDGE_LEVEL);
             LocalBroadcastManager.getInstance(context).sendBroadcast(broadcastIntent);
-            Log.i(LEVEL_OF_ALARM, "NUDGE");
+            Log.i(Tags.LEVEL_OF_ALARM, "NUDGE");
             //color yellow
             if(sc.isNotificationPermission()) {
                 CatNotifications.issueNotification(context, "Hurry!", "Cat's getting hungry", Tags.APP_COLOR_NUDGE);
@@ -182,7 +167,7 @@ public class Cat {
         }else if(previousFoodLevel>=ALARM_LEVEL&&foodLevel<=ALARM_LEVEL&&foodLevel>=CRITICAL_LEVEL){
             broadcastIntent.putExtra("LEVEL_OF_ALARM", ALARM_LEVEL);
             LocalBroadcastManager.getInstance(context).sendBroadcast(broadcastIntent);
-            Log.i(LEVEL_OF_ALARM, "ALARM");
+            Log.i(Tags.LEVEL_OF_ALARM, "ALARM");
             //color orange
             if(sc.isNotificationPermission()) {
                 CatNotifications.issueNotification(context, "Hurry!", "Cat's really hungry", Tags.APP_COLOR_ALARM);
@@ -191,14 +176,14 @@ public class Cat {
         }else if(previousFoodLevel>=CRITICAL_LEVEL&&foodLevel<=CRITICAL_LEVEL&&foodLevel>=DEAD){
             broadcastIntent.putExtra("LEVEL_OF_ALARM", CRITICAL_LEVEL);
             LocalBroadcastManager.getInstance(context).sendBroadcast(broadcastIntent);
-            Log.i(LEVEL_OF_ALARM, "CRITICAL");
+            Log.i(Tags.LEVEL_OF_ALARM, "CRITICAL");
             //red color
             if(sc.isNotificationPermission()) {
                 CatNotifications.issueNotification(context, "Hurry!", "Kitty is starving!", Tags.APP_COLOR_CRITICAL);
             }
 
         } else if(foodLevel>NUDGE_LEVEL){
-            Log.i(LEVEL_OF_ALARM,"NONE");
+            Log.i(Tags.LEVEL_OF_ALARM,"NONE");
         }
         return foodLevel;
     }
@@ -222,21 +207,40 @@ public class Cat {
 
     }
     /**
-     *
+     * increment food value without checking levels, it will be updated soon in foreground
+     * T ODO make sure when you reach level in background with this method, it will notify immediately, not wait for next iteration of alarm
      * increment is the value between -101 and 101
      */
-    public double feedTheArtByValue(double increment){
+    public double feedTheArtByValue(Context ctxt, double increment){
 
 
         this.foodLevel +=increment;
+        Log.i("FOOD_LEVEL_BY_VALUE",""+this.foodLevel);
         if(this.foodLevel>101){
             this.foodLevel = 101;
         } else if (this.foodLevel<0){
             this.foodLevel = 0;
         }
+
+        Intent broadcastIntent = new Intent(Tags.UPDATE_FOODLEVEL_ACTION);
+        double message = this.foodLevel;
+        Log.i("FOOD_LEVEL_BY_VALUE1",""+message);
+        broadcastIntent.putExtra("SERVICE_BROADCAST", message);
+        LocalBroadcastManager.getInstance(ctxt).sendBroadcast(broadcastIntent);
         return this.foodLevel;
     }
 
 
+    /**
+     * copy cat to new variable, but assign it current context. Works with 'transient' keyword
+     * @param context
+     * @return
+     */
+    public Cat copyCat(Context context){
+        Cat cat = this;
+        SettingsController sc = new SettingsController(context);
+        sc.refreshSettings(cat);
+        return cat;
+    }
 
 }

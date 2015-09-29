@@ -2,7 +2,6 @@
 
 package menuactivity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -26,6 +25,8 @@ import javax.inject.Inject;
 import cat.Cat;
 import cat.Tags;
 import catactivity.CatActivity;
+import controllers.SettingsController;
+import controllers.SharedPreferencesController;
 import modules.BusModule;
 
 /*
@@ -43,9 +44,11 @@ public class MenuActivity extends FragmentActivity implements SeekBar.OnSeekBarC
     public NewcatNameFragment nnf;
     public MenuSettingsFragment msf;
     public SharedPreferences shared;
+    private SharedPreferencesController spc;
     private int COUNT;
     private Handler handler = new Handler();
-
+    Cat cat;
+    Gson gson;
 
 
     public int character;
@@ -67,6 +70,7 @@ public class MenuActivity extends FragmentActivity implements SeekBar.OnSeekBarC
             character = savedInstanceState.getInt(Tags.CHARACTER);
             name = savedInstanceState.getString(Tags.NAME);
         }
+        spc = new SharedPreferencesController(getApplicationContext());
 
         Intent intent = getIntent();
         Boolean exit = intent.getBooleanExtra("EXIT",false);
@@ -84,6 +88,7 @@ public class MenuActivity extends FragmentActivity implements SeekBar.OnSeekBarC
     @Override
     public void onResume(){
         super.onResume();
+
         //BusProvider.getInstance().register(sendEventHandler);
     }
 
@@ -97,7 +102,19 @@ public class MenuActivity extends FragmentActivity implements SeekBar.OnSeekBarC
     protected void onSaveInstanceState(Bundle out){
         out.putInt(Tags.CHARACTER, character);
         out.putString(Tags.NAME, name);
+        gson = new Gson();
+        String json = gson.toJson(cat);
+        out.putString(Tags.CAT,json);
         super.onSaveInstanceState(out);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedState){
+        name = savedState.getString(Tags.NAME);
+        character = savedState.getInt(Tags.CHARACTER);
+        String json = savedState.getString(Tags.CAT);
+        gson = new Gson();
+        cat = gson.fromJson(json, Cat.class);
     }
     /*
     Handling orientation changes. Shitty way, to be improved.
@@ -109,16 +126,15 @@ public class MenuActivity extends FragmentActivity implements SeekBar.OnSeekBarC
         super.onConfigurationChanged(newConfig);
 
     }
+
     /*
     Startup methods
      */
     public void startup(){
-
+        spc = new SharedPreferencesController(getApplicationContext());
         Intent intent = getIntent();
         String type = intent.getStringExtra("TYPE");
-        shared = getSharedPreferences("INSTANCES_COUNT", MODE_PRIVATE);
-        COUNT = shared.getInt("COUNT",0);
-
+        COUNT = spc.getInt(Tags.CAT_INSTANCES_COUNT,0);
 
         /*
         Handling different cases of first launch, non-first launch, going back to menu from Cat Activity
@@ -141,7 +157,7 @@ public class MenuActivity extends FragmentActivity implements SeekBar.OnSeekBarC
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         if(!prefs.getBoolean("firstTime", false)) {
             SharedPreferences.Editor ed = getSharedPreferences(SettingsController.SETTINGS_PREFS, MODE_PRIVATE).edit();
-            ed.putFloat(SettingsController.SETTINGS_STARVING_SPEED_COEFF, SettingsController.DEFAULT_STARVING_SPEED);
+            ed.putString(SettingsController.SETTINGS_STARVING_SPEED_COEFF, SettingsController.DEFAULT_STARVING_SPEED);
             ed.putInt(SettingsController.SETTINGS_DEFAULT_ALARM_LEVELS_SIZE,3);
             float[] alarmLevels = SettingsController.DEFAULT_ALARM_LEVELS;
             for(int i=0;i<alarmLevels.length;i++){
@@ -291,9 +307,10 @@ public class MenuActivity extends FragmentActivity implements SeekBar.OnSeekBarC
 
     //check if there was an input, update cat's name, finish creator
     public void finishCreator(String inputName){
-
+        Log.i("CREATOR","1");
+        //spc = new SharedPreferencesController(getApplicationContext());
+        Log.i("CREATOR","2");
         if(inputName!=null&&!inputName.isEmpty()&&!inputName.equals("SAY MY NAME!")){
-
             setName(inputName);
 
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -301,40 +318,29 @@ public class MenuActivity extends FragmentActivity implements SeekBar.OnSeekBarC
             if(nnf!=null){
                 ft.hide(nnf);
             }
+            ft.commit();
+            Log.i("CREATOR", "3");
         /*
         Indicate that new game was already created. Preference used in MenuFragment and startup();
          */
             SharedPreferences.Editor editor = getSharedPreferences("INSTANCES_COUNT", MODE_PRIVATE).edit();
             editor.putInt("COUNT", 1);
             editor.commit();
-
+            Log.i("CREATOR", "4");
+            spc.putInt(Tags.CAT_INSTANCES_COUNT, 1);
             //create Cat instance, put into separate shared preferences using gson under its ID as key
             //
-            Cat cat = new Cat(this);//jeżeli zserializujemy z tym kontekstem to odczytując w drugiej activity będzie dupa
+            Cat cat = new Cat();//jeżeli zserializujemy z tym kontekstem to odczytując w drugiej activity będzie dupa
             cat.setName(inputName);
             cat.setCharacter(character);
-
-
-            SharedPreferences.Editor instanceEditor = getSharedPreferences(Tags.CAT_INSTANCES,MODE_PRIVATE).edit();
-            Gson gson = new Gson();
-            String json = gson.toJson(cat);
-            instanceEditor.putString(String.valueOf(cat.getID()),json);
-            instanceEditor.commit();
-
-
-            //put current instance into sharedpreferences
-            SharedPreferences.Editor currentInfoEditor= getSharedPreferences(Tags.CURRENT_GAME_INFO, Context.MODE_PRIVATE).edit();
-            currentInfoEditor.putString(Tags.CURRENT_GAME_INSTANCE, json);
-            currentInfoEditor.commit();
-
+            Log.i("CREATOR", "5");
+            spc.putCat(Tags.CURRENT_GAME_INSTANCE, cat);
+            Log.i("CREATOR", "6");
             toCatActivity();
-
-
+            Log.i("CREATOR", "7");
         } else {
             Toast.makeText(this, "Put something here!", Toast.LENGTH_LONG).show();
         }
-
-
     }
     /*
     Navigate to cat Activity
@@ -370,7 +376,6 @@ public class MenuActivity extends FragmentActivity implements SeekBar.OnSeekBarC
         //BusProvider.getInstance().post("Fuck yeah!");
         bus.post("Fuck yeah, injection!");
         Log.i("Otto", "test database!");
-
 
     }
 
