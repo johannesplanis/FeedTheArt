@@ -2,15 +2,16 @@
 
 package menuactivity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.widget.SeekBar;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -22,8 +23,10 @@ import com.squareup.otto.Subscribe;
 import javax.inject.Inject;
 
 import cat.Cat;
-import cat.Flags;
+import cat.Tags;
 import catactivity.CatActivity;
+import controllers.SettingsController;
+import controllers.SharedPreferencesController;
 import modules.BusModule;
 
 /*
@@ -33,7 +36,7 @@ import modules.BusModule;
 * Why ?!? Probably it removes all background fragments' clickability.
 * */
 
-public class MenuActivity extends FragmentActivity {
+public class MenuActivity extends FragmentActivity implements SeekBar.OnSeekBarChangeListener {
     public SplashFragment spf;
     public MenuFragment mef;
     public TutorialFragment tuf;
@@ -41,9 +44,11 @@ public class MenuActivity extends FragmentActivity {
     public NewcatNameFragment nnf;
     public MenuSettingsFragment msf;
     public SharedPreferences shared;
+    private SharedPreferencesController spc;
     private int COUNT;
     private Handler handler = new Handler();
-
+    Cat cat;
+    Gson gson;
 
 
     public int character;
@@ -62,9 +67,10 @@ public class MenuActivity extends FragmentActivity {
         BusModule.getObjectGraph().inject(this);
 
         if(savedInstanceState != null){
-            character = savedInstanceState.getInt(Flags.CHARACTER);
-            name = savedInstanceState.getString(Flags.NAME);
+            character = savedInstanceState.getInt(Tags.CHARACTER);
+            name = savedInstanceState.getString(Tags.NAME);
         }
+        spc = new SharedPreferencesController(getApplicationContext());
 
         Intent intent = getIntent();
         Boolean exit = intent.getBooleanExtra("EXIT",false);
@@ -75,13 +81,14 @@ public class MenuActivity extends FragmentActivity {
         } else{
             startup();
         }
-
+        setupPreferences();
 
     }
 
     @Override
     public void onResume(){
         super.onResume();
+
         //BusProvider.getInstance().register(sendEventHandler);
     }
 
@@ -93,9 +100,21 @@ public class MenuActivity extends FragmentActivity {
 
     @Override
     protected void onSaveInstanceState(Bundle out){
-        out.putInt(Flags.CHARACTER,character);
-        out.putString(Flags.NAME,name);
+        out.putInt(Tags.CHARACTER, character);
+        out.putString(Tags.NAME, name);
+        gson = new Gson();
+        String json = gson.toJson(cat);
+        out.putString(Tags.CAT,json);
         super.onSaveInstanceState(out);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedState){
+        name = savedState.getString(Tags.NAME);
+        character = savedState.getInt(Tags.CHARACTER);
+        String json = savedState.getString(Tags.CAT);
+        gson = new Gson();
+        cat = gson.fromJson(json, Cat.class);
     }
     /*
     Handling orientation changes. Shitty way, to be improved.
@@ -107,19 +126,15 @@ public class MenuActivity extends FragmentActivity {
         super.onConfigurationChanged(newConfig);
 
     }
+
     /*
     Startup methods
      */
     public void startup(){
-
+        spc = new SharedPreferencesController(getApplicationContext());
         Intent intent = getIntent();
         String type = intent.getStringExtra("TYPE");
-
-
-        shared = getSharedPreferences("INSTANCES_COUNT", MODE_PRIVATE);
-        COUNT = shared.getInt("COUNT",0);
-
-
+        COUNT = spc.getInt(Tags.CAT_INSTANCES_COUNT,0);
 
         /*
         Handling different cases of first launch, non-first launch, going back to menu from Cat Activity
@@ -134,8 +149,25 @@ public class MenuActivity extends FragmentActivity {
         } else{
             System.out.println("Error! Impossible test case!");
         }
-
-
+    }
+    /**
+     * stup default shared preferences once and only once
+     */
+    private void setupPreferences(){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        if(!prefs.getBoolean("firstTime", false)) {
+            SharedPreferences.Editor ed = getSharedPreferences(SettingsController.SETTINGS_PREFS, MODE_PRIVATE).edit();
+            ed.putString(SettingsController.SETTINGS_STARVING_SPEED_COEFF, SettingsController.DEFAULT_STARVING_SPEED);
+            ed.putInt(SettingsController.SETTINGS_DEFAULT_ALARM_LEVELS_SIZE,3);
+            float[] alarmLevels = SettingsController.DEFAULT_ALARM_LEVELS;
+            for(int i=0;i<alarmLevels.length;i++){
+                ed.putFloat(SettingsController.SETTINGS_DEFAULT_ALARM_LEVELS + "_" + i, alarmLevels[i]);
+            }
+            ed.commit();
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putBoolean("firstTime", true);
+            editor.commit();
+        }
     }
     public void splashStartup(){
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -144,7 +176,7 @@ public class MenuActivity extends FragmentActivity {
         if(spf.isAdded()){
             ft.show(spf);
         } else{
-            ft.add(R.id.menu_container, spf, Flags.SPLASH_FRAGMENT);
+            ft.add(R.id.menu_container, spf, Tags.SPLASH_FRAGMENT);
         }
         ft.commit();
         handler.postDelayed(new Runnable() {
@@ -165,22 +197,22 @@ public class MenuActivity extends FragmentActivity {
         if(mef.isAdded()){
             ft.show(mef);
         } else{
-            ft.add(R.id.menu_container, mef, Flags.MENU_FRAGMENT);
+            ft.add(R.id.menu_container, mef, Tags.MENU_FRAGMENT);
         }
 
-        spf = (SplashFragment) getSupportFragmentManager().findFragmentByTag(Flags.SPLASH_FRAGMENT);
+        spf = (SplashFragment) getSupportFragmentManager().findFragmentByTag(Tags.SPLASH_FRAGMENT);
         if (spf!=null){
             ft.hide(spf);
         }
-        tuf = (TutorialFragment) getSupportFragmentManager().findFragmentByTag(Flags.TUTORIAL_FRAGMENT);
+        tuf = (TutorialFragment) getSupportFragmentManager().findFragmentByTag(Tags.TUTORIAL_FRAGMENT);
         if(tuf!=null){
             ft.hide(tuf);
         }
-        ncf = (NewcatChooseFragment) getSupportFragmentManager().findFragmentByTag(Flags.NEWCAT_CHOOSE_FRAGMENT);
+        ncf = (NewcatChooseFragment) getSupportFragmentManager().findFragmentByTag(Tags.NEWCAT_CHOOSE_FRAGMENT);
         if(ncf!=null){
             ft.hide(ncf);
         }
-        msf = (MenuSettingsFragment) getSupportFragmentManager().findFragmentByTag(Flags.SETTINGS_FRAGMENT);
+        msf = (MenuSettingsFragment) getSupportFragmentManager().findFragmentByTag(Tags.SETTINGS_FRAGMENT);
         if(msf!=null){
             ft.hide(msf);
         }
@@ -201,13 +233,13 @@ public class MenuActivity extends FragmentActivity {
         if(ncf.isAdded()){
             ft.show(ncf);
         } else{
-            ft.add(R.id.menu_container, ncf, Flags.NEWCAT_CHOOSE_FRAGMENT);
+            ft.add(R.id.menu_container, ncf, Tags.NEWCAT_CHOOSE_FRAGMENT);
         }
-        mef = (MenuFragment) getSupportFragmentManager().findFragmentByTag(Flags.MENU_FRAGMENT);
+        mef = (MenuFragment) getSupportFragmentManager().findFragmentByTag(Tags.MENU_FRAGMENT);
         if(mef!=null){
             ft.hide(mef);
         }
-        ft.addToBackStack(Flags.NEWCAT_CHOOSE_FRAGMENT);
+        ft.addToBackStack(Tags.NEWCAT_CHOOSE_FRAGMENT);
         ft.commit();
     }
     public void toTutorial(){
@@ -216,13 +248,13 @@ public class MenuActivity extends FragmentActivity {
         if(tuf.isAdded()){
             ft.show(tuf);
         } else{
-            ft.add(R.id.menu_container,tuf,Flags.TUTORIAL_FRAGMENT);
+            ft.add(R.id.menu_container, tuf, Tags.TUTORIAL_FRAGMENT);
         }
-        mef = (MenuFragment) getSupportFragmentManager().findFragmentByTag(Flags.MENU_FRAGMENT);
+        mef = (MenuFragment) getSupportFragmentManager().findFragmentByTag(Tags.MENU_FRAGMENT);
         if(mef!=null){
             ft.hide(mef);
         }
-        ft.addToBackStack(Flags.TUTORIAL_FRAGMENT);
+        ft.addToBackStack(Tags.TUTORIAL_FRAGMENT);
         ft.commit();
     }
     public void toSettings(){
@@ -231,13 +263,13 @@ public class MenuActivity extends FragmentActivity {
         if(msf.isAdded()){
             ft.show(msf);
         } else{
-            ft.add(R.id.menu_container,msf,Flags.SETTINGS_FRAGMENT);
+            ft.add(R.id.menu_container,msf, Tags.SETTINGS_FRAGMENT);
         }
-        mef = (MenuFragment) getSupportFragmentManager().findFragmentByTag(Flags.MENU_FRAGMENT);
+        mef = (MenuFragment) getSupportFragmentManager().findFragmentByTag(Tags.MENU_FRAGMENT);
         if(mef!=null){
             ft.hide(mef);
         }
-        ft.addToBackStack(Flags.SETTINGS_FRAGMENT);
+        ft.addToBackStack(Tags.SETTINGS_FRAGMENT);
         ft.commit();
     }
     /*
@@ -249,13 +281,13 @@ public class MenuActivity extends FragmentActivity {
         if(nnf.isAdded()){
             ft.show(nnf);
         } else{
-            ft.add(R.id.menu_container,nnf,Flags.NEWCAT_NAME_FRAGMENT);
+            ft.add(R.id.menu_container,nnf, Tags.NEWCAT_NAME_FRAGMENT);
         }
-        ncf = (NewcatChooseFragment) getSupportFragmentManager().findFragmentByTag(Flags.NEWCAT_CHOOSE_FRAGMENT);
+        ncf = (NewcatChooseFragment) getSupportFragmentManager().findFragmentByTag(Tags.NEWCAT_CHOOSE_FRAGMENT);
         if(ncf!=null){
             ft.hide(ncf);
         }
-        ft.addToBackStack(Flags.NEWCAT_NAME_FRAGMENT);
+        ft.addToBackStack(Tags.NEWCAT_NAME_FRAGMENT);
         ft.commit();
     }
     public void nameToChoose(){
@@ -264,9 +296,9 @@ public class MenuActivity extends FragmentActivity {
         if(ncf.isAdded()){
             ft.show(ncf);
         } else{
-            ft.add(R.id.menu_container,ncf,Flags.NEWCAT_CHOOSE_FRAGMENT);
+            ft.add(R.id.menu_container, ncf, Tags.NEWCAT_CHOOSE_FRAGMENT);
         }
-        nnf = (NewcatNameFragment) getSupportFragmentManager().findFragmentByTag(Flags.NEWCAT_NAME_FRAGMENT);
+        nnf = (NewcatNameFragment) getSupportFragmentManager().findFragmentByTag(Tags.NEWCAT_NAME_FRAGMENT);
         if(nnf!=null){
             ft.hide(nnf);
         }
@@ -275,57 +307,47 @@ public class MenuActivity extends FragmentActivity {
 
     //check if there was an input, update cat's name, finish creator
     public void finishCreator(String inputName){
-
+        Log.i("CREATOR","1");
+        //spc = new SharedPreferencesController(getApplicationContext());
+        Log.i("CREATOR","2");
         if(inputName!=null&&!inputName.isEmpty()&&!inputName.equals("SAY MY NAME!")){
-
             setName(inputName);
 
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            nnf = (NewcatNameFragment) getSupportFragmentManager().findFragmentByTag(Flags.NEWCAT_NAME_FRAGMENT);
+            nnf = (NewcatNameFragment) getSupportFragmentManager().findFragmentByTag(Tags.NEWCAT_NAME_FRAGMENT);
             if(nnf!=null){
                 ft.hide(nnf);
             }
+            ft.commit();
+            Log.i("CREATOR", "3");
         /*
         Indicate that new game was already created. Preference used in MenuFragment and startup();
          */
             SharedPreferences.Editor editor = getSharedPreferences("INSTANCES_COUNT", MODE_PRIVATE).edit();
             editor.putInt("COUNT", 1);
             editor.commit();
-
+            Log.i("CREATOR", "4");
+            spc.putInt(Tags.CAT_INSTANCES_COUNT, 1);
             //create Cat instance, put into separate shared preferences using gson under its ID as key
             //
-            Cat cat = new Cat();
+            Cat cat = new Cat();//jeżeli zserializujemy z tym kontekstem to odczytując w drugiej activity będzie dupa
             cat.setName(inputName);
             cat.setCharacter(character);
-
-
-            SharedPreferences.Editor instanceEditor = getSharedPreferences(Flags.CAT_INSTANCES,MODE_PRIVATE).edit();
-            Gson gson = new Gson();
-            String json = gson.toJson(cat);
-            instanceEditor.putString(String.valueOf(cat.getID()),json);
-            instanceEditor.commit();
-
-
-            //put current instance into sharedpreferences
-            SharedPreferences.Editor currentInfoEditor= getSharedPreferences(Flags.CURRENT_GAME_INFO, Context.MODE_PRIVATE).edit();
-            currentInfoEditor.putString(Flags.CURRENT_GAME_INSTANCE, json);
-            currentInfoEditor.commit();
-
+            Log.i("CREATOR", "5");
+            spc.putCat(Tags.CURRENT_GAME_INSTANCE, cat);
+            Log.i("CREATOR", "6");
             toCatActivity();
-
-
+            Log.i("CREATOR", "7");
         } else {
             Toast.makeText(this, "Put something here!", Toast.LENGTH_LONG).show();
         }
-
-
     }
     /*
     Navigate to cat Activity
      */
     public void toCatActivity(){
         Intent intent = new Intent(getApplicationContext(), CatActivity.class);
-        intent.putExtra("START_MODE","MENU_ACTIVITY");
+        intent.putExtra("START_MODE", "MENU_ACTIVITY");
         startActivity(intent);
     }
 
@@ -353,10 +375,12 @@ public class MenuActivity extends FragmentActivity {
 
         //BusProvider.getInstance().post("Fuck yeah!");
         bus.post("Fuck yeah, injection!");
-        Log.i("Otto","test database!");
-
+        Log.i("Otto", "test database!");
 
     }
+
+
+
     //class to carry the message
     public class MessageAvailableEvent{
         private String msg;
@@ -379,4 +403,24 @@ public class MenuActivity extends FragmentActivity {
     public void setName(String name){this.name = name;}
 
 
+    /**
+     * settings section
+     */
+
+
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+
+    }
 }
+

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+        <EditTextPreference
+            android:key="pref_speed_coeff"
+            android:title="Starving speed"
+            android:defaultValue="100"
+        />
+        <CheckBoxPreference
+            android:key="pref_notifications"
+            />
+
+         </PreferenceScreen>
+</PreferenceScreen>

@@ -64,7 +64,6 @@ public class ArtDownloader {
         }
         try{
 
-
             artObject.setAuthor(stripBracesQuotes(jsonObject.getString("dcCreator")));
 
             //artObject.setImage(image);
@@ -75,6 +74,38 @@ public class ArtDownloader {
             System.out.println("No author name associated with JSON");
             artObject.setAuthor("NN");
         }
+        return artObject;
+    }
+
+    public ArtObject getArtObjectFromApiJSON(JSONObject jsonObject){
+        ArtObject artObject = new ArtObject();
+        try {
+            String url = stripQuotes(jsonObject.getString("previewUrl"));
+            artObject.setUrl(url);
+        } catch(JSONException e){
+            e.printStackTrace();
+            System.out.println("No URL associated with JSON object");
+            artObject.setUrl("http://orig05.deviantart.net/6651/f/2009/210/7/2/dead_face_by_krasus.jpg");
+        }
+        try{
+            String name = stripQuotes(jsonObject.getString("title"));
+            artObject.setName(name);
+        } catch(JSONException e){
+            e.printStackTrace();
+            System.out.println("No title associated with piece");
+            artObject.setName("NN");
+        }
+        try{
+            artObject.setAuthor(stripQuotes(jsonObject.getString("author")));
+            System.out.println("Art for today" + artObject.getName() + " " + artObject.getAuthor());
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            System.out.println("No author name associated with JSON");
+            artObject.setAuthor("NN");
+        }
+
+
         return artObject;
     }
 
@@ -138,6 +169,10 @@ public class ArtDownloader {
     /*
     Methods to work on formatting strings read from JSON
      */
+    public String stripQuotes(String oldOne){
+        String newOne = (String) oldOne.replaceAll("^\"|\"$","");
+        return newOne;
+    }
 
     public String stripBackslashAndBraces(String oldOne){
 

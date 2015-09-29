@@ -1,9 +1,12 @@
 package catactivity;
 
 import android.app.FragmentTransaction;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -15,9 +18,15 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.Geofence;
+import com.google.android.gms.location.LocationServices;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonParser;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.planis.johannes.catprototype.R;
 
@@ -26,17 +35,23 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import backgroundcat.BackgroundAlarmManager;
-import backgroundcat.FoodLevelUpdateService;
 import cat.Cat;
-import cat.Flags;
+import cat.Tags;
+import controllers.SharedPreferencesController;
+import cat.Constants;
+import geofencing.GeofenceStore;
+import geofencing.GeofencesIntentService;
+import geofencing.VenueGeofence;
 import menuactivity.MenuActivity;
+import controllers.SettingsController;
 
-
-public class CatActivity extends FragmentActivity implements CatArtFragment.OnRefreshCatArtListener {
+public class CatActivity extends FragmentActivity implements CatArtFragment.OnRefreshCatArtListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     public CatFragment catf;
     public CatArtFragment artf;
@@ -47,6 +62,8 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
     public ArtObject artObject;
     public JSONObject jsonObject;
     public SharedPreferences prefs;
+    SharedPreferencesController spc;
+    SettingsController sc;
     public String dir;
     Bitmap bitmap;
     public Cat cat;
@@ -54,71 +71,119 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
     public BackgroundAlarmManager bam;
     private Handler foodHandler;
     private Runnable foodHandlerTask;
+
+    public double starvingSpeed;
+
+
     Timer timer;
-    public static final int INTERVAL_FOREGROUND = 100;
+    Timer foregroundGeofenceTimer;
+    public static final int INTERVAL_FOREGROUND = 500;
     public static final int INTERVAL_BACKGROUND = 1000*10;
 
     public static final String STORAGE_KEY = "SHARED_PREFERENCES_KEY";
     private static final String SEARCH_TERM = "/search.json?wskey=NQc7GcL5M&query=guitar&start=1&rows=24&profile=breadcrumb"; //qf=animals
 
+    /**
+     * Geofencing variables
+    */
+    // Internal List of Geofence objects. In a real app, these might be provided by an API based on
+    // locations within the user's proximity.
+    List<Geofence> mGeofenceList;
+
+    // These will store hard-coded geofences in this sample app.
+    private VenueGeofence mRetorykaGeofence;
+    private VenueGeofence mMuzeumNarodoweGeofence;
+    private VenueGeofence mMuzeumWitrazuGeofence;
+
+    // Persistent storage for geofences.
+    private GeofenceStore mGeofenceStorage;
+
+    private LocationServices mLocationService;
+    // Stores the PendingIntent used to request geofence monitoring.
+    private PendingIntent mGeofenceRequestIntent;
+    private GoogleApiClient mApiClient;
+    private enum REQUEST_TYPE {ADD}
+    private REQUEST_TYPE mRequestType;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cat);
+
         Intent intent = getIntent();
         String startMode = intent.getStringExtra("START_MODE");
 
-        startup(startMode);
-        cat = new Cat();
-
-        name = "Czarek";
+        //Setup controllers
+        spc = new SharedPreferencesController(getApplicationContext());
+        sc = new SettingsController(getApplicationContext());
+        //Setup settings
+        //starvingSpeed = 0.5;
+        updateSettings();
+        //load cat from sp
         loadGameInstance();
-        //preloadArt();
+        //setup view
+        startup(startMode);
+
+
         artObject = new ArtObject();
         jsonObject = new JSONObject();
         ad = new ArtDownloader(getApplicationContext());
         bam = new BackgroundAlarmManager(getApplicationContext());
-        getJSON(SEARCH_TERM);
 
-        //alternative to timer
-        /*foodHandler = new Handler();
-        foodHandlerTask = new Runnable() {
-            @Override
-            public void run() {
-                computeInForeground();
-                foodHandler.postDelayed(this,INTERVAL_FOREGROUND);
-            }
-        };
-*/
+        getJSON(CatArtConstants.relativeApiUrl);
+
     }
 
     @Override
     public void onResume(){
         super.onResume();
+        //register broadcast receiver on increments
+        LocalBroadcastManager
+                .getInstance(getApplicationContext())
+                .registerReceiver(broadcastReceiver, new IntentFilter(Tags.SCORE_INCREMENT_FOREGROUND));
+
+        spc = new SharedPreferencesController(getApplicationContext());
+        loadGameInstance();
         Log.i("ACTIVITY", "RESUMED");
         //make updates more frequent to make score dynamically change in UI
         bam.cancelAlarm();
-
         //while in foreground, score is computed more frequently to show it in UI. Due to Lollipop restrictions, alarm cannot run more frequently than once a minute
-
         timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
                 computeInForeground();
             }
-        },0,INTERVAL_FOREGROUND);
-        //foodHandlerTask.run();
+        }, 0, Tags.INTERVAL_FOREGROUND);
+
+
+        //setup geofence
+
+        geofenceInit();
     }
 
     @Override
     public void onPause(){
         super.onPause();
+        LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(broadcastReceiver);
         Log.i("ACTIVITY", "PAUSED");
-        //make updates less frequent to save battery but run from time to time
-        bam.setupAlarm(INTERVAL_BACKGROUND);
-        //foodHandler.removeCallbacks(foodHandlerTask);
+
         timer.cancel();
+
+        saveGameInstance();
+        //make updates less frequent to save battery but run from time to time
+        bam.setupAlarm(Tags.INTERVAL_BACKGROUND);
+        LocationServices.GeofencingApi.removeGeofences(
+                mApiClient,
+                // This is the same pending intent that was used in addGeofences().
+                getGeofenceTransitionPendingIntent()
+        ).setResultCallback(new ResultCallback<Status>() {
+            @Override
+            public void onResult(Status status) {
+                Log.i("GEOFENCE STATUS", "DISCONNECTED? " + status);
+            }
+        }); // Result processed in onResult().
     }
 
     @Override
@@ -156,7 +221,7 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
     @Override
     public void onRefreshSelected(){
         //download new JSON, parse, return ArtObject, call fragment updater function
-        getJSON(SEARCH_TERM);
+        getJSON(CatArtConstants.relativeApiUrl);
 
         //need better way to update fragment only after new JSON is returned, callback from onSuccess?
         final Handler handler = new Handler();
@@ -164,25 +229,26 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
             @Override
             public void run() {
                 CatArtFragment catFrag = (CatArtFragment) getFragmentManager().findFragmentByTag("ARTF");
-                if(catFrag != null){
+                if (catFrag != null) {
                     //update art
-                    if (artObject==null){
+                    if (artObject == null) {
                         artObject = getFromCache(STORAGE_KEY);
                     }
                     catFrag.updateArt(artObject);
 
-                }   else{
-                    Toast.makeText(getApplicationContext(),"Unable to refresh. Fragment not found!",Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Unable to refreshSettings. Fragment not found!", Toast.LENGTH_LONG).show();
                 }
             }
         }, 500);
 
     }
-    /*
+
+
+    /**
     startup methods, navigate to cat
      */
     public void startup(String startMode){
-
 
         if(startMode.equals("NOTIFICATION")){
             toCat();
@@ -205,6 +271,8 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
         }
 
     }
+
+
     /*
     preload daily art either from web, or internal storage, currently not in use
      */
@@ -221,12 +289,10 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
 
     //read current instance of game, and translate from json into Object
     public void loadGameInstance(){
-        SharedPreferences sp = getSharedPreferences(Flags.CURRENT_GAME_INFO,MODE_PRIVATE);
-        Gson gson = new Gson();
-        String json = sp.getString(Flags.CURRENT_GAME_INSTANCE, "");
-        if(json!=null&&!json.isEmpty()){
-            cat = gson.fromJson(json,Cat.class);
-        }
+        spc = new SharedPreferencesController(getApplicationContext());
+        spc.getCatObject(Tags.CURRENT_GAME_INSTANCE,null);
+
+        cat = spc.getCatObject(Tags.CURRENT_GAME_INSTANCE, null);
         if(cat!=null) {
             if (cat.getName() != null) {
                 Log.i("KITTY", cat.getName());
@@ -235,6 +301,22 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
         }
 
     }
+
+    private void updateSettings(){
+        this.starvingSpeed = sc.getStarvingSpeed();
+    }
+
+    public void saveGameInstance(){
+        Cat helperCat = cat;
+        spc.putCat(Tags.CURRENT_GAME_INSTANCE, helperCat);
+    }
+
+
+    /**
+     *
+     * Navigation methods
+     *
+    */
     public void toCat(){
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         catf = new CatFragment();
@@ -256,10 +338,13 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
 
         ft.commit();
     }
-    /*
+    /**
     methods to navigate to fragments
      */
 
+    /**
+     * navigate to menu activity
+     */
     public void toMenu(){
         Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
         intent.putExtra("TYPE", "APP");
@@ -267,6 +352,10 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
         //finish();
 
     }
+
+    /**
+     * navigate to map
+     */
     public void toMap(){
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         mapf = new CatMapFragment();
@@ -282,6 +371,10 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
         ft.addToBackStack("MAP");
         ft.commit();
     }
+
+    /**
+     * navigate to art
+     */
     public void toArt(){
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         Bundle bundle = new Bundle();
@@ -302,30 +395,23 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
 
     //TEST
     //increment food level by some value
+
+    /**
+     * navigate to extra
+     * currently used to test incrementing of score
+     */
     public void toExtra(){
 
+        //run in separate thread
+        Handler handler = new Handler();
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                cat.feedTheArtByValue(getApplicationContext(),5d);
+            }
+        });
 
-        SharedPreferences sp = getSharedPreferences(Flags.CURRENT_GAME_INFO,MODE_PRIVATE);
-        Gson gson = new Gson();
-        String json = sp.getString(Flags.CURRENT_GAME_INSTANCE, "");
-        if(json!=null&&!json.isEmpty()){
-            cat = gson.fromJson(json,Cat.class);
-        }
-
-        if(cat!=null) {
-            cat.feedTheArtByValue(5);
-            Log.i("FOOD_LEVEL",String.valueOf(cat.getFoodLevel()));
-        }
-
-        Intent broadcastIntent = new Intent(FoodLevelUpdateService.UPDATE_FOODLEVEL_ACTION);
-        //int randomInt = (int) (Math.random()*100)+1;
-        broadcastIntent.putExtra("SERVICE_BROADCAST",cat.getFoodLevel());
-        LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
-
-        String updatedJson = gson.toJson(cat);
-        SharedPreferences.Editor currentInfoEditor= getSharedPreferences(Flags.CURRENT_GAME_INFO, MODE_PRIVATE).edit();
-        currentInfoEditor.putString(Flags.CURRENT_GAME_INSTANCE, updatedJson);
-        currentInfoEditor.commit();
+        Log.i("SETTINGS", "COEFF: " + String.valueOf(new SettingsController(this).getStarvingSpeed()));
 
     }
 
@@ -336,8 +422,8 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
 
     }
 
-    /*
-    Asynchronously download today's art
+    /**
+     * Asynchronously download today's art
      */
     private class LoadImage extends AsyncTask<String, String, Bitmap>{
         protected Bitmap doInBackground(String... args) {
@@ -363,40 +449,20 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
             }
         }
     }
-    /*
-    send REST request, parse response, download image and put everything in ArtObject, cache into SharedPreferences
+    /**
+     * send REST request, parse response, download image and put everything in ArtObject, cache into SharedPreferences
      */
     public void getJSON(String address){
 
         ArtDownloadRestClient.get(address, null, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                // If the response is JSONObject
-                //System.out.println(response);
-                JSONObject item;
-                try {
-                    JSONArray array = response.getJSONArray("items");
-                    //get random search result
-                    item = (JSONObject) array.get((int) Math.floor(Math.random() * 24));
-                    jsonObject = item;
 
-                    artObject = ad.getArtObjectFromJSON(jsonObject);
-                    cacheObject(artObject, STORAGE_KEY);
-
-
-                    Gson gson = new GsonBuilder().setPrettyPrinting().create();
-                    JsonParser jp = new JsonParser();
-                    //JsonElement je = jp.parse(jsonObject);
-                    String prettyJson = gson.toJson(jsonObject);
-
-                    System.out.println(prettyJson);
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                //System.out.println("object" + item);
-
-
+                artObject = ad.getArtObjectFromApiJSON(response);
+                cacheObject(artObject, STORAGE_KEY);
+                Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                String prettyJson = gson.toJson(response);
+                Log.i("REST Api",prettyJson);
             }
 
             @Override
@@ -405,7 +471,6 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
                 try {
                     JSONObject res = (JSONObject) response.get(0);
                     System.out.println("array" + res);
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -413,18 +478,15 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
                 // Do something with the response
 
             }
-
             @Override
             public void onFailure(int statusCode, Header[] headers, String res, Throwable t) {
-                Toast.makeText(getApplicationContext(), "Unable to download now", Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(), "Unable to download now", Toast.LENGTH_LONG).show();
             }
-
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable t, JSONObject json) {
-                Toast.makeText(getApplicationContext(), "Unable to download now", Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(), "Unable to download now", Toast.LENGTH_LONG).show();
                 artObject = getFromCache(STORAGE_KEY);
             }
-
         });
 
 
@@ -444,10 +506,8 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
     public boolean cacheObject(ArtObject art, String sharedPreferencesKey){
 
         try{
-
             ArtDownloader ad = new ArtDownloader(getApplicationContext());
             new LoadImage().execute(art.getUrl());
-
             //String path = ad.saveImageToStorage(bitmap);
             SharedPreferences.Editor editor = getSharedPreferences(sharedPreferencesKey,MODE_PRIVATE).edit();
             editor.putString("NAME",art.getName());
@@ -461,7 +521,6 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
             System.out.println("cache unsuccesful");
             return false;
         }
-
         return true;
     }
     public ArtObject getFromCache(String sharedPreferencesKey){
@@ -477,44 +536,185 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
         return art;
     }
 
+    /**
+     * receive increment from geofences while in foreground
+     * update foodlevel, broadcast to UI
+     *
+     */
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            //get increment, update cat score here
+            double increment = intent.getDoubleExtra(Tags.SCORE_INCREMENT_FIELD,0);
+            cat.feedTheArtByValue(getApplicationContext(),increment);
+            Log.i("broadcast receiver","current score "+cat.getFoodLevel());
+
         }
     };
+
     public String getName(){
         return this.name;
     }
 
+
+    /**
+    * SCORE computing section
+    */
+
+
+    /**
+     * used in resumed activity
+     * after loading cat, used to compute periodically
+     */
     public void computeInForeground(){
 
-            SharedPreferences sp = getSharedPreferences(Flags.CURRENT_GAME_INFO,MODE_PRIVATE);
-            Gson gson = new Gson();
-            String json = sp.getString(Flags.CURRENT_GAME_INSTANCE, "");
-            if(json!=null&&!json.isEmpty()){
-                cat = gson.fromJson(json,Cat.class);
-            }
-
             if(cat!=null) {
-                cat.updateFoodLevel(getApplicationContext());
+
+                cat.updateFoodLevel(getApplicationContext(),starvingSpeed);
                 Log.i("FOOD_LEVEL",String.valueOf(cat.getFoodLevel()));
             }
-
-            Intent broadcastIntent = new Intent(FoodLevelUpdateService.UPDATE_FOODLEVEL_ACTION);
-            //int randomInt = (int) (Math.random()*100)+1;
+            Intent broadcastIntent = new Intent(Tags.UPDATE_FOODLEVEL_ACTION);
             broadcastIntent.putExtra("SERVICE_BROADCAST",cat.getFoodLevel());
+            broadcastIntent.putExtra("STARVING_SPEED", starvingSpeed);
             LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
-
-            String updatedJson = gson.toJson(cat);
-            SharedPreferences.Editor currentInfoEditor= getSharedPreferences(Flags.CURRENT_GAME_INFO, MODE_PRIVATE).edit();
-            currentInfoEditor.putString(Flags.CURRENT_GAME_INSTANCE, updatedJson);
-            currentInfoEditor.commit();
-
-
-
     }
 
 
+    /**
+     * GEOFENCING section
+     */
 
 
+    public void createGeofences() {
+        // Create internal "flattened" objects containing the geofence data.
+        mRetorykaGeofence = new VenueGeofence(
+                Constants.RETORYKA_ID,                // geofenceId.
+                Constants.RETORYKA_LATITUDE,
+                Constants.RETORYKA_LONGITUDE,
+                Constants.RETORYKA_RADIUS_METERS,
+                Constants.GEOFENCE_EXPIRATION_TIME,
+                Geofence.GEOFENCE_TRANSITION_DWELL
+        );
+        mMuzeumNarodoweGeofence = new VenueGeofence(
+                Constants.MUZEUM_NARODOWE_ID,                // geofenceId.
+                Constants.MUZEUM_NARODOWE_LATITUDE,
+                Constants.MUZEUM_NARODOWE_LONGITUDE,
+                Constants.MUZEUM_NARODOWE_RADIUS_METERS,
+                Constants.GEOFENCE_EXPIRATION_TIME,
+                Geofence.GEOFENCE_TRANSITION_DWELL
+        );
+
+        mMuzeumWitrazuGeofence = new VenueGeofence(
+                Constants.MUZEUM_WITRAZU_ID,                // geofenceId.
+                Constants.MUZEUM_WITRAZU_LATITUDE,
+                Constants.MUZEUM_WITRAZU_LONGITUDE,
+                Constants.MUZEUM_WITRAZU_RADIUS_METERS,
+                Constants.GEOFENCE_EXPIRATION_TIME,
+                Geofence.GEOFENCE_TRANSITION_DWELL
+        );
+
+        // Store these flat versions in SharedPreferences and add them to the geofence list.
+        mGeofenceStorage.setGeofence(Constants.RETORYKA_ID, mRetorykaGeofence);
+        mGeofenceStorage.setGeofence(Constants.MUZEUM_NARODOWE_ID, mMuzeumNarodoweGeofence);
+        mGeofenceStorage.setGeofence(Constants.MUZEUM_WITRAZU_ID, mMuzeumWitrazuGeofence);
+        mGeofenceList.add(mRetorykaGeofence.toGeofence());
+        mGeofenceList.add(mMuzeumNarodoweGeofence.toGeofence());
+        mGeofenceList.add(mMuzeumWitrazuGeofence.toGeofence());
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        // Get the PendingIntent for the geofence monitoring request.
+        // Send a request to add the current geofences.
+        mGeofenceRequestIntent = getGeofenceTransitionPendingIntent();
+        LocationServices.GeofencingApi.addGeofences(mApiClient, mGeofenceList,
+                mGeofenceRequestIntent).setResultCallback(new ResultCallback<Status>() {
+            @Override
+            public void onResult(Status status) {
+                Log.i("GEOFENCES", "CONNECTED? " + status);
+            }
+        });
+        //Toast.makeText(this, "GEOFENCE SERVICE STARTED", Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        if (null != mGeofenceRequestIntent) {
+            LocationServices.GeofencingApi.removeGeofences(mApiClient, mGeofenceRequestIntent).setResultCallback(new ResultCallback<Status>() {
+                @Override
+                public void onResult(Status status) {
+                    Log.i("GEOFENCE", "DISCONNECTED? " + status);
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        // If the error has a resolution, start a Google Play services activity to resolve it.
+        if (connectionResult.hasResolution()) {
+            try {
+                connectionResult.startResolutionForResult(this,
+                        Constants.CONNECTION_FAILURE_RESOLUTION_REQUEST);
+            } catch (IntentSender.SendIntentException e) {
+                Log.e(Constants.APP_TAG, "Exception while resolving connection error.", e);
+            }
+        } else {
+            int errorCode = connectionResult.getErrorCode();
+            Log.e(Constants.APP_TAG, "Connection to Google Play services failed with error code " + errorCode);
+        }
+    }
+
+
+    /**
+     * Checks if Google Play services is available.
+     * @return true if it is.
+     */
+    private boolean isGooglePlayServicesAvailable() {
+        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+        if (ConnectionResult.SUCCESS == resultCode) {
+            if (Log.isLoggable(Constants.APP_TAG, Log.DEBUG)) {
+                Log.d(Constants.APP_TAG, "Google Play services is available.");
+            }
+            return true;
+        } else {
+            Log.e(Constants.APP_TAG, "Google Play services is unavailable.");
+            return false;
+        }
+    }
+
+    /**
+     * Create a PendingIntent that triggers GeofenceTransitionIntentService when a geofence
+     * transition occurs.
+     */
+    private PendingIntent getGeofenceTransitionPendingIntent() {
+        Intent intent = new Intent(this, GeofencesIntentService.class);
+        return PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+    /**
+     * setup geofence
+     * sometimes produces error when app wasn't properly closed, and services ain't registered yet
+     */
+    public void geofenceInit(){
+        /**
+         * geofencing magic
+         */
+        if (!isGooglePlayServicesAvailable()) {
+            Log.e(Constants.APP_TAG, "Google Play services unavailable.");
+            return;
+        }
+        mGeofenceStorage = new GeofenceStore(this);
+        mGeofenceList = new ArrayList<Geofence>();
+        createGeofences();
+        mApiClient = new GoogleApiClient.Builder(this)
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
+
+        mApiClient.connect();
+
+
+    }
 }

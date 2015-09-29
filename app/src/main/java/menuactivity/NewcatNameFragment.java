@@ -56,7 +56,7 @@ public class NewcatNameFragment extends Fragment {
         finishButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finishCreator(nameInputField.getText().toString());
+                finishCreator(nameInputField.getText().toString().trim());
             }
         });
 
@@ -66,18 +66,11 @@ public class NewcatNameFragment extends Fragment {
                 nameToChoose();
             }
         });
-
-
         setupKeyboard(view);
-
-
-
         return view;
     }
 
-
     //hide keyboard by touching outside input field
-
     public void setupKeyboard(View view){
         relativeLayout.setOnTouchListener(new View.OnTouchListener()
         {
@@ -125,31 +118,18 @@ public class NewcatNameFragment extends Fragment {
         //bus.unregister(readEventHandler);
     }
 
-
-
     public void finishCreator(String name){
 
         Activity act = getActivity();
         if (act instanceof MenuActivity)
            ((MenuActivity) act).finishCreator(name);
-
     }
-
 
     public void nameToChoose(){
         Activity act = getActivity(); if (act instanceof MenuActivity)
             ((MenuActivity) act).nameToChoose();
     }
-/*
-    private Object readEventHandler = new Object(){
-        @Subscribe
-        public void dataReceived(int data){
 
-            checkCharacter(data);
-
-
-        }
-    };*/
     private void checkCharacter(int ID){
         switch(ID){
             case 0:
