@@ -22,7 +22,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -94,7 +93,7 @@ public class CatMapFragment extends Fragment implements OnMapReadyCallback {
                             }
                             LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
                             map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
-                            MarkerOptions mOption = new MarkerOptions().position(latLng).title("Twoja lokalizacja").flat(true).icon(BitmapDescriptorFactory.fromResource(R.drawable.person));
+                            MarkerOptions mOption = new MarkerOptions().position(latLng).title("Twoja lokalizacja").flat(true);//.icon(BitmapDescriptorFactory.fromResource(R.drawable.person));
                             marker = map.addMarker(mOption);
                             //markerInfo = marker.getPosition().toString();
                         }

@@ -7,7 +7,7 @@ import android.util.Log;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import backgroundcat.CatNotifications;
+import controllers.NotificationController;
 import controllers.SettingsController;
 
 /**
@@ -161,7 +161,7 @@ import controllers.SettingsController;
             Log.i(Tags.LEVEL_OF_ALARM, "NUDGE");
             //color yellow
             if(sc.isNotificationPermission()) {
-                CatNotifications.issueNotification(context, "Hurry!", "Cat's getting hungry", Tags.APP_COLOR_NUDGE);
+                NotificationController.issueNotification(context, "Hurry!", "Cat's getting hungry", Constants.APP_COLOR_NUDGE);
             }
 
         }else if(previousFoodLevel>=ALARM_LEVEL&&foodLevel<=ALARM_LEVEL&&foodLevel>=CRITICAL_LEVEL){
@@ -170,7 +170,7 @@ import controllers.SettingsController;
             Log.i(Tags.LEVEL_OF_ALARM, "ALARM");
             //color orange
             if(sc.isNotificationPermission()) {
-                CatNotifications.issueNotification(context, "Hurry!", "Cat's really hungry", Tags.APP_COLOR_ALARM);
+                NotificationController.issueNotification(context, "Hurry!", "Cat's really hungry", Constants.APP_COLOR_ALARM);
             }
 
         }else if(previousFoodLevel>=CRITICAL_LEVEL&&foodLevel<=CRITICAL_LEVEL&&foodLevel>=DEAD){
@@ -179,7 +179,7 @@ import controllers.SettingsController;
             Log.i(Tags.LEVEL_OF_ALARM, "CRITICAL");
             //red color
             if(sc.isNotificationPermission()) {
-                CatNotifications.issueNotification(context, "Hurry!", "Kitty is starving!", Tags.APP_COLOR_CRITICAL);
+                NotificationController.issueNotification(context, "Hurry!", "Kitty is starving!", Constants.APP_COLOR_CRITICAL);
             }
 
         } else if(foodLevel>NUDGE_LEVEL){

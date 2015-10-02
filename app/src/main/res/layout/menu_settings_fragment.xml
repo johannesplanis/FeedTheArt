@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#ffffff">
 
     <TextView
         android:layout_width="wrap_content"
@@ -67,9 +68,23 @@
 
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="right">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="back"
+            android:id="@+id/button5"
+            android:layout_weight="1"
+            android:visibility="invisible" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/button6"
+            android:visibility="invisible" />
 
         <Button
             android:layout_width="wrap_content"
@@ -77,13 +92,12 @@
             android:text="BACK"
             android:id="@+id/menu_settings_back_button"
             android:background="#eaeaad"
-            android:padding="10dp"
-            android:layout_margin="15dp"
             android:elegantTextHeight="false"
             android:enabled="true"
             android:focusable="false"
             android:textColor="#000000"
             android:singleLine="false"
-            android:clickable="true" />
+            android:clickable="true"
+            android:layout_weight="1" />
     </LinearLayout>
 </LinearLayout>

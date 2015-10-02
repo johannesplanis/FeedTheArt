@@ -10,7 +10,7 @@ import android.util.Log;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingEvent;
 
-import backgroundcat.CatNotifications;
+import controllers.NotificationController;
 import cat.Constants;
 import cat.Tags;
 import controllers.SharedPreferencesController;
@@ -46,7 +46,7 @@ public class GeofencesIntentService extends IntentService {
 
                 sc = new SettingsController(this);
                 if(sc.isNotificationPermission()) {
-                    CatNotifications.issueNotification(getApplicationContext(), "Good job!", "You are inside! ", Tags.APP_COLOR_SUCCESS);
+                    NotificationController.issueNotification(getApplicationContext(), "Good job!", "You are inside! ", Constants.APP_COLOR_SUCCESS);
                 }
                 Log.i("INCREMENT","SENDING_GOOD_NEWS");
                 //not elegant bc only one receiver can receive

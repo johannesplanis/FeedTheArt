@@ -57,6 +57,7 @@ public class GeofencesSetupIntentService extends IntentService implements Google
             Log.e(Constants.APP_TAG, "Google Play services unavailable.");
             return;
         }
+        Log.i("GEOFENCE SETUP","in progress");
         mGeofenceStorage = new GeofenceStore(this);
         mGeofenceList = new ArrayList<Geofence>();
         createGeofences(59 * 1000);

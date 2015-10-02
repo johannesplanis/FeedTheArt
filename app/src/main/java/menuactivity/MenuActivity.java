@@ -5,12 +5,14 @@ package menuactivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
@@ -19,12 +21,14 @@ import com.planis.johannes.catprototype.R;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Produce;
 import com.squareup.otto.Subscribe;
+import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
 
 import cat.Cat;
 import cat.Tags;
 import catactivity.CatActivity;
+import controllers.BitmapController;
 import controllers.SettingsController;
 import controllers.SharedPreferencesController;
 import modules.BusModule;
@@ -43,14 +47,16 @@ public class MenuActivity extends FragmentActivity implements SeekBar.OnSeekBarC
     public NewcatChooseFragment ncf;
     public NewcatNameFragment nnf;
     public MenuSettingsFragment msf;
-    public SharedPreferences shared;
     private SharedPreferencesController spc;
+    private BitmapController bc;
     private int COUNT;
     private Handler handler = new Handler();
+
+
     Cat cat;
     Gson gson;
 
-
+    Bitmap mPlaceholderBitmap;
     public int character;
     public String name;
 
@@ -83,6 +89,8 @@ public class MenuActivity extends FragmentActivity implements SeekBar.OnSeekBarC
         }
         setupPreferences();
 
+       //mPlaceholderBitmap = BitmapFactory.decodeResource(getResources(),R.drawable.image_placeholder);
+       //bc = new BitmapController(getApplicationContext());
     }
 
     @Override
@@ -104,7 +112,7 @@ public class MenuActivity extends FragmentActivity implements SeekBar.OnSeekBarC
         out.putString(Tags.NAME, name);
         gson = new Gson();
         String json = gson.toJson(cat);
-        out.putString(Tags.CAT,json);
+        out.putString(Tags.CAT, json);
         super.onSaveInstanceState(out);
     }
 
@@ -227,6 +235,10 @@ public class MenuActivity extends FragmentActivity implements SeekBar.OnSeekBarC
         toCatActivity();
         //finish();
     }
+
+    /**
+     * start cat creator
+     */
     public void newCat(){
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ncf = new NewcatChooseFragment();
@@ -242,6 +254,22 @@ public class MenuActivity extends FragmentActivity implements SeekBar.OnSeekBarC
         ft.addToBackStack(Tags.NEWCAT_CHOOSE_FRAGMENT);
         ft.commit();
     }
+
+
+    /**
+     * process cat bitmaps off UI thread
+     *
+     */
+    public void loadBitmap(int resId, ImageView imageView){
+
+        Picasso.with(this).load(resId).into(imageView);
+        //bc.loadBitmap(resId,imageView,mPlaceholderBitmap);
+    }
+
+
+    /**
+     * navigate to tutorial
+     */
     public void toTutorial(){
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         tuf = new TutorialFragment();

@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import cat.Cat;
-import controllers.SharedPreferencesController;
 
 /**
  * Created by JOHANNES on 9/25/2015.
@@ -32,7 +31,7 @@ public class SettingsController {
 
     /**
      * load preferences from sp, if returned nothing, put default values
-     *
+     * TODO add callback when notification status is changed
      */
     public SettingsController(Context ctxt){
 

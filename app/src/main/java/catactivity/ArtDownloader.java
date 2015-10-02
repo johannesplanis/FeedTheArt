@@ -48,11 +48,11 @@ public class ArtDownloader {
         ArtObject artObject = new ArtObject();
         try {
             String url = stripBackslashAndBraces(jsonObject.getString("edmPreview"));
-            artObject.setUrl(url);
+            artObject.setImage_url(url);
         } catch(JSONException e){
             e.printStackTrace();
             System.out.println("No URL associated with JSON object");
-            artObject.setUrl("http://orig05.deviantart.net/6651/f/2009/210/7/2/dead_face_by_krasus.jpg");
+            artObject.setImage_url("http://orig05.deviantart.net/6651/f/2009/210/7/2/dead_face_by_krasus.jpg");
             }
         try{
             String name = stripQuotesBraces(jsonObject.getString("title"));
@@ -77,15 +77,23 @@ public class ArtDownloader {
         return artObject;
     }
 
-    public ArtObject getArtObjectFromApiJSON(JSONObject jsonObject){
+    public ArtObject parseArtObjectFromJSON(JSONObject jsonObject){
         ArtObject artObject = new ArtObject();
+
+        //Gson gson = new Gson();
+
+       // ArtDownloader
+
+
+
+
         try {
             String url = stripQuotes(jsonObject.getString("previewUrl"));
-            artObject.setUrl(url);
+            artObject.setImage_url(url);
         } catch(JSONException e){
             e.printStackTrace();
             System.out.println("No URL associated with JSON object");
-            artObject.setUrl("http://orig05.deviantart.net/6651/f/2009/210/7/2/dead_face_by_krasus.jpg");
+            artObject.setImage_url("http://orig05.deviantart.net/6651/f/2009/210/7/2/dead_face_by_krasus.jpg");
         }
         try{
             String name = stripQuotes(jsonObject.getString("title"));

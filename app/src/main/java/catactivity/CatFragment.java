@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
@@ -15,14 +16,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.planis.johannes.catprototype.R;
 
 import java.text.DecimalFormat;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import cat.Constants;
 import cat.Tags;
 
 /**
@@ -43,10 +47,13 @@ public class CatFragment extends Fragment {
     Button artButton;
     @Bind(R.id.cat_extra_button)
     Button extraButton;
+    @Bind(R.id.cat_placeholder_image_view)
+    ImageView imageView;
 
 
 
     public String catName;
+    public Bitmap placeholderBitmap;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -110,6 +117,7 @@ public class CatFragment extends Fragment {
 
     public void setupLayout(){
 
+
         Activity act = getActivity(); if (act instanceof  CatActivity)
             catName = ((CatActivity) act).getName();
         menuButton.setOnClickListener(new View.OnClickListener(){
@@ -139,7 +147,18 @@ public class CatFragment extends Fragment {
         Typeface customFont = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/AustieBostKittenKlub.ttf");
         catDialogTop.setTypeface(customFont);
         catDialogBottom.setTypeface(customFont);
-        catDialogTop.setText("Hello, it's me, "+catName+" !");
+        catDialogTop.setText("Hello, it's me, " + catName + " !");
+
+
+        int character = ((CatActivity) getActivity()).getCharacter();
+
+        int resId = Constants.catImageResIds[character];
+        Log.i("CAT FRAGMENT", "character: " + character);
+
+        Glide.with(this).load(resId).into(imageView);
+        //Picasso.with(getActivity()).load(resId).into(imageView);
+        //Glide has better performance
+
     }
 
     /**

@@ -34,7 +34,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse nec ex eu lacus pulvinar sollicitudin. Fusce eu bibendum nibh, non vestibulum orci. Etiam gravida purus ex, eget convallis lacus consectetur et. Integer gravida nibh eu ipsum elementum porta. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum suscipit facilisis ex, id bibendum sem sodales id. Vivamus mauris tellus, feugiat ac felis vel, fringilla efficitur quam. Ut consequat erat in condimentum vehicula. Nam suscipit leo ut turpis porttitor, auctor mollis turpis porta. Pellentesque leo odio, cursus sed nibh a, dictum mattis dui."
+                android:text=""
                 android:id="@+id/tutorial_objectives_list_field"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginLeft="7dp"
@@ -48,24 +48,37 @@
 
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="right" >
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="back"
+            android:id="@+id/button3"
+            android:layout_weight="1"
+            android:visibility="invisible" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/button7"
+            android:visibility="invisible" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="BACK"
             android:id="@+id/tutorial_back_button"
-            android:background="#eaeaad"
-            android:padding="10dp"
-            android:layout_margin="15dp"
+            android:background="#ededda"
             android:elegantTextHeight="false"
             android:enabled="true"
             android:focusable="false"
             android:textColor="#000000"
             android:singleLine="false"
-            android:clickable="true" />
+            android:clickable="true"
+            android:layout_weight="1" />
     </LinearLayout>
 
 

@@ -1,4 +1,4 @@
-package backgroundcat;
+package controllers;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -13,9 +13,10 @@ import com.planis.johannes.catprototype.R;
 import catactivity.CatActivity;
 
 /**
+ * TODO builder?
  * Created by JOHANNES on 8/27/2015.
  */
-public class CatNotifications {
+public class NotificationController {
 
     /*
     http://android-developers.blogspot.com/2015/08/get-dos-and-donts-for-notifications.html

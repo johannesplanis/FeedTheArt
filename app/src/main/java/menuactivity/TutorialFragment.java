@@ -19,6 +19,7 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import cat.Constants;
 import modules.BusModule;
 
 /**
@@ -30,7 +31,7 @@ public class TutorialFragment extends Fragment {
     @Bind(R.id.objectives_field)
     TextView header;
     @Bind(R.id.tutorial_objectives_list_field)
-    TextView body;
+    TextView tutorial;
     @Bind(R.id.tutorial_back_button)
     Button backButton;
 
@@ -51,8 +52,8 @@ public class TutorialFragment extends Fragment {
                 toMenu();
             }
         });
-        customFont = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/AustieBostKittenKlub.ttf");
-
+        customFont = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), Constants.AUSTIE_BOST_KITTEN_KLUB_FONT);
+        tutorial.setText(Constants.TUTORIAL);
         header.setTypeface(customFont);
         backButton.setTypeface(customFont);
 

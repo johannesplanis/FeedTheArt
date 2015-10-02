@@ -22,7 +22,7 @@
         android:id="@+id/newcat_choose_pager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/linearLayout"
+        android:layout_above="@+id/linearLayoutLeft"
         android:layout_below="@+id/newcat_choose_fragment_header"
         android:paddingLeft="0dp"
         android:paddingRight="0dp"
@@ -36,7 +36,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
-        android:id="@+id/linearLayout">
+        android:id="@+id/linearLayoutLeft">
 
         <Button
             android:layout_width="wrap_content"
@@ -68,6 +68,21 @@
             android:background="#ededda" />
     </LinearLayout>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/newcat_choose_swipe_r"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/newcat_choose_swipe_l"
+        android:layout_alignBottom="@+id/newcat_choose_swipe_r"
+        android:layout_toLeftOf="@+id/newcat_choose_fragment_header"
+        android:layout_toStartOf="@+id/newcat_choose_fragment_header" />
 
 
 </RelativeLayout>

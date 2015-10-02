@@ -3,14 +3,16 @@ package cat;
 import android.net.Uri;
 
 import com.google.android.gms.location.Geofence;
+import com.planis.johannes.catprototype.R;
 
 /**
  * Created by JOHANNES on 9/11/2015.
  */
 public class Constants {
 
-    private Constants() {
-    }
+    public static final int INTERVAL_FOREGROUND = 500;
+    public static final int INTERVAL_BACKGROUND = 1000*10;
+    public static final int INTERVAL_GEOFENCE = 59*1000;
 
     public static final String APP_TAG = "FeedTheArt";
 
@@ -79,5 +81,45 @@ public class Constants {
     public static final float INVALID_FLOAT_VALUE = -999.0f;
     public static final int INVALID_INT_VALUE = -999;
 
+    //placeholder cats
+    public static final String SWEET_CAT = "Sweet cat";
+    public static final String EVIL_CAT = "Evil cat";
+    public static final String PIRATE_CAT = "Pirate cat";
+    public final static String[] imageNames = new String[]{SWEET_CAT, EVIL_CAT, PIRATE_CAT};
+    public final static Integer[] imageResIds = new Integer[]{R.drawable.kitty_sweet,R.drawable.kitty_evil,R.drawable.kitty_pirate};
 
+    //proper cats
+    public static final String PAINTER_CAT = "Painter cat";
+    public static final String BASIC_CAT = "Evil cat";
+    public static final String PIRAT_CAT = "Pirate cat";
+    public static final String[] catsNames = new String[]{PAINTER_CAT,BASIC_CAT,PIRAT_CAT};
+    public final static Integer[] catImageResIds = new Integer[]{R.drawable.kitty_painter_cut,R.drawable.kitty_basic_cut,R.drawable.kitty_pirate_cut};
+
+
+    //cat art constants
+    public static final String baseApiUrl = "http://192.168.2.105:8080";
+    public static final String relativeApiUrl = "/art.json";
+
+    //notification colors
+    public static final int APP_COLOR_SUCCESS = 0xFF40D211;
+    public static final int APP_COLOR_NUDGE = 0xFFE8ED00;
+    public static final int APP_COLOR_ALARM = 0xFFED7800;
+    public static final int APP_COLOR_CRITICAL = 0xFFED1000;
+
+
+    //
+    public static final String TUTORIAL = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. " +
+            "Suspendisse nec ex eu lacus pulvinar sollicitudin. Fusce eu bibendum nibh, non vestibulum orci. " +
+            "Etiam gravida purus ex, eget convallis lacus consectetur et. Integer gravida nibh eu ipsum elementum porta. " +
+            "Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. " +
+            "Vestibulum suscipit facilisis ex, id bibendum sem sodales id. Vivamus mauris tellus, feugiat ac felis vel, fringilla efficitur quam. " +
+            "Ut consequat erat in condimentum vehicula. Nam suscipit leo ut turpis porttitor, auctor mollis turpis porta. " +
+            "Pellentesque leo odio, cursus sed nibh a, dictum mattis dui.";
+
+    //fonts
+    public static final String AUSTIE_BOST_KITTEN_KLUB_FONT = "fonts/AustieBostKittenKlub.ttf";
+
+
+    private Constants() {
+    }
 }

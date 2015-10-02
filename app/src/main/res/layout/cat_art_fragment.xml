@@ -1,54 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true"
-    android:background="#ffffff">
+    android:background="#ffffff"
+    android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Art for today"
-        android:id="@+id/cat_art_header"
-        android:layout_gravity="center_horizontal"
-        android:textSize="32dp"
-        android:layout_margin="25dp" />
+        android:gravity="center"
+        android:background="#ededda">
 
-    <FrameLayout
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Art for today"
+            android:id="@+id/cat_art_header"
+            android:layout_gravity="center_horizontal"
+            android:textSize="32dp"
+            android:gravity="center"
+            android:layout_margin="7dp" />
+    </LinearLayout>
+
+    <view
+        class="modules.OverscrolledScrollView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
+        android:layout_height="fill_parent"
+        android:id="@+id/scrollView2"
         android:layout_weight="1"
-        android:id="@+id/cat_art_container">
+        android:scrollbars="none">
 
-        <ImageView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/cat_art_image_view" />
-    </FrameLayout>
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp">
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:id="@+id/cat_art_container">
 
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:id="@+id/cat_art_title"
-        android:layout_gravity="center_horizontal"
-        android:layout_weight="0" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/cat_art_image_view"
+                    android:src="@drawable/logo_bw"
+                    android:layout_gravity="center_horizontal" />
+            </FrameLayout>
 
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:id="@+id/cat_art_author"
-        android:layout_gravity="center_horizontal"
-        android:layout_weight="0.5" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:id="@+id/cat_art_title"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="0"
+                android:text="title" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:id="@+id/cat_art_author"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="0.5"
+                android:text="author" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/cat_art_year"
+                android:text="year" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="location"
+                android:id="@+id/cat_art_location" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="type"
+                android:id="@+id/cat_art_type" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="description"
+                android:id="@+id/cat_art_description" />
+
+
+        </LinearLayout>
+    </view>
+
 
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal">
+        android:layout_gravity="center_horizontal|right">
 
         <Button
             android:layout_width="wrap_content"
@@ -57,7 +113,15 @@
             android:id="@+id/cat_art_share_button"
             android:background="#ededda"
             android:padding="5dp"
-            style="?android:attr/borderlessButtonStyle"/>
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_weight="1" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/button10"
+            android:layout_weight="1"
+            android:visibility="invisible" />
 
         <Button
             android:layout_width="wrap_content"
@@ -67,7 +131,8 @@
             android:background="#ededda"
             android:layout_marginLeft="5dp"
             android:padding="5dp"
-            style="?android:attr/borderlessButtonStyle"/>
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_weight="1" />
 
     </LinearLayout>
 </LinearLayout>
