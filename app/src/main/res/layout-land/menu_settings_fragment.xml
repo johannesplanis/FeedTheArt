@@ -33,11 +33,13 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Settings"
             android:id="@+id/menu_settings_header_field"
-            android:layout_gravity="center_horizontal"
+            android:layout_gravity="center"
             android:textSize="32dp"
             android:padding="7dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
+            android:layout_weight="6"
+            android:gravity="center"
             android:textColor="@color/overall_font"
             android:typeface="serif" />
 
@@ -57,59 +59,6 @@
         android:layout_weight="1"
         android:padding="25dp">
 
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="15dp">
-
-            <Switch
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Notifications"
-                android:id="@+id/settings_notification_permission_switch"
-                android:layout_gravity="center_horizontal|top"
-                android:checked="true"
-                android:textColor="@color/overall_font"
-                android:typeface="serif" />
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left|center_vertical"
-                android:layout_marginTop="25dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="Starving speed"
-                    android:id="@+id/settings_starving_speed_text"
-                    android:layout_gravity="left|center_vertical"
-                    android:textColor="@color/overall_font"
-                    android:paddingBottom="10dp"
-                    android:typeface="serif" />
-
-                <SeekBar
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:indeterminate="false"
-                    android:id="@+id/settings_starving_speed"
-                    android:max="100" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="00 %"
-                    android:id="@+id/settings_starving_speed_percent"
-                    android:layout_gravity="center_horizontal"
-                    android:textColor="@color/overall_font"
-                    android:typeface="serif" />
-            </LinearLayout>
-        </LinearLayout>
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -119,8 +68,53 @@
             android:layout_gravity="center_horizontal|bottom"
             android:padding="10dp"
             android:singleLine="false"
-            android:textColor="#b3b2b2"
+            android:textColor="#a8a4a4"
             android:typeface="serif" />
+
+        <Switch
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Notifications"
+            android:id="@+id/settings_notification_permission_switch"
+            android:layout_gravity="center_horizontal|top"
+            android:checked="true"
+            android:textColor="@color/overall_font"
+            android:typeface="serif" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="Starving speed"
+                android:id="@+id/settings_starving_speed_text"
+                android:layout_gravity="left|center_vertical"
+                android:textColor="@color/overall_font"
+                android:paddingBottom="10dp"
+                android:typeface="serif" />
+
+            <SeekBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:indeterminate="false"
+                android:id="@+id/settings_starving_speed"
+                android:max="100" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="00 %"
+                android:id="@+id/settings_starving_speed_percent"
+                android:layout_gravity="center_horizontal"
+                android:textColor="@color/overall_font"
+                android:typeface="serif" />
+        </LinearLayout>
 
     </FrameLayout>
 

@@ -55,7 +55,7 @@
             android:id="@+id/continue_button"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="0dp"
-            android:textSize="23dp"
+            android:textSize="24dp"
             android:background="#59B9A8"
             android:padding="10dp"
 
@@ -70,7 +70,7 @@
             android:id="@+id/new_cat_button"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
-            android:textSize="23dp"
+            android:textSize="24dp"
             android:background="#53473A"
             android:padding="10dp"
 
@@ -85,7 +85,7 @@
             android:id="@+id/tutorial_button"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
-            android:textSize="23dp"
+            android:textSize="24dp"
             android:background="#53473A"
             android:padding="10dp"
 
@@ -100,7 +100,7 @@
             android:id="@+id/settings_button"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
-            android:textSize="23dp"
+            android:textSize="24dp"
             android:background="#53473A"
             android:padding="10dp"
 

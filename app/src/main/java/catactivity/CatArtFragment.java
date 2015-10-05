@@ -21,6 +21,7 @@ import com.planis.johannes.catprototype.R;
 public class CatArtFragment extends Fragment{
     ArtObject object;
     OnRefreshCatArtListener meaowCallback;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

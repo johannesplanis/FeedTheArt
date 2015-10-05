@@ -22,10 +22,16 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.planis.johannes.catprototype.R;
+
+import java.util.ArrayList;
+
+import geofencing.VenueObject;
+import geofencing.VenuesDevelopmentMode;
 
 /**
  * Created by JOHANNES on 8/5/2015.
@@ -36,7 +42,7 @@ public class CatMapFragment extends Fragment implements OnMapReadyCallback {
     //private String markerInfo;
     private FragmentActivity myContext;
     private ArrayAdapter<Marker> places;
-
+    private ArrayList<VenueObject> vo;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -53,7 +59,25 @@ public class CatMapFragment extends Fragment implements OnMapReadyCallback {
             }
         });
 
+
         initMaps();
+
+        vo = VenuesDevelopmentMode.sampleVenues();
+        //for tests of async loading of pins
+
+        final android.os.Handler handler = new android.os.Handler();
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                for(VenueObject v:vo){
+
+                    addPlace(v);
+                }
+            }
+        },2000);
+
+
 
         return view;
 
@@ -98,15 +122,25 @@ public class CatMapFragment extends Fragment implements OnMapReadyCallback {
                             //markerInfo = marker.getPosition().toString();
                         }
                     });
+
+
                 }
             }
         }
     }
 
-    private void addPlace(LatLng position,String description) {
-        MarkerOptions mOption = new MarkerOptions().position(position).title(description).flat(true);
-        marker = map.addMarker(mOption);
-        places.add(marker);
+    private void addPlace(VenueObject v) {
+        Log.i("VENUES ON MAP", "" + v.getmId() + " " + v.getmLatitude() + ", " + v.getmLongitude() + ", " + v.getName());
+        LatLng latLng = new LatLng(v.getmLatitude(),v.getmLongitude());
+        String name = v.getName();
+        String snippet = v.getDescription();
+        MarkerOptions markerOptions = new MarkerOptions()
+                .position(latLng)
+                .title(name)
+                .snippet(snippet)
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+                .flat(true);
+        Marker eMarker = map.addMarker(markerOptions);
     }
 
     public void toCat() {

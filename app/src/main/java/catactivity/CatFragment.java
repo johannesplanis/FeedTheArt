@@ -145,8 +145,8 @@ public class CatFragment extends Fragment {
             }
         });
         Typeface customFont = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/AustieBostKittenKlub.ttf");
-        catDialogTop.setTypeface(customFont);
-        catDialogBottom.setTypeface(customFont);
+        //catDialogTop.setTypeface(customFont);
+        //catDialogBottom.setTypeface(customFont);
         catDialogTop.setText("Hello, it's me, " + catName + " !");
 
 

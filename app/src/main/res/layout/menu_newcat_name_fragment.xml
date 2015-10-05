@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
-    android:background="#ffffff"
+    android:background="@color/overall_background"
     android:clickable="true"
     android:id="@+id/newcat_name_relative_layout">
 
@@ -21,9 +21,13 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:onClick="continueCreator"
-            android:background="#eaeaad"
+            android:background="#53473A"
             android:layout_weight="1"
-            android:paddingRight="0dp" />
+            android:paddingRight="0dp"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:textColor="@color/overall_font"
+            android:typeface="serif"
+            android:textSize="18dp" />
 
         <Button
             android:layout_width="wrap_content"
@@ -41,8 +45,12 @@
             android:layout_alignParentRight="true"
 
             android:onClick="finishCreator"
-            android:background="#ededda"
-            android:layout_weight="1" />
+            android:background="#59B9A8"
+            android:layout_weight="1"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:textColor="@color/overall_font"
+            android:typeface="serif"
+            android:textSize="18dp" />
     </LinearLayout>
 
     <EditText
@@ -52,7 +60,11 @@
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         android:hint="SAY MY NAME!"
-        android:textColor="#222125"
+        android:textColor="@color/overall_font"
         android:inputType="textPersonName"
-        android:imeOptions="actionGo"/>
+        android:imeOptions="actionGo"
+        android:typeface="serif"
+        android:elegantTextHeight="false"
+        android:singleLine="true"
+        android:textColorHint="@color/overall_font" />
 </RelativeLayout>

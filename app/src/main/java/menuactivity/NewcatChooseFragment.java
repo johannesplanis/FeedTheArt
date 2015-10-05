@@ -119,7 +119,7 @@ public class NewcatChooseFragment extends android.support.v4.app.Fragment {
             }
         });
         Typeface customFont = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/AustieBostKittenKlub.ttf");
-        chooseCharacterHeader.setTypeface(customFont);
+        //chooseCharacterHeader.setTypeface(customFont);
         swipeL.setTypeface(customFont);
         swipeR.setTypeface(customFont);
     }

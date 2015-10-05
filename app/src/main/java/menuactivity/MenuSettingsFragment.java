@@ -1,6 +1,7 @@
 package menuactivity;
 
 import android.app.Activity;
+import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -34,6 +35,11 @@ public class MenuSettingsFragment extends Fragment implements SeekBar.OnSeekBarC
     Button backButton;
     @Bind(R.id.settings_starving_speed)
     SeekBar starvingSpeedBar;
+    @Bind(R.id.settings_starving_speed_percent)
+    TextView starvingSpeedPercent;
+    @Bind(R.id.settings_notification_permission_switch)
+    Switch mSwitch;
+
 
     Typeface customFont;
     SettingsController sc;
@@ -46,35 +52,7 @@ public class MenuSettingsFragment extends Fragment implements SeekBar.OnSeekBarC
 
         ButterKnife.bind(this, view);
 
-
-        SeekBar mSeekBar = (SeekBar) view.findViewById(R.id.settings_starving_speed);
-        mSeekBar.setOnSeekBarChangeListener(this);
-        Switch mSwitch = (Switch) view.findViewById(R.id.settings_notification_permission_switch);
-        mSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                sc.setNotificationPermission(isChecked);
-            }
-        });
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toMenu();
-            }
-        });
-        reset.setOnClickListener(new View.OnClickListener(){
-            @Override
-        public void onClick(View v){
-                resetProgress();
-            }
-        });
-
-        customFont = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/AustieBostKittenKlub.ttf");
-        head.setTypeface(customFont);
-        backButton.setTypeface(customFont);
-        double fspeed = sc.getStarvingSpeed()/2*1000000;
-        mSeekBar.setProgress((int)Math.ceil(fspeed)); //after loading settings, set current value of setting
-        mSwitch.setChecked(sc.isNotificationPermission());
+        setupLayout();
 
         return view;
     }
@@ -102,6 +80,7 @@ public class MenuSettingsFragment extends Fragment implements SeekBar.OnSeekBarC
         double fProgress = (double) progress;
         sc.setStarvingSpeed(fProgress*2/1000000);//adjust to look nice in settings page, and work as designed as well
         Log.i(Tags.SETTINGS,"Progress:"+progress);
+        starvingSpeedPercent.setText(progress+" %");
     }
 
     @Override
@@ -113,4 +92,55 @@ public class MenuSettingsFragment extends Fragment implements SeekBar.OnSeekBarC
     public void onStopTrackingTouch(SeekBar seekBar) {
 
     }
+
+    //Handle orientation changes
+    @Override
+    public void onConfigurationChanged(Configuration newConfig){
+        super.onConfigurationChanged(newConfig);
+        LayoutInflater inflater = LayoutInflater.from(getActivity());
+        populateViewForOrientation(inflater, (ViewGroup) getView());
+    }
+
+    private void populateViewForOrientation(LayoutInflater inflater,ViewGroup viewGroup){
+        viewGroup.removeAllViewsInLayout();
+        View subview = inflater.inflate(R.layout.menu_settings_fragment, viewGroup);
+        ButterKnife.bind(this, subview);
+        setupLayout();
+    }
+
+    private void setupLayout(){
+
+        //SeekBar mSeekBar = (SeekBar) getView().findViewById(R.id.settings_starving_speed);
+        starvingSpeedBar.setOnSeekBarChangeListener(this);
+        //Switch mSwitch = (Switch) getView().findViewById(R.id.settings_notification_permission_switch);
+        mSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                sc.setNotificationPermission(isChecked);
+            }
+        });
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toMenu();
+            }
+        });
+        reset.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                resetProgress();
+            }
+        });
+
+        customFont = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/AustieBostKittenKlub.ttf");
+
+        double fspeed = sc.getStarvingSpeed()/2*1000000;
+        starvingSpeedBar.setProgress((int)Math.ceil(fspeed)); //after loading settings, set current value of setting
+        mSwitch.setChecked(sc.isNotificationPermission());
+        starvingSpeedPercent.setText(fspeed+" %");
+
+         }
+
+
+
 }

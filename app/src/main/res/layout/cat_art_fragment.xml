@@ -3,15 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true"
-    android:background="#ffffff"
+    android:background="@color/overall_background"
     android:orientation="vertical">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:background="#ededda">
+        android:gravity="center">
 
         <TextView
             android:layout_width="wrap_content"
@@ -22,7 +21,9 @@
             android:layout_gravity="center_horizontal"
             android:textSize="32dp"
             android:gravity="center"
-            android:layout_margin="7dp" />
+            android:layout_margin="7dp"
+            android:textColor="@color/overall_font"
+            android:typeface="serif" />
     </LinearLayout>
 
     <view
@@ -111,10 +112,13 @@
             android:layout_height="wrap_content"
             android:text="TEMP REFRESH"
             android:id="@+id/cat_art_share_button"
-            android:background="#ededda"
+            android:background="@color/blue1"
             android:padding="5dp"
             style="?android:attr/borderlessButtonStyle"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:typeface="serif"
+            android:textColor="@color/overall_font"
+            android:textSize="18dp" />
 
         <Button
             android:layout_width="wrap_content"
@@ -128,11 +132,14 @@
             android:layout_height="wrap_content"
             android:text="BACK"
             android:id="@+id/cat_art_back_button"
-            android:background="#ededda"
+            android:background="@color/red1"
             android:layout_marginLeft="5dp"
             android:padding="5dp"
             style="?android:attr/borderlessButtonStyle"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:typeface="serif"
+            android:textColor="@color/overall_font"
+            android:textSize="18dp" />
 
     </LinearLayout>
 </LinearLayout>

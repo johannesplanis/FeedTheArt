@@ -52,6 +52,7 @@ import controllers.SharedPreferencesController;
 import geofencing.GeofenceStore;
 import geofencing.GeofencesIntentService;
 import geofencing.VenueGeofence;
+import geofencing.VenueObject;
 import menuactivity.MenuActivity;
 
 public class CatActivity extends FragmentActivity implements CatArtFragment.OnRefreshCatArtListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -102,12 +103,21 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
     // Persistent storage for geofences.
     private GeofenceStore mGeofenceStorage;
 
+    public ArrayList<VenueObject> vo;
     private LocationServices mLocationService;
     // Stores the PendingIntent used to request geofence monitoring.
     private PendingIntent mGeofenceRequestIntent;
     private GoogleApiClient mApiClient;
     private enum REQUEST_TYPE {ADD}
     private REQUEST_TYPE mRequestType;
+
+    public ArrayList<VenueObject> getVo() {
+        return vo;
+    }
+
+    public void setVo(ArrayList<VenueObject> vo) {
+        this.vo = vo;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,6 +144,10 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
         bam = new BackgroundAlarmManager(getApplicationContext());
 
         getJSON(Constants.relativeApiUrl);
+        //VenueStorageController vsc = new VenueStorageController();
+        //vo = VenuesDevelopmentMode.sampleVenues();
+        //vsc.putVenues(getApplicationContext(),vo);
+
 
     }
 
@@ -158,6 +172,7 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
                 computeInForeground();
             }
         }, 0, Constants.INTERVAL_FOREGROUND);
+
 
         //setup geofence
 
@@ -221,7 +236,8 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
         getJSON(Constants.relativeApiUrl);
 
         //need better way to update fragment only after new JSON is returned, callback from onSuccess?
-        final Handler handler = new Handler();
+        final Handler handler;
+        handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {

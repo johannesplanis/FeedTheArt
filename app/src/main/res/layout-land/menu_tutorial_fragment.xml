@@ -11,24 +11,33 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:gravity="center">
+        android:gravity="center"
+        android:weightSum="1">
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="BACK"
             android:id="@+id/tutorial_back_button"
+            android:background="#00ededda"
             android:elegantTextHeight="false"
             android:enabled="true"
             android:focusable="false"
             android:textColor="@color/overall_font"
             android:singleLine="false"
             android:clickable="true"
-            android:layout_weight="1"
-            android:background="#00000000"
-            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_weight="0.25"
             android:typeface="serif"
-            android:textSize="18dp" />
+            android:textSize="18dp"
+            style="@style/Widget.AppCompat.Button.Borderless" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="back"
+            android:id="@+id/button12"
+            android:layout_weight="0.25"
+            android:visibility="invisible" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -43,11 +52,18 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="back"
-            android:id="@+id/button14"
-            android:layout_weight="1"
+            android:text="New Button"
+            android:id="@+id/button13"
+            android:layout_weight="0.25"
             android:visibility="invisible" />
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="back"
+            android:id="@+id/button11"
+            android:visibility="invisible"
+            android:layout_weight="0.25" />
     </LinearLayout>
 
     <view
@@ -186,8 +202,7 @@
                 android:layout_marginBottom="0dp"
                 android:nestedScrollingEnabled="true"
                 android:textSize="24dp"
-                android:paddingLeft="7dp"
-                android:paddingRight="7dp"
+                android:padding="7dp"
                 android:typeface="serif" />
 
             <ImageView
@@ -208,9 +223,8 @@
                 android:layout_weight="0.81"
                 android:layout_marginBottom="0dp"
                 android:nestedScrollingEnabled="true"
+                android:padding="7dp"
                 android:textSize="24dp"
-                android:paddingLeft="7dp"
-                android:paddingRight="7dp"
                 android:typeface="serif" />
 
             <ImageView
@@ -232,9 +246,7 @@
                 android:layout_marginBottom="0dp"
                 android:nestedScrollingEnabled="true"
                 android:textSize="24dp"
-                android:paddingLeft="7dp"
-                android:paddingRight="7dp"
-                android:paddingBottom="7dp"
+                android:padding="7dp"
                 android:typeface="serif" />
 
             <TextView
@@ -280,29 +292,6 @@
 
         </LinearLayout>
     </view>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:visibility="gone">
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="back"
-            android:id="@+id/button3"
-            android:layout_weight="1"
-            android:visibility="invisible" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/button7"
-            android:visibility="invisible" />
-
-    </LinearLayout>
 
 
 </LinearLayout>

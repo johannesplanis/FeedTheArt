@@ -27,6 +27,7 @@ public class Tags {
 
     public static final String SETTINGS = "SETTINGS";
 
+    public static final String GEOFENCE = "GEOFENCE";
     /**
      * actions
      */

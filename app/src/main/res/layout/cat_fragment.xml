@@ -8,30 +8,36 @@ http://design-seeds.com/home/entry/pinwheel-color
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true"
-    android:background="#ffffff">
+    android:background="@color/overall_background">
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:weightSum="1">
+        android:weightSum="1"
+        android:gravity="center_vertical">
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="MENU"
             android:id="@+id/cat_menu_button"
-            android:background="#ededda"
+            android:background="#00ededda"
             android:enabled="true"
-            style="?android:attr/borderlessButtonStyle"/>
+            style="?android:attr/borderlessButtonStyle"
+            android:textColor="@color/overall_font"
+            android:typeface="serif"
+            android:textSize="18dp" />
 
-        <Button
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="New Button"
             android:id="@+id/button"
-            android:visibility="invisible" />
+            android:visibility="invisible"
+            android:textSize="32dp"
+            android:text="buttock"
+            android:layout_marginTop="7dp"
+            android:layout_marginBottom="7dp" />
 
         <Button
             android:layout_width="wrap_content"
@@ -55,14 +61,18 @@ http://design-seeds.com/home/entry/pinwheel-color
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="It&apos;s me, Czarek!"
+        android:text="Hello, it&apos;s me, Pablo"
         android:id="@+id/cat_name_field"
         android:layout_gravity="center"
-        android:padding="10dp"
         android:textSize="28dp"
         android:focusable="false"
         android:enabled="true"
-        android:textColor="#000000" />
+        android:textColor="@color/overall_font"
+        android:paddingTop="20dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="10dp"
+        android:typeface="serif" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -76,8 +86,9 @@ http://design-seeds.com/home/entry/pinwheel-color
             android:layout_height="fill_parent"
             android:id="@+id/cat_placeholder_image_view"
             android:layout_gravity="center"
-            android:src="@drawable/placeholder_kitty"
-            android:padding="20dp" />
+            android:src="@drawable/kitty_placeholder"
+            android:paddingLeft="40dp"
+            android:paddingRight="40dp" />
     </FrameLayout>
 
     <TextView
@@ -88,7 +99,9 @@ http://design-seeds.com/home/entry/pinwheel-color
         android:id="@+id/cat_feedme_text"
         android:layout_gravity="center_horizontal"
         android:padding="7dp"
-        android:textSize="24dp" />
+        android:textSize="24dp"
+        android:textColor="@color/overall_font"
+        android:typeface="serif" />
 
     <LinearLayout
         android:orientation="horizontal"
@@ -105,7 +118,10 @@ http://design-seeds.com/home/entry/pinwheel-color
             android:id="@+id/cat_map_button"
             android:background="#2cd1a0"
             android:layout_weight="1"
-            style="?android:attr/borderlessButtonStyle"/>
+            style="?android:attr/borderlessButtonStyle"
+            android:textColor="@color/overall_font"
+            android:typeface="serif"
+            android:textSize="18dp" />
 
         <Button
             android:layout_width="match_parent"
@@ -115,7 +131,9 @@ http://design-seeds.com/home/entry/pinwheel-color
             android:background="#d44846"
             android:textColor="#ededda"
             android:layout_weight="1"
-            style="?android:attr/borderlessButtonStyle"/>
+            style="?android:attr/borderlessButtonStyle"
+            android:typeface="serif"
+            android:textSize="18dp" />
 
         <Button
             android:layout_width="match_parent"
@@ -125,7 +143,9 @@ http://design-seeds.com/home/entry/pinwheel-color
             android:background="#614687"
             android:textColor="#ffd333"
             android:layout_weight="1"
-            style="?android:attr/borderlessButtonStyle"/>
+            style="?android:attr/borderlessButtonStyle"
+            android:typeface="serif"
+            android:textSize="18dp" />
     </LinearLayout>
 
 </LinearLayout>

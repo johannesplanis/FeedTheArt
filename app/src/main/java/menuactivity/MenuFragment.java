@@ -67,7 +67,7 @@ public class MenuFragment extends Fragment {
         TextView tv = (TextView) view.findViewById(R.id.menu_title_text_field);
         Typeface customFont = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/AustieBostKittenKlub.ttf");
         tv.setText("Feed The Art!");
-        tv.setTypeface(customFont);
+        //tv.setTypeface(customFont);
         return view;
     }
 

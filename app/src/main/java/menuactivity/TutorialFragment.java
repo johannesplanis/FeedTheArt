@@ -1,6 +1,7 @@
 package menuactivity;
 
 import android.app.Activity;
+import android.content.res.Configuration;
 import android.support.v4.app.Fragment;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -53,9 +54,9 @@ public class TutorialFragment extends Fragment {
             }
         });
         customFont = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), Constants.AUSTIE_BOST_KITTEN_KLUB_FONT);
-        tutorial.setText(Constants.TUTORIAL);
-        header.setTypeface(customFont);
-        backButton.setTypeface(customFont);
+        //tutorial.setText(Constants.TUTORIAL);
+        //header.setTypeface(customFont);
+        //backButton.setTypeface(customFont);
 
         return view;
     }
@@ -78,8 +79,29 @@ public class TutorialFragment extends Fragment {
         super.onPause();
         bus.unregister(readEventHandler);
     }
+    @Override
+    public void onConfigurationChanged(Configuration newConfig){
+        super.onConfigurationChanged(newConfig);
+        LayoutInflater inflater = LayoutInflater.from(getActivity());
+        populateViewForOrientation(inflater, (ViewGroup) getView());
+    }
 
+    private void populateViewForOrientation(LayoutInflater inflater,ViewGroup viewGroup){
+        viewGroup.removeAllViewsInLayout();
+        View subview = inflater.inflate(R.layout.menu_tutorial_fragment, viewGroup);
+        ButterKnife.bind(this, subview);
+        setupLayout();
+    }
 
+    private void setupLayout(){
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toMenu();
+            }
+        });
+        customFont = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), Constants.AUSTIE_BOST_KITTEN_KLUB_FONT);
+    }
 
     public void toMenu(){
         Activity act = getActivity(); if (act instanceof MenuActivity)
