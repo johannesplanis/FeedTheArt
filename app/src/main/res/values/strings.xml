@@ -1,8 +1,12 @@
 <resources>
-    <string name="app_name">Cat Prototype</string>
+    <string name="app_name">Feed The Art</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_cat">CatActivity</string>
     <string name="title_activity_maps">Map</string>
+
+    <string name="apikey_debug">AIzaSyBS242OGEslXRnM9pvxmvVxsAj9PBUHYQo</string>
+    <string name="apikey_release">AIzaSyDYMirPMcI0nBt9kE2YN3K7xZQbLFqjqLM</string>
+    <string name="title_activity_intro">IntroActivity</string>
 </resources>

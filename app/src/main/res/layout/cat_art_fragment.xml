@@ -1,73 +1,155 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true"
-    android:background="#ffffff">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Art for today"
-        android:id="@+id/cat_art_header"
-        android:layout_gravity="center_horizontal"
-        android:textSize="32dp"
-        android:layout_margin="25dp" />
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_weight="1"
-        android:id="@+id/cat_art_container">
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/cat_art_image_view" />
-    </FrameLayout>
-
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:id="@+id/cat_art_title"
-        android:layout_gravity="center_horizontal"
-        android:layout_weight="0" />
-
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:id="@+id/cat_art_author"
-        android:layout_gravity="center_horizontal"
-        android:layout_weight="0.5" />
+    android:background="@color/overall_background"
+    android:orientation="vertical">
 
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal">
+        android:gravity="center"
+        android:layout_gravity="center">
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TEMP REFRESH"
-            android:id="@+id/cat_art_share_button"
-            android:background="#ededda"
-            android:padding="5dp"
-            style="?android:attr/borderlessButtonStyle"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="BACK"
+        <ImageButton
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:id="@+id/cat_art_back_button"
-            android:background="#ededda"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="10dp"
             android:padding="5dp"
-            style="?android:attr/borderlessButtonStyle"/>
+            style="?android:attr/borderlessButtonStyle"
+            android:typeface="serif"
+            android:textColor="@color/overall_font"
+            android:textSize="18dp"
+            android:background="@mipmap/ic_arrow_back_white_36dp"
+            android:layout_marginRight="10dp" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Art for today"
+            android:id="@+id/cat_art_header"
+            android:textSize="32dp"
+            android:gravity="center"
+            android:layout_margin="7dp"
+            android:textColor="@color/overall_font"
+            android:typeface="serif"
+            android:layout_weight="1" />
+
+        <ImageButton
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:id="@+id/cat_art_share_button"
+            android:background="@mipmap/ic_refresh_white_36dp"
+            android:padding="5dp"
+            style="?android:attr/borderlessButtonStyle"
+            android:typeface="serif"
+            android:textColor="@color/overall_font"
+            android:textSize="18dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp" />
     </LinearLayout>
+
+    <view
+        class="modules.OverscrolledScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/scrollView2"
+        android:layout_weight="1"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="20dp">
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:id="@+id/cat_art_container"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/cat_art_image_view"
+                    android:src="@drawable/logo_bw"
+                    android:layout_gravity="center_horizontal" />
+            </FrameLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:id="@+id/cat_art_title"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="0"
+                android:text="title"
+                android:textColor="@color/overall_font"
+                android:typeface="serif"
+                android:textSize="21dp"
+                android:layout_marginBottom="5dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:id="@+id/cat_art_author"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="0.5"
+                android:text="author"
+                android:textColor="@color/overall_font"
+                android:typeface="serif"
+                android:textSize="16dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/cat_art_year"
+                android:text="year"
+                android:textColor="@color/overall_font"
+                android:typeface="serif"
+                android:textSize="15dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="location"
+                android:id="@+id/cat_art_location"
+                android:textColor="@color/overall_font"
+                android:typeface="serif"
+                android:textSize="15dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="type"
+                android:id="@+id/cat_art_type"
+                android:textColor="@color/overall_font"
+                android:typeface="serif"
+                android:textSize="15dp"
+                android:layout_marginBottom="7dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="description"
+                android:id="@+id/cat_art_description"
+                android:textColor="@color/overall_font"
+                android:typeface="serif"
+                android:textSize="15dp" />
+
+
+        </LinearLayout>
+    </view>
+
+
 </LinearLayout>

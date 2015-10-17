@@ -27,11 +27,11 @@ public class BackgroundAlarmManager {
         if (PendingIntent.getBroadcast(context, AlarmReceiver.CODE, intent, PendingIntent.FLAG_NO_CREATE)==null) {
 
             final PendingIntent pIntent =PendingIntent.getBroadcast(context, AlarmReceiver.CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-            long firstTime = System.currentTimeMillis();
+            //long firstTime = System.currentTimeMillis();
 
             AlarmManager alarm = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
-            alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP,firstTime,interval,pIntent);
+            alarm.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+100, interval, pIntent);
             Log.i("ALARM", "STARTED");
         } else{
             Log.i("ALARM","ALREADY STARTED");

@@ -7,31 +7,43 @@ import android.graphics.Bitmap;
  */
 public class ArtObject {
 
+    private int ID;
+    private double factor;
+    private String image_url;
     private String name;
+    private String year;
     private String author;
-    private int year;
+    private String type;
+    private String location;
     private String description;
-    private Bitmap image;
-    private String url;
     private String storageUri;
-
-
-
-
-
-
-
 
     public ArtObject(){
 
     }
-    public ArtObject(Bitmap image, String description, int year, String author, String name) {
-        this.image = image;
+    public ArtObject(int ID, double factor,
+                     String name, String author, String year,
+                     String type, String location, String image_url,
+                     String description) {
+        this.ID = ID;
+        this.factor = factor;
+        this.image_url = image_url;
+        this.name = name;
+        this.author = author;
+        this.year = year;
+        this.type = type;
+        this.location = location;
+
+        this.description = description;
+    }
+    public ArtObject(Bitmap image, String description, String year, String author, String name) {
+
         this.description = description;
         this.year = year;
         this.author = author;
         this.name = name;
     }
+
 
     public String getStorageUri() {
         return storageUri;
@@ -40,12 +52,12 @@ public class ArtObject {
     public void setStorageUri(String storageUri) {
         this.storageUri = storageUri;
     }
-    public String getUrl() {
-        return url;
+    public String getImage_url() {
+        return image_url;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setImage_url(String image_url) {
+        this.image_url = image_url;
     }
 
 
@@ -65,11 +77,11 @@ public class ArtObject {
         this.author = author;
     }
 
-    public int getYear() {
+    public String getYear() {
         return year;
     }
 
-    public void setYear(int year) {
+    public void setYear(String year) {
         this.year = year;
     }
 
@@ -81,13 +93,35 @@ public class ArtObject {
         this.description = description;
     }
 
-    public Bitmap getImage() {
-        return image;
+    public int getID() {
+        return ID;
     }
 
-    public void setImage(Bitmap image) {
-        this.image = image;
+    public void setID(int id) {
+        this.ID = id;
     }
 
+    public double getFactor() {
+        return factor;
+    }
 
+    public void setFactor(double factor) {
+        this.factor = factor;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 }

@@ -3,13 +3,44 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true"
-    android:background="#ffffff">
+    android:background="@color/overall_background">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical">
+
+        <Button
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:id="@+id/cat_map_back_button"
+            android:background="@mipmap/ic_arrow_back_white_36dp"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:textSize="18dp"
+            android:textColor="@color/overall_font"
+            android:typeface="serif"
+            android:layout_marginLeft="10dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView9"
+            android:textSize="32dp"
+            android:visibility="invisible"
+            android:text="Mapsy"
+            android:layout_margin="7dp" />
+
+    </LinearLayout>
 
     <FrameLayout
         android:id="@+id/cat_map_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:layout_weight="1" >
+
+
+        Fragment shouldnt be inflated from another fragment
         <fragment
             xmlns:map="http://schemas.android.com/apk/res-auto"
             android:id="@+id/google_maps_fragment"
@@ -19,22 +50,18 @@
 
             map:cameraBearing="0"
             map:cameraTilt="0"
-            map:cameraZoom="0"
             map:mapType="terrain"
             map:uiCompass="true"
             map:uiRotateGestures="true"
             map:uiScrollGestures="true"
             map:uiTiltGestures="true"
             map:uiZoomControls="false"
-            map:uiZoomGestures="true" />
+            map:uiZoomGestures="true"
+
+
+             />
+        <!--map:cameraZoom="0" -->
     </FrameLayout>
 
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="BACK"
-        android:id="@+id/cat_map_back_button"
-        android:layout_gravity="right"
-        android:background="#ededda" />
 </LinearLayout>

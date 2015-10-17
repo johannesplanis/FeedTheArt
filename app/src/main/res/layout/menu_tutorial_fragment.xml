@@ -3,12 +3,58 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:weightSum="1"
-    android:background="#ffffff"
+    android:background="@color/overall_background"
     android:clickable="true">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center">
+
+        <Button
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:id="@+id/tutorial_back_button"
+            android:elegantTextHeight="false"
+            android:enabled="true"
+            android:focusable="false"
+            android:textColor="@color/overall_font"
+            android:singleLine="false"
+            android:clickable="true"
+            android:background="@mipmap/ic_arrow_back_white_36dp"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:typeface="serif"
+            android:textSize="18dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Walkthrough"
+            android:id="@+id/objectives_field"
+            android:textSize="32dp"
+            android:textColor="@color/overall_font"
+            android:layout_margin="7dp"
+            android:typeface="serif"
+            android:layout_weight="1"
+            android:gravity="center" />
+
+        <Button
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:text="back"
+            android:id="@+id/button14"
+            android:layout_weight="1"
+            android:visibility="invisible" />
+
+    </LinearLayout>
 
     <view
         class="modules.OverscrolledScrollView"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:id="@+id/scrollView2"
         android:layout_weight="1">
@@ -17,55 +63,247 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Objectives"
-                android:id="@+id/objectives_field"
-                android:layout_gravity="center_horizontal"
-                android:textSize="32dp"
-                android:textColor="#000000"
-                android:layout_marginBottom="15dp"
-                android:layout_marginTop="25dp" />
+            android:paddingTop="3dp"
+            android:paddingBottom="15dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse nec ex eu lacus pulvinar sollicitudin. Fusce eu bibendum nibh, non vestibulum orci. Etiam gravida purus ex, eget convallis lacus consectetur et. Integer gravida nibh eu ipsum elementum porta. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum suscipit facilisis ex, id bibendum sem sodales id. Vivamus mauris tellus, feugiat ac felis vel, fringilla efficitur quam. Ut consequat erat in condimentum vehicula. Nam suscipit leo ut turpis porttitor, auctor mollis turpis porta. Pellentesque leo odio, cursus sed nibh a, dictum mattis dui."
+                android:text="Objectives:"
                 android:id="@+id/tutorial_objectives_list_field"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginLeft="7dp"
                 android:layout_marginRight="7dp"
                 android:layout_weight="0.81"
                 android:layout_marginBottom="0dp"
-                android:nestedScrollingEnabled="true" />
+                android:nestedScrollingEnabled="true"
+                android:layout_margin="7dp"
+                android:textSize="24dp"
+                android:padding="7dp"
+                android:textColor="#000000"
+                android:typeface="serif" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="By entering the game, you become an owner of one special cat.."
+                android:id="@+id/textView6"
+                android:layout_weight="0.81"
+                android:textColor="#000000"
+                android:typeface="serif" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="It is so unique because it feeds only on art"
+                android:id="@+id/textView7"
+                android:layout_weight="0.81"
+                android:textColor="#000000"
+                android:typeface="serif" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Do it frequently so that it doesn&apos;t starve!"
+                android:id="@+id/textView8"
+                android:layout_weight="0.81"
+                android:textColor="#000000"
+                android:typeface="serif" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Feeding:"
+                android:id="@+id/tutorial_feeding_tv"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="7dp"
+                android:layout_marginRight="7dp"
+                android:layout_weight="0.81"
+                android:layout_marginBottom="7dp"
+                android:nestedScrollingEnabled="true"
+                android:layout_marginTop="7dp"
+                android:textSize="24dp"
+                android:padding="7dp"
+                android:typeface="serif" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="You can feed the cat either by visiting supported cultural facility, or by enjoying art on your phone. Share your love for art and cats to get additional bonuses!"
+                android:id="@+id/textView"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="0.81"
+                android:typeface="serif" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Control center:"
+                android:id="@+id/tutorial_control_tv"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="7dp"
+                android:layout_marginRight="7dp"
+                android:layout_weight="0.81"
+                android:layout_marginBottom="0dp"
+                android:nestedScrollingEnabled="true"
+                android:layout_margin="7dp"
+                android:textSize="24dp"
+                android:padding="7dp"
+                android:textColor="@android:color/holo_orange_light"
+                android:typeface="serif" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="At this screen you can track current food level of your friend, check nearby culture places, or take a peek at art we prepared for you today."
+                android:id="@+id/textView2"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="0.81"
+                android:textColor="@android:color/holo_orange_light"
+                android:typeface="serif" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageView3"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="0.81"
+                android:src="@drawable/w_cat" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Map:"
+                android:id="@+id/tutorial_map_tv"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="7dp"
+                android:layout_marginRight="7dp"
+                android:layout_weight="0.81"
+                android:layout_marginBottom="0dp"
+                android:nestedScrollingEnabled="true"
+                android:textSize="24dp"
+                android:paddingLeft="7dp"
+                android:paddingRight="7dp"
+                android:typeface="serif" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageView4"
+                android:src="@drawable/w_map" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Art:"
+                android:id="@+id/tutorial_art_tv"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="7dp"
+                android:layout_marginRight="7dp"
+                android:layout_weight="0.81"
+                android:layout_marginBottom="0dp"
+                android:nestedScrollingEnabled="true"
+                android:textSize="24dp"
+                android:paddingLeft="7dp"
+                android:paddingRight="7dp"
+                android:typeface="serif" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageView5"
+                android:src="@drawable/w_art" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Creator:"
+                android:id="@+id/tutorial_creator_tv"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="7dp"
+                android:layout_marginRight="7dp"
+                android:layout_weight="0.81"
+                android:layout_marginBottom="0dp"
+                android:nestedScrollingEnabled="true"
+                android:textSize="24dp"
+                android:paddingLeft="7dp"
+                android:paddingRight="7dp"
+                android:paddingBottom="7dp"
+                android:typeface="serif" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pick the character of your pet.."
+                android:id="@+id/textView3"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="0.81"
+                android:typeface="serif" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageView6"
+                android:src="@drawable/w_character" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="..name it then."
+                android:id="@+id/textView4"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="0.81"
+                android:typeface="serif" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageView7"
+                android:src="@drawable/w_name"
+                android:layout_gravity="center" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Enjoy your new friend!"
+                android:id="@+id/textView5"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="0.81"
+                android:typeface="serif" />
 
         </LinearLayout>
     </view>
 
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="right" >
+        android:layout_gravity="right"
+        android:visibility="gone">
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="BACK"
-            android:id="@+id/tutorial_back_button"
-            android:background="#eaeaad"
-            android:padding="10dp"
-            android:layout_margin="15dp"
-            android:elegantTextHeight="false"
-            android:enabled="true"
-            android:focusable="false"
-            android:textColor="#000000"
-            android:singleLine="false"
-            android:clickable="true" />
+            android:text="back"
+            android:id="@+id/button3"
+            android:layout_weight="1"
+            android:visibility="invisible" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/button7"
+            android:visibility="invisible" />
+
     </LinearLayout>
 
 

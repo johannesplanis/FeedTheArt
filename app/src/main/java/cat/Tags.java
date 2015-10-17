@@ -25,20 +25,9 @@ public class Tags {
     public static final String NAME = "NAME";
     public static final String LEVEL_OF_ALARM = "LEVEL_OF_ALARM";
 
-    public static final int APP_COLOR_SUCCESS = 0xFF40D211;
-
-    public static final int APP_COLOR_NUDGE = 0xFFE8ED00;
-    public static final int APP_COLOR_ALARM = 0xFFED7800;
-    public static final int APP_COLOR_CRITICAL = 0xFFED1000;
-
-
     public static final String SETTINGS = "SETTINGS";
 
-    public static final int INTERVAL_FOREGROUND = 500;
-    public static final int INTERVAL_BACKGROUND = 1000*10;
-
-    public static final int INTERVAL_GEOFENCE = 59*1000;
-
+    public static final String GEOFENCE = "GEOFENCE";
     /**
      * actions
      */
@@ -54,5 +43,7 @@ public class Tags {
     public static final String SCORE_INCREMENT_FOREGROUND = "SCORE_INCREMENT_FOREGROUND"; //introduced to indicate flow of info
     public static final String SCORE_INCREMENT_FIELD = "SCORE_INCREMENT_FIELD";
 
+    //art cache
+    public static final String ART_CACHE = "ART_CACHE";
 
 }

@@ -7,7 +7,7 @@ import android.util.Log;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import backgroundcat.CatNotifications;
+import controllers.NotificationController;
 import controllers.SettingsController;
 
 /**
@@ -24,10 +24,20 @@ import controllers.SettingsController;
     private static final double defaultCoefficient = 0.0001d;
     private double coefficient; //how fast it's getting hungry
     private int level;
-    private double NUDGE_LEVEL = 100d;
-    private double ALARM_LEVEL = 25d;
-    private double CRITICAL_LEVEL = 5d;
+    public static final double NUDGE_LEVEL = 100d;
+    public static final double ALARM_LEVEL = 95d;
+    public static final double CRITICAL_LEVEL = 5d;
+
+    public int getHumour() {
+        return humour;
+    }
+
+    public void setHumour(int humour) {
+        this.humour = humour;
+    }
+
     private double DEAD = 0d;
+    private int humour = 0;
 
     //when you read cat fields from any storage
     public Cat(double lastTimestamp, int ID,String name, int character, double foodLevel, double coefficient, int level,Context context) {
@@ -145,7 +155,7 @@ import controllers.SettingsController;
         this.foodLevel = this.foodLevel - 2*coeff*this.coefficient*timeElapsed;//2 bcin settings it will be as 0-100 and default will be 50
 
         Intent broadcastIntent = new Intent(Tags.ALARMING_FOODLEVEL_ACTION);
-
+        Intent humourBroadcastIntent = new Intent("HUMOUR");
         if(foodLevel<0){
             this.foodLevel=0;
         }
@@ -161,8 +171,11 @@ import controllers.SettingsController;
             Log.i(Tags.LEVEL_OF_ALARM, "NUDGE");
             //color yellow
             if(sc.isNotificationPermission()) {
-                CatNotifications.issueNotification(context, "Hurry!", "Cat's getting hungry", Tags.APP_COLOR_NUDGE);
+                NotificationController.issueNotification(context, "Hurry!", "Cat's getting hungry", Constants.APP_COLOR_NUDGE);
             }
+            humourBroadcastIntent.putExtra("HUMOUR","NUDGE");
+            LocalBroadcastManager.getInstance(context).sendBroadcast(humourBroadcastIntent);
+
 
         }else if(previousFoodLevel>=ALARM_LEVEL&&foodLevel<=ALARM_LEVEL&&foodLevel>=CRITICAL_LEVEL){
             broadcastIntent.putExtra("LEVEL_OF_ALARM", ALARM_LEVEL);
@@ -170,8 +183,11 @@ import controllers.SettingsController;
             Log.i(Tags.LEVEL_OF_ALARM, "ALARM");
             //color orange
             if(sc.isNotificationPermission()) {
-                CatNotifications.issueNotification(context, "Hurry!", "Cat's really hungry", Tags.APP_COLOR_ALARM);
+                NotificationController.issueNotification(context, "Hurry!", "Cat's really hungry", Constants.APP_COLOR_ALARM);
             }
+
+            humourBroadcastIntent.putExtra("HUMOUR","HUNGRING");
+            LocalBroadcastManager.getInstance(context).sendBroadcast(humourBroadcastIntent);
 
         }else if(previousFoodLevel>=CRITICAL_LEVEL&&foodLevel<=CRITICAL_LEVEL&&foodLevel>=DEAD){
             broadcastIntent.putExtra("LEVEL_OF_ALARM", CRITICAL_LEVEL);
@@ -179,12 +195,15 @@ import controllers.SettingsController;
             Log.i(Tags.LEVEL_OF_ALARM, "CRITICAL");
             //red color
             if(sc.isNotificationPermission()) {
-                CatNotifications.issueNotification(context, "Hurry!", "Kitty is starving!", Tags.APP_COLOR_CRITICAL);
+                NotificationController.issueNotification(context, "Hurry!", "Kitty is starving!", Constants.APP_COLOR_CRITICAL);
             }
+            humourBroadcastIntent.putExtra("HUMOUR","STARVING");
+            LocalBroadcastManager.getInstance(context).sendBroadcast(humourBroadcastIntent);
 
         } else if(foodLevel>NUDGE_LEVEL){
             Log.i(Tags.LEVEL_OF_ALARM,"NONE");
         }
+
         return foodLevel;
     }
 
@@ -212,6 +231,8 @@ import controllers.SettingsController;
      * increment is the value between -101 and 101
      */
     public double feedTheArtByValue(Context ctxt, double increment){
+        double previousFoodLevel = this.foodLevel;
+        Intent humourBroadcastIntent = new Intent("HUMOUR");
 
 
         this.foodLevel +=increment;
@@ -227,6 +248,18 @@ import controllers.SettingsController;
         Log.i("FOOD_LEVEL_BY_VALUE1",""+message);
         broadcastIntent.putExtra("SERVICE_BROADCAST", message);
         LocalBroadcastManager.getInstance(ctxt).sendBroadcast(broadcastIntent);
+
+
+
+        if(previousFoodLevel<=ALARM_LEVEL&&foodLevel>=ALARM_LEVEL){
+            Log.i("HUMOUR","SERVICE FEEDING");
+            humourBroadcastIntent.putExtra("HUMOUR","FEEDING");
+            LocalBroadcastManager.getInstance(ctxt).sendBroadcast(humourBroadcastIntent);
+        } else if(previousFoodLevel<=CRITICAL_LEVEL&&foodLevel>CRITICAL_LEVEL){
+            Log.i("HUMOUR","SERVICE FEEDING FROM STARVE");
+            humourBroadcastIntent.putExtra("HUMOUR","FEEDING_FROM_STARVE");
+            LocalBroadcastManager.getInstance(ctxt).sendBroadcast(humourBroadcastIntent);
+        }
         return this.foodLevel;
     }
 

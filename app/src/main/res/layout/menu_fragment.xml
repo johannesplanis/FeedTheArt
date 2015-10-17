@@ -4,12 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/scrollView"
-    android:background="#ffffff">
+    android:background="@color/overall_background">
 <LinearLayout
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:weightSum="1"
-    android:background="#ffffff"
+    android:background="@color/overall_background"
     android:clickable="true"
     android:padding="10dp">
 
@@ -21,7 +21,8 @@
         android:id="@+id/imageView2"
         android:layout_gravity="center"
         android:src="@drawable/logo_bw"
-        android:padding="5dp" />
+        android:padding="5dp"
+        android:layout_marginTop="15dp" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -36,7 +37,9 @@
             android:id="@+id/menu_title_text_field"
             android:layout_gravity="center"
             android:gravity="center"
-            android:textSize="32dp" />
+            android:textSize="32dp"
+            android:typeface="serif"
+            android:textColor="@color/overall_font" />
     </FrameLayout>
 
     <LinearLayout
@@ -52,11 +55,13 @@
             android:id="@+id/continue_button"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="0dp"
-            android:textSize="24dp"
-            android:background="#ededda"
+            android:textSize="23dp"
+            android:background="#59B9A8"
             android:padding="10dp"
 
-            style="?android:attr/borderlessButtonStyle"/>
+            style="?android:attr/borderlessButtonStyle"
+            android:typeface="serif"
+            android:textColor="@color/overall_font" />
 
         <Button
             android:layout_width="match_parent"
@@ -65,11 +70,13 @@
             android:id="@+id/new_cat_button"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
-            android:textSize="24dp"
-            android:background="#ededda"
+            android:textSize="23dp"
+            android:background="#53473A"
             android:padding="10dp"
 
-            style="?android:attr/borderlessButtonStyle"/>
+            style="?android:attr/borderlessButtonStyle"
+            android:typeface="serif"
+            android:textColor="@color/overall_font" />
 
         <Button
             android:layout_width="match_parent"
@@ -78,11 +85,13 @@
             android:id="@+id/tutorial_button"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
-            android:textSize="24dp"
-            android:background="#ededda"
+            android:textSize="23dp"
+            android:background="#53473A"
             android:padding="10dp"
 
-            style="?android:attr/borderlessButtonStyle"/>
+            style="?android:attr/borderlessButtonStyle"
+            android:typeface="serif"
+            android:textColor="@color/overall_font" />
 
         <Button
             android:layout_width="match_parent"
@@ -91,16 +100,14 @@
             android:id="@+id/settings_button"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
-            android:textSize="24dp"
-            android:background="#ededda"
+            android:textSize="23dp"
+            android:background="#53473A"
             android:padding="10dp"
 
-            style="?android:attr/borderlessButtonStyle"/>
+            style="?android:attr/borderlessButtonStyle"
+            android:typeface="serif"
+            android:textColor="@color/overall_font" />
     </LinearLayout>
 
 </LinearLayout>
-
-
-
-
 </ScrollView>

@@ -8,12 +8,13 @@ http://design-seeds.com/home/entry/pinwheel-color
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true"
-    android:background="#ffffff">
+    android:background="@color/overall_background">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_weight="1">
 
         <TextView
             android:layout_width="wrap_content"
@@ -22,16 +23,21 @@ http://design-seeds.com/home/entry/pinwheel-color
             android:text="Feed me!"
             android:id="@+id/cat_feedme_text"
             android:padding="7dp"
-            android:textSize="24dp" />
+            android:textSize="24dp"
+            android:typeface="serif"
+            android:textColor="@color/overall_font" />
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="MENU"
             android:id="@+id/cat_menu_button"
-            android:background="#ededda"
+            android:background="#53473A"
             android:enabled="true"
-            style="?android:attr/borderlessButtonStyle"/>
+            style="?android:attr/borderlessButtonStyle"
+            android:typeface="serif"
+            android:textSize="18dp"
+            android:textColor="@color/overall_font" />
 
         <Button
             android:layout_width="match_parent"
@@ -40,7 +46,10 @@ http://design-seeds.com/home/entry/pinwheel-color
             android:id="@+id/cat_map_button"
             android:background="#2cd1a0"
             android:layout_weight="1"
-            style="?android:attr/borderlessButtonStyle"/>
+            style="?android:attr/borderlessButtonStyle"
+            android:typeface="serif"
+            android:textSize="18dp"
+            android:textColor="@color/overall_font" />
 
         <Button
             android:layout_width="match_parent"
@@ -48,9 +57,11 @@ http://design-seeds.com/home/entry/pinwheel-color
             android:text="ART"
             android:id="@+id/cat_art_button"
             android:background="#d44846"
-            android:textColor="#ededda"
+            android:textColor="@color/overall_font"
             android:layout_weight="1"
-            style="?android:attr/borderlessButtonStyle"/>
+            style="?android:attr/borderlessButtonStyle"
+            android:typeface="serif"
+            android:textSize="18dp" />
 
         <Button
             android:layout_width="match_parent"
@@ -60,14 +71,16 @@ http://design-seeds.com/home/entry/pinwheel-color
             android:background="#614687"
             android:textColor="#ffd333"
             android:layout_weight="1"
-            style="?android:attr/borderlessButtonStyle"/>
+            style="?android:attr/borderlessButtonStyle"
+            android:typeface="serif"
+            android:textSize="18dp" />
     </LinearLayout>
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0"
+        android:layout_height="match_parent"
+        android:layout_weight="10"
         android:baselineAligned="false"
         android:layout_gravity="center_horizontal">
 
@@ -89,7 +102,8 @@ http://design-seeds.com/home/entry/pinwheel-color
                 android:textSize="28dp"
                 android:focusable="false"
                 android:enabled="true"
-                android:textColor="#000000" />
+                android:textColor="@color/overall_font"
+                android:typeface="serif" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -113,7 +127,7 @@ http://design-seeds.com/home/entry/pinwheel-color
                 android:layout_height="wrap_content"
                 android:id="@+id/cat_placeholder_image_view"
                 android:layout_gravity="center"
-                android:src="@drawable/placeholder_kitty"
+                android:src="@drawable/cat_basic"
                 android:padding="20dp" />
         </FrameLayout>
     </LinearLayout>

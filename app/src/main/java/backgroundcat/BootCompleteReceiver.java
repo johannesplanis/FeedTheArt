@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import cat.Tags;
+import cat.Constants;
 
 /**
  * start working just after boot
@@ -16,7 +16,7 @@ public class BootCompleteReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         BackgroundAlarmManager bam = new BackgroundAlarmManager(context);
-        bam.setupAlarm(Tags.INTERVAL_BACKGROUND);
+        bam.setupAlarm(Constants.INTERVAL_BACKGROUND);
         Log.i("FEEDTHEART","Starting work after boot!");
     }
 }

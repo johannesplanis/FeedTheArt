@@ -1,17 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/overall_background">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Settings"
-        android:id="@+id/menu_settings_header_field"
-        android:layout_gravity="center_horizontal"
-        android:padding="25dp"
-        android:textSize="32dp" />
+        android:gravity="center"
+        android:layout_gravity="center">
+
+        <Button
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:id="@+id/menu_settings_back_button"
+            android:background="@mipmap/ic_arrow_back_white_36dp"
+            android:elegantTextHeight="false"
+            android:enabled="true"
+            android:focusable="false"
+            android:textColor="@color/overall_font"
+            android:singleLine="false"
+            android:clickable="true"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:typeface="serif"
+            android:textSize="18dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Settings"
+            android:id="@+id/menu_settings_header_field"
+            android:layout_gravity="center"
+            android:textSize="32dp"
+            android:padding="7dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:textColor="@color/overall_font"
+            android:typeface="serif"
+            android:layout_weight="1"
+            android:gravity="center" />
+
+        <Button
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:text="back"
+            android:id="@+id/button15"
+            android:visibility="invisible"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp" />
+    </LinearLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -19,6 +60,59 @@
         android:layout_gravity="center_horizontal"
         android:layout_weight="1"
         android:padding="25dp">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="15dp">
+
+            <Switch
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Notifications"
+                android:id="@+id/settings_notification_permission_switch"
+                android:layout_gravity="center_horizontal|top"
+                android:checked="true"
+                android:textColor="@color/overall_font"
+                android:typeface="serif" />
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center_vertical"
+                android:layout_marginTop="25dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="Starving speed"
+                    android:id="@+id/settings_starving_speed_text"
+                    android:layout_gravity="left|center_vertical"
+                    android:textColor="@color/overall_font"
+                    android:paddingBottom="10dp"
+                    android:typeface="serif" />
+
+                <SeekBar
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:indeterminate="false"
+                    android:id="@+id/settings_starving_speed"
+                    android:max="100" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="00 %"
+                    android:id="@+id/settings_starving_speed_percent"
+                    android:layout_gravity="center_horizontal"
+                    android:textColor="@color/overall_font"
+                    android:typeface="serif" />
+            </LinearLayout>
+        </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
@@ -28,62 +122,32 @@
             android:id="@+id/settings_reset_progress"
             android:layout_gravity="center_horizontal|bottom"
             android:padding="10dp"
-            android:singleLine="false" />
-
-        <Switch
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Notifications"
-            android:id="@+id/settings_notification_permission_switch"
-            android:layout_gravity="center_horizontal|top"
-            android:checked="true" />
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left|center_vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="Starving speed"
-                android:id="@+id/settings_starving_speed_text"
-                android:layout_gravity="left|center_vertical"
-                android:textColor="#000000"
-                android:paddingBottom="10dp" />
-
-            <SeekBar
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:indeterminate="false"
-                android:id="@+id/settings_starving_speed"
-                android:max="100" />
-        </LinearLayout>
+            android:singleLine="false"
+            android:textColor="#b3b2b2"
+            android:typeface="serif" />
 
     </FrameLayout>
 
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="right">
+        android:layout_gravity="right"
+        android:visibility="gone">
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="BACK"
-            android:id="@+id/menu_settings_back_button"
-            android:background="#eaeaad"
-            android:padding="10dp"
-            android:layout_margin="15dp"
-            android:elegantTextHeight="false"
-            android:enabled="true"
-            android:focusable="false"
-            android:textColor="#000000"
-            android:singleLine="false"
-            android:clickable="true" />
+            android:text="back"
+            android:id="@+id/button5"
+            android:layout_weight="1"
+            android:visibility="invisible" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/button6"
+            android:visibility="invisible" />
+
     </LinearLayout>
 </LinearLayout>

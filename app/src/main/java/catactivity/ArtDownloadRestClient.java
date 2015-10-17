@@ -6,6 +6,8 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import cat.Constants;
+
 /**
  * Created by JOHANNES on 8/13/2015.
  */
@@ -28,8 +30,8 @@ public class ArtDownloadRestClient {
 
     private static String getAbsoluteUrl(String relativeUrl) {
 
-        Log.i("REST Api",CatArtConstants.baseApiUrl + relativeUrl);
-        return CatArtConstants.baseApiUrl + relativeUrl;
+        Log.i("REST Api", Constants.baseApiUrl + relativeUrl);
+        return Constants.baseApiUrl + relativeUrl;
 
     }
 }

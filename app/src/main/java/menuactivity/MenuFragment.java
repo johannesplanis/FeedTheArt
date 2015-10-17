@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.planis.johannes.catprototype.R;
+import com.planis.johannes.feedtheart.bambino.R;
 
 import cat.Tags;
 import controllers.SharedPreferencesController;
@@ -67,7 +67,7 @@ public class MenuFragment extends Fragment {
         TextView tv = (TextView) view.findViewById(R.id.menu_title_text_field);
         Typeface customFont = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/AustieBostKittenKlub.ttf");
         tv.setText("Feed The Art!");
-        tv.setTypeface(customFont);
+        //tv.setTypeface(customFont);
         return view;
     }
 

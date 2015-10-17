@@ -6,7 +6,11 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 
+import java.util.HashSet;
+
 import cat.Cat;
+import catactivity.ArtObject;
+import geofencing.VenueObject;
 
 /**
  * put int SharedPreferences objects, Strings, numbers in formats: float, int, double
@@ -38,7 +42,7 @@ public class SharedPreferencesController {
         Log.i("CREATOR PUT","3");
         Gson gson = new Gson();
         Log.i("CREATOR PUT","4");
-        String serialized = gson.toJson(c);  //jebana linijka kodu, zasrany kot nie chce się serializować
+        String serialized = gson.toJson(c);
         Log.i("CREATOR PUT","5");
         ed.putString(key, serialized);
         Log.i("CREATOR PUT", "6");
@@ -63,6 +67,37 @@ public class SharedPreferencesController {
             Log.i("CAT_SP","Read null value, returned default value");
         }
         return cat;
+    }
+
+    /**
+     * just primitives! otherwise use Instance Cretor
+     * http://howtodoinjava.com/2014/06/17/google-gson-tutorial-convert-java-object-to-from-json/
+     * @param key
+     * @param art
+     */
+    public void putArt(String key, ArtObject art){
+        if(!sp.getString(key,"").equals("")){
+            Log.i("SHARED PREFERENCES","not null w. key "+key+" and w. message: "+sp.getString(key,""));
+        }
+        ed = sp.edit();
+        Gson gson = new Gson();
+        String serialized = gson.toJson(art);
+        ed.putString(key, serialized);
+        ed.commit();
+}
+
+    public ArtObject getArtObject(String key, Object notReceived){
+        ArtObject art;
+        Gson gson = new Gson();
+        String serialized = gson.toJson(notReceived);
+        String json = sp.getString(key, serialized);
+        if(json!=serialized){
+            art = gson.fromJson(json,ArtObject.class);
+        }   else{
+            art = new ArtObject();
+            Log.i("CAT_SP","Read null value, returned default value");
+        }
+        return art;
     }
 
     public void putString(String key,String message){
@@ -133,5 +168,46 @@ public class SharedPreferencesController {
         return sp.getBoolean(key, notReceived);
     }
 
+    public void putStringSet(String key, HashSet<String> inputSet){
+
+
+        ed = sp.edit();
+        ed.putStringSet(key, inputSet);
+        ed.commit();
+    }
+    public HashSet<String> getStringSet(String key, HashSet<String> notReceived){
+        return (HashSet) sp.getStringSet(key,notReceived);
+    }
+
+    /**
+     * just primitives! otherwise use Instance Cretor
+     * http://howtodoinjava.com/2014/06/17/google-gson-tutorial-convert-java-object-to-from-json/
+     * @param key
+     * @param venue
+     */
+    public void putVenue(String key, VenueObject venue){
+        if(!sp.getString(key,"").equals("")){
+            Log.i("SHARED PREFERENCES","not null w. key "+key+" and w. message: "+sp.getString(key,""));
+        }
+        ed = sp.edit();
+        Gson gson = new Gson();
+        String serialized = gson.toJson(venue);
+        ed.putString(key, serialized);
+        ed.commit();
+    }
+
+    public VenueObject getVenueObject(String key, Object notReceived){
+        VenueObject venue;
+        Gson gson = new Gson();
+        String serialized = gson.toJson(notReceived);
+        String json = sp.getString(key, serialized);
+        if(json!=serialized){
+            venue = gson.fromJson(json,VenueObject.class);
+        }   else{
+            venue = new VenueObject();
+            Log.i("CAT_SP","Read null value, returned default value");
+        }
+        return venue;
+    }
 
 }
