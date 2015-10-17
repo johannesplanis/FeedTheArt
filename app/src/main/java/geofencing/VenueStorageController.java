@@ -38,7 +38,6 @@ public class VenueStorageController {
         SharedPreferencesController sp = new SharedPreferencesController(context);
         ArrayList<String> geofencesList = new ArrayList<>(sp.getStringSet("ids_"+Tags.GEOFENCE,new HashSet<String>()));
         geofencesList.add(mId);
-
         sp.putStringSet("ids_" + Tags.GEOFENCE, new HashSet<String>(geofencesList));
     }
 

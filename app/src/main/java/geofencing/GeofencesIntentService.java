@@ -35,24 +35,31 @@ public class GeofencesIntentService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
         scp = new SharedPreferencesController(getApplicationContext());
+        sc = new SettingsController(this);
         if(geofencingEvent.hasError()){
             Log.i(Constants.APP_TAG, "Location services error: " + geofencingEvent.getErrorCode());
         } else{
             int transitionType = geofencingEvent.getGeofenceTransition();
+            Geofence geofence = geofencingEvent.getTriggeringGeofences().get(0);
             if(Geofence.GEOFENCE_TRANSITION_DWELL == transitionType){
                 Log.i("GEOFENCE", "DWELLING INSIDE");
                 showOnMainThread(this, "DWELLING INSIDE!");
 
-
-                sc = new SettingsController(this);
-                if(sc.isNotificationPermission()) {
+               if(sc.isNotificationPermission()) {
                     NotificationController.issueNotification(getApplicationContext(), "Good job!", "You are inside! ", Constants.APP_COLOR_SUCCESS);
                 }
-                Log.i("INCREMENT","SENDING_GOOD_NEWS");
+                Log.i("INCREMENT", "SENDING_GOOD_NEWS");
                 //not elegant bc only one receiver can receive
                 Intent broadcastIntent = new Intent(Tags.SCORE_INCREMENT);
                 broadcastIntent.putExtra(Tags.SCORE_INCREMENT_FIELD, INCREMENT);
+
+                broadcastIntent.putExtra("REQ_ID", Integer.parseInt(geofence.getRequestId())); //put name of the geofence
+                //Log.i("GEOFENCE",geofence.getRequestId());
+                //Log.i("GEOFENCE", VenuesDevelopmentMode.sampleVenues().get(Integer.parseInt(geofence.getRequestId())).getName());
+
                 getApplicationContext().sendBroadcast(broadcastIntent);
+
+
             }
         }
     }

@@ -17,7 +17,7 @@ import android.widget.SeekBar;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.planis.johannes.catprototype.R;
+import com.planis.johannes.feedtheart.bambino.R;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Produce;
 import com.squareup.otto.Subscribe;
@@ -135,6 +135,22 @@ public class MenuActivity extends FragmentActivity implements SeekBar.OnSeekBarC
 
     }
 
+    //najpierw wyczyść back stack, potem wyłącz
+    //ma powodować kliknij drugi raz żeby wyjść
+
+    @Override
+    public void onBackPressed(){
+
+        int count = getFragmentManager().getBackStackEntryCount();
+        if (count == 0) {
+
+        } else {
+            getFragmentManager().popBackStack();
+        }
+
+    }
+
+
     /*
     Startup methods
      */
@@ -226,6 +242,8 @@ public class MenuActivity extends FragmentActivity implements SeekBar.OnSeekBarC
         }
 
         ft.commit();
+/*
+        */
     }
     /**
     Menu navigation methods
@@ -449,6 +467,15 @@ public class MenuActivity extends FragmentActivity implements SeekBar.OnSeekBarC
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
 
+    }
+
+    public void popBackstack(){
+        int count = getFragmentManager().getBackStackEntryCount();
+        if (count == 0) {
+            getFragmentManager().popBackStack();
+        } else {
+            getFragmentManager().popBackStack();
+        }
     }
 }
 

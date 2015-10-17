@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.planis.johannes.catprototype.R;
+import com.planis.johannes.feedtheart.bambino.R;
 
 import cat.Tags;
 import controllers.SharedPreferencesController;

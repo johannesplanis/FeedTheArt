@@ -7,10 +7,24 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:gravity="center">
+        android:gravity="center"
+        android:layout_gravity="center">
+
+        <ImageButton
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:id="@+id/cat_art_back_button"
+            android:layout_marginLeft="10dp"
+            android:padding="5dp"
+            style="?android:attr/borderlessButtonStyle"
+            android:typeface="serif"
+            android:textColor="@color/overall_font"
+            android:textSize="18dp"
+            android:background="@mipmap/ic_arrow_back_white_36dp"
+            android:layout_marginRight="10dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -18,12 +32,25 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Art for today"
             android:id="@+id/cat_art_header"
-            android:layout_gravity="center_horizontal"
             android:textSize="32dp"
             android:gravity="center"
             android:layout_margin="7dp"
             android:textColor="@color/overall_font"
-            android:typeface="serif" />
+            android:typeface="serif"
+            android:layout_weight="1" />
+
+        <ImageButton
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:id="@+id/cat_art_share_button"
+            android:background="@mipmap/ic_refresh_white_36dp"
+            android:padding="5dp"
+            style="?android:attr/borderlessButtonStyle"
+            android:typeface="serif"
+            android:textColor="@color/overall_font"
+            android:textSize="18dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp" />
     </LinearLayout>
 
     <view
@@ -38,16 +65,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="10dp">
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="20dp">
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_weight="1"
-                android:id="@+id/cat_art_container">
+                android:id="@+id/cat_art_container"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp">
 
                 <ImageView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/cat_art_image_view"
                     android:src="@drawable/logo_bw"
@@ -61,7 +92,11 @@
                 android:id="@+id/cat_art_title"
                 android:layout_gravity="center_horizontal"
                 android:layout_weight="0"
-                android:text="title" />
+                android:text="title"
+                android:textColor="@color/overall_font"
+                android:typeface="serif"
+                android:textSize="21dp"
+                android:layout_marginBottom="5dp" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -70,76 +105,51 @@
                 android:id="@+id/cat_art_author"
                 android:layout_gravity="center_horizontal"
                 android:layout_weight="0.5"
-                android:text="author" />
+                android:text="author"
+                android:textColor="@color/overall_font"
+                android:typeface="serif"
+                android:textSize="16dp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/cat_art_year"
-                android:text="year" />
+                android:text="year"
+                android:textColor="@color/overall_font"
+                android:typeface="serif"
+                android:textSize="15dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="location"
-                android:id="@+id/cat_art_location" />
+                android:id="@+id/cat_art_location"
+                android:textColor="@color/overall_font"
+                android:typeface="serif"
+                android:textSize="15dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="type"
-                android:id="@+id/cat_art_type" />
+                android:id="@+id/cat_art_type"
+                android:textColor="@color/overall_font"
+                android:typeface="serif"
+                android:textSize="15dp"
+                android:layout_marginBottom="7dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="description"
-                android:id="@+id/cat_art_description" />
+                android:id="@+id/cat_art_description"
+                android:textColor="@color/overall_font"
+                android:typeface="serif"
+                android:textSize="15dp" />
 
 
         </LinearLayout>
     </view>
 
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|right">
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TEMP REFRESH"
-            android:id="@+id/cat_art_share_button"
-            android:background="@color/blue1"
-            android:padding="5dp"
-            style="?android:attr/borderlessButtonStyle"
-            android:layout_weight="1"
-            android:typeface="serif"
-            android:textColor="@color/overall_font"
-            android:textSize="18dp" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/button10"
-            android:layout_weight="1"
-            android:visibility="invisible" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="BACK"
-            android:id="@+id/cat_art_back_button"
-            android:background="@color/red1"
-            android:layout_marginLeft="5dp"
-            android:padding="5dp"
-            style="?android:attr/borderlessButtonStyle"
-            android:layout_weight="1"
-            android:typeface="serif"
-            android:textColor="@color/overall_font"
-            android:textSize="18dp" />
-
-    </LinearLayout>
 </LinearLayout>

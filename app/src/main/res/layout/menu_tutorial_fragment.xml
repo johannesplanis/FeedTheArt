@@ -14,9 +14,8 @@
         android:gravity="center">
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="BACK"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:id="@+id/tutorial_back_button"
             android:elegantTextHeight="false"
             android:enabled="true"
@@ -24,11 +23,12 @@
             android:textColor="@color/overall_font"
             android:singleLine="false"
             android:clickable="true"
-            android:layout_weight="1"
-            android:background="#00000000"
+            android:background="@mipmap/ic_arrow_back_white_36dp"
             style="@style/Widget.AppCompat.Button.Borderless"
             android:typeface="serif"
-            android:textSize="18dp" />
+            android:textSize="18dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -38,11 +38,13 @@
             android:textSize="32dp"
             android:textColor="@color/overall_font"
             android:layout_margin="7dp"
-            android:typeface="serif" />
+            android:typeface="serif"
+            android:layout_weight="1"
+            android:gravity="center" />
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:text="back"
             android:id="@+id/button14"
             android:layout_weight="1"

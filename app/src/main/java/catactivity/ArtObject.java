@@ -7,32 +7,33 @@ import android.graphics.Bitmap;
  */
 public class ArtObject {
 
-    private int id;
+    private int ID;
     private double factor;
+    private String image_url;
     private String name;
-    private String author;
     private String year;
+    private String author;
     private String type;
     private String location;
-    private String image_url;
     private String description;
     private String storageUri;
 
     public ArtObject(){
 
     }
-    public ArtObject(int id, double factor,
+    public ArtObject(int ID, double factor,
                      String name, String author, String year,
                      String type, String location, String image_url,
                      String description) {
-        this.id = id;
+        this.ID = ID;
         this.factor = factor;
+        this.image_url = image_url;
         this.name = name;
         this.author = author;
         this.year = year;
         this.type = type;
         this.location = location;
-        this.image_url = image_url;
+
         this.description = description;
     }
     public ArtObject(Bitmap image, String description, String year, String author, String name) {
@@ -92,12 +93,12 @@ public class ArtObject {
         this.description = description;
     }
 
-    public int getId() {
-        return id;
+    public int getID() {
+        return ID;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setID(int id) {
+        this.ID = id;
     }
 
     public double getFactor() {

@@ -32,14 +32,9 @@ public class GeofencesSetupIntentService extends IntentService implements Google
     // locations within the user's proximity.
     List<Geofence> mGeofenceList;
 
-    // These will store hard-coded geofences in this sample app.
-    private VenueGeofence mRetorykaGeofence;
-    private VenueGeofence mMuzeumNarodoweGeofence;
-    private VenueGeofence mMuzeumWitrazuGeofence;
 
-    // Persistent storage for geofences.
     private GeofenceStore mGeofenceStorage;
-
+    private ArrayList<VenueGeofence> vg;
     private LocationServices mLocationService;
     // Stores the PendingIntent used to request geofence monitoring.
     private PendingIntent mGeofenceRequestIntent;
@@ -70,40 +65,14 @@ public class GeofencesSetupIntentService extends IntentService implements Google
     }
 
     public void createGeofences(int timeout) {
-        // Create internal "flattened" objects containing the geofence data.
-        mRetorykaGeofence = new VenueGeofence(
-                Constants.RETORYKA_ID,                // geofenceId.
-                Constants.RETORYKA_LATITUDE,
-                Constants.RETORYKA_LONGITUDE,
-                Constants.RETORYKA_RADIUS_METERS,
-                timeout,
-                Geofence.GEOFENCE_TRANSITION_DWELL
-        );
-        mMuzeumNarodoweGeofence = new VenueGeofence(
-                Constants.MUZEUM_NARODOWE_ID,                // geofenceId.
-                Constants.MUZEUM_NARODOWE_LATITUDE,
-                Constants.MUZEUM_NARODOWE_LONGITUDE,
-                Constants.MUZEUM_NARODOWE_RADIUS_METERS,
-                timeout,
-                Geofence.GEOFENCE_TRANSITION_DWELL
-        );
 
-        mMuzeumWitrazuGeofence = new VenueGeofence(
-                Constants.MUZEUM_WITRAZU_ID,                // geofenceId.
-                Constants.MUZEUM_WITRAZU_LATITUDE,
-                Constants.MUZEUM_WITRAZU_LONGITUDE,
-                Constants.MUZEUM_WITRAZU_RADIUS_METERS,
-                timeout,
-                Geofence.GEOFENCE_TRANSITION_DWELL
-        );
 
-        // Store these flat versions in SharedPreferences and add them to the geofence list.
-        mGeofenceStorage.setGeofence(Constants.RETORYKA_ID, mRetorykaGeofence);
-        mGeofenceStorage.setGeofence(Constants.MUZEUM_NARODOWE_ID, mMuzeumNarodoweGeofence);
-        mGeofenceStorage.setGeofence(Constants.MUZEUM_WITRAZU_ID, mMuzeumWitrazuGeofence);
-        mGeofenceList.add(mRetorykaGeofence.toGeofence());
-        mGeofenceList.add(mMuzeumNarodoweGeofence.toGeofence());
-        mGeofenceList.add(mMuzeumWitrazuGeofence.toGeofence());
+        vg = VenuesDevelopmentMode.sampleVenueGeofences(timeout);
+        for(VenueGeofence v:vg){
+            mGeofenceStorage.setGeofence(v);
+        }
+        mGeofenceList = VenuesDevelopmentMode.sampleGeofences(timeout);
+
     }
 
     @Override
@@ -115,7 +84,7 @@ public class GeofencesSetupIntentService extends IntentService implements Google
                 mGeofenceRequestIntent).setResultCallback(new ResultCallback<Status>() {
             @Override
             public void onResult(Status status) {
-                Log.i("GEOFENCE","CONNECTED? "+status);
+                Log.i("GEOFENCE", "CONNECTED? " + status);
             }
         });
         //Toast.makeText(this, "GEOFENCE SERVICE STARTED", Toast.LENGTH_SHORT).show();

@@ -57,17 +57,17 @@ public class GeofenceStore {
      * Save a geofence.
      * @param geofence The SimpleGeofence with the values you want to save in SharedPreferences.
      */
-    public void setGeofence(String id, VenueGeofence geofence) {
+    public void setGeofence(VenueGeofence geofence) {
         // Get a SharedPreferences editor instance. Among other things, SharedPreferences
         // ensures that updates are atomic and non-concurrent.
         SharedPreferences.Editor prefs = mPrefs.edit();
         // Write the Geofence values to SharedPreferences.
-        prefs.putFloat(getGeofenceFieldKey(id, Constants.KEY_LATITUDE), (float) geofence.getLatitude());
-        prefs.putFloat(getGeofenceFieldKey(id, Constants.KEY_LONGITUDE), (float) geofence.getLongitude());
-        prefs.putFloat(getGeofenceFieldKey(id, Constants.KEY_RADIUS), geofence.getRadius());
-        prefs.putLong(getGeofenceFieldKey(id, Constants.KEY_EXPIRATION_DURATION),
+        prefs.putFloat(getGeofenceFieldKey(geofence.getId(), Constants.KEY_LATITUDE), (float) geofence.getLatitude());
+        prefs.putFloat(getGeofenceFieldKey(geofence.getId(), Constants.KEY_LONGITUDE), (float) geofence.getLongitude());
+        prefs.putFloat(getGeofenceFieldKey(geofence.getId(), Constants.KEY_RADIUS), geofence.getRadius());
+        prefs.putLong(getGeofenceFieldKey(geofence.getId(), Constants.KEY_EXPIRATION_DURATION),
                 geofence.getExpirationDuration());
-        prefs.putInt(getGeofenceFieldKey(id, Constants.KEY_TRANSITION_TYPE),
+        prefs.putInt(getGeofenceFieldKey(geofence.getId(), Constants.KEY_TRANSITION_TYPE),
                 geofence.getTransitionType());
         // Commit the changes.
         prefs.commit();

@@ -17,7 +17,7 @@ public class VenueObject {
     double refactorTime;    //how long before you can feed here again
     double mLatitude;
     double mLongitude;
-    float mRadius;
+    float mRadius; //radius of the feeding area
     LatLng coordinates;
     private long mExpirationDuration;
     private int mTransitionType;
@@ -165,5 +165,14 @@ public class VenueObject {
         this.mLatitude = mLatitude;
     }
 
+    public VenueGeofence getVenueGeofenceFromVenue(long timeout, int transitionType ){
+        VenueGeofence vg = new VenueGeofence(this.mId,this.mLatitude,this.mLongitude,this.mRadius,timeout,transitionType);
+        return vg;
+    }
+
+    public Geofence getGeofenceFromVenue(long timeout, int transitionType ){
+        VenueGeofence vg = new VenueGeofence(this.mId,this.mLatitude,this.mLongitude,this.mRadius,timeout,transitionType);
+        return vg.toGeofence();
+    }
 
 }

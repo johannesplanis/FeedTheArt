@@ -8,12 +8,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.planis.johannes.catprototype.R;
+import com.planis.johannes.feedtheart.bambino.R;
 
 /**
  * Created by JOHANNES on 8/5/2015.
@@ -30,8 +30,8 @@ public class CatArtFragment extends Fragment{
         Context context = getActivity().getApplicationContext();
         final View view = inflater.inflate(R.layout.cat_art_fragment,
                 container, false);
-        Button menuButton = (Button) view.findViewById(R.id.cat_art_back_button);
-        Button shareButton = (Button) view.findViewById(R.id.cat_art_share_button);
+        ImageButton menuButton = (ImageButton) view.findViewById(R.id.cat_art_back_button);
+        ImageButton shareButton = (ImageButton) view.findViewById(R.id.cat_art_share_button);
         ImageView artContainer = (ImageView) view.findViewById(R.id.cat_art_image_view);
         TextView title = (TextView) view.findViewById(R.id.cat_art_title);
         TextView author = (TextView) view.findViewById(R.id.cat_art_author);

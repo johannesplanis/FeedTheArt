@@ -23,7 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/choose_character_fragment_image"
-        android:src="@drawable/kitty_placeholder"
+        android:src="@drawable/cat_basic"
         android:paddingLeft="35dp"
         android:paddingRight="35dp"
         android:baselineAlignBottom="true"

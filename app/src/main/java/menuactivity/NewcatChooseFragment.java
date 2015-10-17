@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.planis.johannes.catprototype.R;
+import com.planis.johannes.feedtheart.bambino.R;
 import com.squareup.otto.Bus;
 
 import javax.inject.Inject;
@@ -94,7 +94,7 @@ public class NewcatChooseFragment extends android.support.v4.app.Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstance){
        super.onActivityCreated(savedInstance);
-        adapterViewPager = new CharacterPagerAdapter(getChildFragmentManager(), Constants.catImageResIds.length);
+        adapterViewPager = new CharacterPagerAdapter(getChildFragmentManager(), Constants.catImageResIds0.length);
         viewPager.setAdapter(adapterViewPager);
     }
 

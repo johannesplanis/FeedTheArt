@@ -8,7 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
 
-import com.planis.johannes.catprototype.R;
+import com.planis.johannes.feedtheart.bambino.R;
 
 import catactivity.CatActivity;
 
@@ -23,11 +23,11 @@ public class NotificationController {
      */
     static public void issueNotification(Context context, String header, String message,int color){
 
-    Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.hipsterska_burgernia_dla_kotow_transparent);
+    Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.logo);
     long[] pattern = {0,500};
 
     NotificationCompat.Builder nBuilder = new NotificationCompat.Builder(context)
-            .setSmallIcon(R.drawable.notificationicon)
+            .setSmallIcon(R.drawable.pyszczek)
             .setLargeIcon(bitmap)
             .setContentTitle(header)
             .setContentText(message)

@@ -127,7 +127,7 @@ http://design-seeds.com/home/entry/pinwheel-color
                 android:layout_height="wrap_content"
                 android:id="@+id/cat_placeholder_image_view"
                 android:layout_gravity="center"
-                android:src="@drawable/kitty_placeholder"
+                android:src="@drawable/cat_basic"
                 android:padding="20dp" />
         </FrameLayout>
     </LinearLayout>

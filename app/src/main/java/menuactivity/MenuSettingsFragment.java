@@ -15,7 +15,7 @@ import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.planis.johannes.catprototype.R;
+import com.planis.johannes.feedtheart.bambino.R;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -59,8 +59,11 @@ public class MenuSettingsFragment extends Fragment implements SeekBar.OnSeekBarC
 
     public void toMenu() {
         Activity act = getActivity();
-        if (act instanceof MenuActivity)
+        if (act instanceof MenuActivity) {
             ((MenuActivity) act).toMenu();
+            ((MenuActivity) act).popBackstack();
+        }
+
     }
 
     @Override

@@ -2,9 +2,9 @@ package menuactivity;
 
 import android.app.Activity;
 import android.content.res.Configuration;
-import android.support.v4.app.Fragment;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.planis.johannes.catprototype.R;
+import com.planis.johannes.feedtheart.bambino.R;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 

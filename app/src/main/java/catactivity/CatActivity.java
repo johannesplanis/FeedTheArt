@@ -29,7 +29,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.planis.johannes.catprototype.R;
+import com.planis.johannes.feedtheart.bambino.R;
 import com.squareup.picasso.Picasso;
 
 import org.apache.http.Header;
@@ -53,6 +53,7 @@ import geofencing.GeofenceStore;
 import geofencing.GeofencesIntentService;
 import geofencing.VenueGeofence;
 import geofencing.VenueObject;
+import geofencing.VenuesDevelopmentMode;
 import menuactivity.MenuActivity;
 
 public class CatActivity extends FragmentActivity implements CatArtFragment.OnRefreshCatArtListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -99,10 +100,14 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
     private VenueGeofence mRetorykaGeofence;
     private VenueGeofence mMuzeumNarodoweGeofence;
     private VenueGeofence mMuzeumWitrazuGeofence;
+    private VenueGeofence mMicroscupGeofence;
+    private VenueGeofence mPNGeofence;
+    private VenueGeofence mMakowaGeofence;
+    private VenueGeofence mAuditoriumMaximumGeofence;
 
     // Persistent storage for geofences.
     private GeofenceStore mGeofenceStorage;
-
+    public ArrayList<VenueGeofence> vg;
     public ArrayList<VenueObject> vo;
     private LocationServices mLocationService;
     // Stores the PendingIntent used to request geofence monitoring.
@@ -110,6 +115,7 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
     private GoogleApiClient mApiClient;
     private enum REQUEST_TYPE {ADD}
     private REQUEST_TYPE mRequestType;
+    JSONObject artJSON;
 
     public ArrayList<VenueObject> getVo() {
         return vo;
@@ -159,6 +165,9 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
                 .getInstance(getApplicationContext())
                 .registerReceiver(broadcastReceiver, new IntentFilter(Tags.SCORE_INCREMENT_FOREGROUND));
 
+        LocalBroadcastManager
+                .getInstance(getApplicationContext())
+                .registerReceiver(humourBroadcastReceiver, new IntentFilter("HUMOUR"));
         spc = new SharedPreferencesController(getApplicationContext());
         loadGameInstance();
         Log.i("ACTIVITY", "RESUMED");
@@ -182,7 +191,13 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
     @Override
     public void onPause(){
         super.onPause();
-        LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(broadcastReceiver);
+        LocalBroadcastManager
+                .getInstance(getApplicationContext())
+                .unregisterReceiver(broadcastReceiver);
+        LocalBroadcastManager
+                .getInstance(getApplicationContext())
+                .unregisterReceiver(humourBroadcastReceiver);
+
         Log.i("ACTIVITY", "PAUSED");
         timer.cancel();
         saveGameInstance();
@@ -203,6 +218,8 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
     @Override
     protected void onSaveInstanceState(Bundle out){
         super.onSaveInstanceState(out);
+
+
     }
     /*
     handling orientation changes
@@ -213,6 +230,8 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
 
     }
 
+    //najpierw wyczyść back stack, potem wyłącz
+    //ma powodować kliknij drugi raz żeby wyjść
     @Override
     public void onBackPressed(){
         int count = getFragmentManager().getBackStackEntryCount();
@@ -355,14 +374,21 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
         } else{
             ft.add(R.id.cat_container, catf, "CATF");
         }
+
         mapf = (CatMapFragment) getFragmentManager().findFragmentByTag("MAPF");
         if(mapf!=null){
             ft.hide(mapf);
         }
 
+
         artf = (CatArtFragment) getFragmentManager().findFragmentByTag("ARTF");
         if(artf!=null){
             ft.hide(artf);
+        }
+
+        splash = (CatSplashFragment) getFragmentManager().findFragmentByTag("SPLASH");
+        if(splash!=null){
+            ft.hide(splash);
         }
 
         ft.commit();
@@ -417,6 +443,7 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
      */
     public void toMap(){
         FragmentTransaction ft = getFragmentManager().beginTransaction();
+        //android.support.v4.app.FragmentTransaction sft = getSupportFragmentManager().beginTransaction();
         mapf = new CatMapFragment();
         if(mapf.isAdded()){
             ft.show(mapf);
@@ -508,11 +535,11 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
      */
     public void getJSON(String address){
 
+        final SharedPreferencesController spcLocal = new SharedPreferencesController(getApplicationContext());
         ArtDownloadRestClient.get(address, null, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 Gson gson = new GsonBuilder().setPrettyPrinting().create();
-                //artObject = ad.parseArtObjectFromJSON(response);
 
                 try {
                     String url = response.getString("image_url");
@@ -520,10 +547,23 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+
+                //new API
+                try {
+                    artJSON = response.getJSONObject("dailyart");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                String jsonString = artJSON.toString();
+                artObject = gson.fromJson(jsonString,ArtObject.class);
+
+                /* old API
                 String jsonString = response.toString();
                 artObject = gson.fromJson(jsonString,ArtObject.class);
-                spc = new SharedPreferencesController(getApplicationContext());
-                spc.putArt(Tags.ART_CACHE, artObject);
+                */
+
+                spcLocal.putArt(Tags.ART_CACHE, artObject);
+                @Deprecated
                 //cacheObject(artObject, STORAGE_KEY);
                 String prettyJson = gson.toJson(response);
                 Log.i("REST Api",prettyJson);
@@ -540,7 +580,7 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
                     e.printStackTrace();
                 }
 
-                // Do something with the response
+
 
             }
             @Override
@@ -549,9 +589,10 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
             }
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable t, JSONObject json) {
-                //Toast.makeText(getApplicationContext(), "Unable to download now", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Unable to download now", Toast.LENGTH_SHORT).show();
                 spc = new SharedPreferencesController(getApplicationContext());
                 artObject = spc.getArtObject(Tags.ART_CACHE, null);
+
                 //artObject = getFromCache(STORAGE_KEY);
             }
         });
@@ -623,6 +664,18 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
         }
     };
 
+    /**
+     * broadcast receiver to change layout according to changing humour
+     */
+    private BroadcastReceiver humourBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            int humour = intent.getIntExtra("HUMOUR", 0);
+            cat.setHumour(humour);
+        }
+    };
+
     public String getName(){
         return this.name;
     }
@@ -631,6 +684,7 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
         return cat.getCharacter();
     }
 
+    public int getHumour(){return cat.getHumour();}
     /**
     * SCORE computing section
     */
@@ -659,13 +713,15 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
 
 
     public void createGeofences() {
+
+        /*
         // Create internal "flattened" objects containing the geofence data.
         mRetorykaGeofence = new VenueGeofence(
                 Constants.RETORYKA_ID,                // geofenceId.
                 Constants.RETORYKA_LATITUDE,
                 Constants.RETORYKA_LONGITUDE,
                 Constants.RETORYKA_RADIUS_METERS,
-                Constants.GEOFENCE_EXPIRATION_TIME,
+                Geofence.NEVER_EXPIRE,
                 Geofence.GEOFENCE_TRANSITION_DWELL
         );
         mMuzeumNarodoweGeofence = new VenueGeofence(
@@ -673,7 +729,7 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
                 Constants.MUZEUM_NARODOWE_LATITUDE,
                 Constants.MUZEUM_NARODOWE_LONGITUDE,
                 Constants.MUZEUM_NARODOWE_RADIUS_METERS,
-                Constants.GEOFENCE_EXPIRATION_TIME,
+                Geofence.NEVER_EXPIRE,
                 Geofence.GEOFENCE_TRANSITION_DWELL
         );
 
@@ -682,17 +738,66 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
                 Constants.MUZEUM_WITRAZU_LATITUDE,
                 Constants.MUZEUM_WITRAZU_LONGITUDE,
                 Constants.MUZEUM_WITRAZU_RADIUS_METERS,
-                Constants.GEOFENCE_EXPIRATION_TIME,
+                Geofence.NEVER_EXPIRE,
+                Geofence.GEOFENCE_TRANSITION_DWELL
+        );
+        mPNGeofence = new VenueGeofence(
+                Constants.PN_ID,
+                Constants.PN_LATITUDE,
+                Constants.PN_LONGITUDE,
+                Constants.PN_RADIUS_METERS,
+                Geofence.NEVER_EXPIRE,
+                Geofence.GEOFENCE_TRANSITION_DWELL);
+
+        mMakowaGeofence = new VenueGeofence(
+                Constants.MAKOWA_ID,                // geofenceId.
+                Constants.MAKOWA_LATITUDE,
+                Constants.MAKOWA_LONGITUDE,
+                Constants.MAKOWA_RADIUS_METERS,
+                Geofence.NEVER_EXPIRE,
+                Geofence.GEOFENCE_TRANSITION_DWELL
+        );
+
+        mMicroscupGeofence = new VenueGeofence(
+                Constants.MICROSCUP_ID,
+                Constants.MICROSCUP_LATITUDE,
+                Constants.MICROSCUP_LONGITUDE,
+                Constants.MICROSCUP_RADIUS_METERS,
+                Geofence.NEVER_EXPIRE,
+                Geofence.GEOFENCE_TRANSITION_DWELL
+        );
+
+        mAuditoriumMaximumGeofence = new VenueGeofence(
+                Constants.AUDITORIUM_MAXIMUM_ID,
+                Constants.AUDITORIUM_MAXIMUM_LATITUDE,
+                Constants.AUDITORIUM_MAXIMUM_LONGITUDE,
+                Constants.AUDITORIUM_MAXIMUM_RADIUS_METERS,
+                Geofence.NEVER_EXPIRE,
                 Geofence.GEOFENCE_TRANSITION_DWELL
         );
 
         // Store these flat versions in SharedPreferences and add them to the geofence list.
-        mGeofenceStorage.setGeofence(Constants.RETORYKA_ID, mRetorykaGeofence);
-        mGeofenceStorage.setGeofence(Constants.MUZEUM_NARODOWE_ID, mMuzeumNarodoweGeofence);
-        mGeofenceStorage.setGeofence(Constants.MUZEUM_WITRAZU_ID, mMuzeumWitrazuGeofence);
+        mGeofenceStorage.setGeofence(mRetorykaGeofence);
+        mGeofenceStorage.setGeofence(mMuzeumNarodoweGeofence);
+        mGeofenceStorage.setGeofence(mMuzeumWitrazuGeofence);
+        mGeofenceStorage.setGeofence(mMicroscupGeofence);
+        mGeofenceStorage.setGeofence(mPNGeofence);
+        mGeofenceStorage.setGeofence(mMakowaGeofence);
+        mGeofenceStorage.setGeofence(mAuditoriumMaximumGeofence);
+
         mGeofenceList.add(mRetorykaGeofence.toGeofence());
         mGeofenceList.add(mMuzeumNarodoweGeofence.toGeofence());
         mGeofenceList.add(mMuzeumWitrazuGeofence.toGeofence());
+        mGeofenceList.add(mMicroscupGeofence.toGeofence());
+        mGeofenceList.add(mPNGeofence.toGeofence());
+        mGeofenceList.add(mMakowaGeofence.toGeofence());
+        mGeofenceList.add(mAuditoriumMaximumGeofence.toGeofence());
+        */
+        vg = VenuesDevelopmentMode.sampleVenueGeofences(Geofence.NEVER_EXPIRE);
+        for(VenueGeofence v:vg){
+            mGeofenceStorage.setGeofence(v);
+        }
+        mGeofenceList = VenuesDevelopmentMode.sampleGeofences(Geofence.NEVER_EXPIRE);
     }
 
     @Override
@@ -785,5 +890,12 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
                 .addOnConnectionFailedListener(this)
                 .build();
         mApiClient.connect();
+    }
+
+    public double getResult(){
+        return cat.getFoodLevel();
+    }
+    public void putResult(double result){
+        cat.setFoodLevel(result);
     }
 }

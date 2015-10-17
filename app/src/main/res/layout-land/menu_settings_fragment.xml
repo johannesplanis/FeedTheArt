@@ -8,24 +8,25 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center">
+        android:gravity="center"
+        android:layout_gravity="center">
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="BACK"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:id="@+id/menu_settings_back_button"
-            android:background="#00eaeaad"
+            android:background="@mipmap/ic_arrow_back_white_36dp"
             android:elegantTextHeight="false"
             android:enabled="true"
             android:focusable="false"
             android:textColor="@color/overall_font"
             android:singleLine="false"
             android:clickable="true"
-            android:layout_weight="1"
             style="@style/Base.Widget.AppCompat.Button.Borderless"
             android:typeface="serif"
-            android:textSize="18dp" />
+            android:textSize="18dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -44,12 +45,13 @@
             android:typeface="serif" />
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:text="back"
             android:id="@+id/button15"
-            android:layout_weight="1"
-            android:visibility="invisible" />
+            android:visibility="invisible"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp" />
     </LinearLayout>
 
     <FrameLayout

@@ -1,16 +1,16 @@
 package catactivity;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.planis.johannes.catprototype.R;
+import com.planis.johannes.feedtheart.bambino.R;
 
 /**
  * Created by JOHANNES on 8/5/2015.

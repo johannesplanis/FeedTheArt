@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.planis.johannes.catprototype.R;
+import com.planis.johannes.feedtheart.bambino.R;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -56,7 +56,7 @@ public class NewcatChooseCharacterFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
-        final int resId = Constants.catImageResIds[id];
+        final int resId = Constants.catImageResIds0[id];
         final String resName = Constants.catsNames[id];
 
         //Glide has better performance than Picasso and Google's example for handling bitmaps

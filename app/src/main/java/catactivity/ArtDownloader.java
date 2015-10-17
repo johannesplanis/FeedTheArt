@@ -187,7 +187,7 @@ public class ArtDownloader {
         String newOne = oldOne.replaceAll("\\\\","");
 
         //System.out.println(newOne);
-        String finalOne = (String) newOne.subSequence(2,newOne.length()-2);
+        String finalOne = (String) newOne.subSequence(2, newOne.length() - 2);
         return finalOne;
     }
 
@@ -197,4 +197,73 @@ public class ArtDownloader {
     public String stripBracesQuotes(String oldOne){
         return oldOne.substring((oldOne.indexOf("[\"")+2),oldOne.indexOf("\"]"));
     }
+
+    /**
+     * send REST request, parse response, download image and put everything in ArtObject, cache into SharedPreferences
+
+    public void getJSON(String address, Context context){
+        final Context ctxt = context;
+        final SharedPreferencesController spcLocal = new SharedPreferencesController(ctxt);
+        JSONObject artJSON;
+        ArtDownloadRestClient.get(address, null, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                //artObject = ad.parseArtObjectFromJSON(response);
+
+                try {
+                    String url = response.getString("image_url");
+                    Log.i("JSON OBJECT URL", "" + url);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                //new API
+                try {
+                    artJSON = response.getJSONObject("dailyart");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                //String jsonString = response.toString();
+                //artObject = gson.fromJson(jsonString,ArtObject.class);
+
+                String jsonString = artJSON.toString();
+                artObject = gson.fromJson(jsonString,ArtObject.class);
+
+
+                spcLocal.putArt(Tags.ART_CACHE, artObject);
+                //cacheObject(artObject, STORAGE_KEY);
+                String prettyJson = gson.toJson(response);
+                Log.i("REST Api",prettyJson);
+                Log.i("ART OBJECT", ""+jsonString);
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                // Pull out the first event on the public timeline
+                try {
+                    JSONObject res = (JSONObject) response.get(0);
+                    System.out.println("array" + res);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                // Do something with the response
+
+            }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String res, Throwable t) {
+                //Toast.makeText(getApplicationContext(), "Unable to download now", Toast.LENGTH_LONG).show();
+            }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable t, JSONObject json) {
+                //Toast.makeText(getApplicationContext(), "Unable to download now", Toast.LENGTH_LONG).show();
+                //spcLocal = new SharedPreferencesController(ctxt);
+                artObject = spcLocal.getArtObject(Tags.ART_CACHE, null);
+                //artObject = getFromCache(STORAGE_KEY);
+            }
+        });
+
+    }**/
 }

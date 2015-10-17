@@ -11,16 +11,14 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 public class CharacterPagerAdapter extends FragmentStatePagerAdapter {
     private final int mSize;
 
-
     public CharacterPagerAdapter(FragmentManager fm,int size){
         super(fm);
         mSize = size;
     }
+
     @Override
     public Fragment getItem(int position) {
-
         return NewcatChooseCharacterFragment.newInstance(position);
-
     }
 
     @Override
