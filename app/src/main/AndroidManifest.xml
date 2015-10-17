@@ -88,6 +88,7 @@
         <receiver
             android:name="backgroundcat.ScoreIncrementReceiver"
             android:exported="false" >
+
             <intent-filter>
                 <action android:name="SCORE_INCREMENT" />
             </intent-filter>
