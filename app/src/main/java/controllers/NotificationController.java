@@ -27,7 +27,7 @@ public class NotificationController {
     long[] pattern = {0,500};
 
     NotificationCompat.Builder nBuilder = new NotificationCompat.Builder(context)
-            .setSmallIcon(R.drawable.pyszczek)
+            .setSmallIcon(R.drawable.notificationicon)
             .setLargeIcon(bitmap)
             .setContentTitle(header)
             .setContentText(message)

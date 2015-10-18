@@ -53,8 +53,8 @@ public class GeofencesIntentService extends IntentService {
                 Intent broadcastIntent = new Intent(Tags.SCORE_INCREMENT);
                 broadcastIntent.putExtra(Tags.SCORE_INCREMENT_FIELD, INCREMENT);
 
-                broadcastIntent.putExtra("REQ_ID", Integer.parseInt(geofence.getRequestId())); //put name of the geofence
-                //Log.i("GEOFENCE",geofence.getRequestId());
+                broadcastIntent.putExtra(Tags.REQ_ID, geofence.getRequestId()); //put id of the geofence
+                Log.i("GEOFENCE",geofence.getRequestId());
                 //Log.i("GEOFENCE", VenuesDevelopmentMode.sampleVenues().get(Integer.parseInt(geofence.getRequestId())).getName());
 
                 getApplicationContext().sendBroadcast(broadcastIntent);

@@ -46,4 +46,5 @@ public class Tags {
     //art cache
     public static final String ART_CACHE = "ART_CACHE";
 
+    public static final String REQ_ID = "REQ_ID";
 }
