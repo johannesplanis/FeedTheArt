@@ -203,16 +203,23 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
         saveGameInstance();
         //make updates less frequent to save battery but run from time to time
         bam.setupAlarm(Constants.INTERVAL_BACKGROUND);
-        LocationServices.GeofencingApi.removeGeofences(
-                mApiClient,
-                // This is the same pending intent that was used in addGeofences().
-                getGeofenceTransitionPendingIntent()
-        ).setResultCallback(new ResultCallback<Status>() {
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
             @Override
-            public void onResult(Status status) {
-                Log.i("GEOFENCE STATUS", "DISCONNECTED? " + status);
+            public void run() {
+                LocationServices.GeofencingApi.removeGeofences(
+                        mApiClient,
+                        // This is the same pending intent that was used in addGeofences().
+                        getGeofenceTransitionPendingIntent()
+                ).setResultCallback(new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(Status status) {
+                        Log.i("GEOFENCE STATUS", "DISCONNECTED? " + status);
+                    }
+                }); // Result processed in onResult().
             }
-        }); // Result processed in onResult().
+        }, 500);
+
     }
 
     @Override
@@ -235,6 +242,25 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
     @Override
     public void onBackPressed(){
         int count = getFragmentManager().getBackStackEntryCount();
+        /**
+         * if you press back from art, feed the cat
+         *
+         */
+        artf = (CatArtFragment) getFragmentManager().findFragmentByTag("ARTF");
+        if(artf!=null&&!artf.isHidden()){
+            Handler handler = new Handler();
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    double food = 10d;
+                    cat.feedTheArtByValue(getApplicationContext(),food);
+                    Toast.makeText(getApplicationContext(),"You fed "+cat.getName()+" by "+food+" !", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+        }
+
+
         if (count == 0) {
             //go to main activity and exit
             Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
@@ -657,9 +683,21 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
         @Override
         public void onReceive(Context context, Intent intent) {
             //get increment, update cat score here
-            double increment = intent.getDoubleExtra(Tags.SCORE_INCREMENT_FIELD,0);
+            double increment = intent.getDoubleExtra(Tags.SCORE_INCREMENT_FIELD, 0);
+            String venueID = intent.getStringExtra(Tags.REQ_ID);
+            if(venueID!=null) {
+                Log.i("GEOFENCES_RECEIVER", "" + venueID); //get value of geofence id not equal to 0
+                //catDialogTop.setText("" + venueID);
+                Intent intent1 = new Intent(Tags.REQ_ID);
+                intent1.putExtra(Tags.REQ_ID,venueID);
+                LocalBroadcastManager.getInstance(context).sendBroadcast(intent1);
+
+            } else{
+                Log.i("GEOFENCES_RECEIVER","null output");
+            }
             cat.feedTheArtByValue(getApplicationContext(),increment);
             Log.i("broadcast receiver","current score "+cat.getFoodLevel());
+
 
         }
     };
@@ -671,8 +709,8 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            int humour = intent.getIntExtra("HUMOUR", 0);
-            cat.setHumour(humour);
+            //int humour = intent.getIntExtra("HUMOUR", 0);
+            //cat.setHumour(humour);
         }
     };
 

@@ -5,7 +5,7 @@
     android:background="@color/overall_background">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="SWEET CAT"
         android:id="@+id/choose_character_fragment_header"
@@ -13,21 +13,22 @@
         android:textSize="28dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:paddingBottom="10dp"
         android:textColor="@color/overall_font"
         android:typeface="serif"
-        android:layout_above="@+id/choose_character_fragment_image"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:gravity="center_vertical|center_horizontal" />
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:id="@+id/choose_character_fragment_image"
         android:src="@drawable/cat_basic"
-        android:paddingLeft="35dp"
-        android:paddingRight="35dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
         android:baselineAlignBottom="true"
-        android:layout_centerVertical="true"
+        android:layout_below="@+id/choose_character_fragment_header"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 </RelativeLayout>
