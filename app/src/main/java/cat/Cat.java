@@ -247,6 +247,7 @@ import controllers.SettingsController;
         double message = this.foodLevel;
         Log.i("FOOD_LEVEL_BY_VALUE1",""+message);
         broadcastIntent.putExtra("SERVICE_BROADCAST", message);
+
         LocalBroadcastManager.getInstance(ctxt).sendBroadcast(broadcastIntent);
 
 

@@ -29,8 +29,10 @@ import butterknife.ButterKnife;
 import cat.Cat;
 import cat.Constants;
 import cat.Tags;
+import geofencing.VenuesDevelopmentMode;
 
 /**
+ * todo jeżeli wychodzimy z artfragment przez
  * Created by JOHANNES on 8/5/2015.
  */
 
@@ -53,7 +55,7 @@ public class CatFragment extends Fragment {
     @Bind(R.id.cat_name_field)
     TextView dialog;
 
-    int venueID;
+    String venueID;
     double value;
     public String catName;
     public Bitmap placeholderBitmap;
@@ -86,14 +88,22 @@ public class CatFragment extends Fragment {
     public void onResume(){
         super.onResume();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, new IntentFilter(Tags.UPDATE_FOODLEVEL_ACTION));
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(humourBroadcastReceiver,new IntentFilter("HUMOUR"));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(humourBroadcastReceiver, new IntentFilter("HUMOUR"));
+
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver1, new IntentFilter(Tags.REQ_ID));
+
+
     }
     @Override
     public void onPause(){
         super.onPause();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(humourBroadcastReceiver);
+
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver1);
     }
+
+
 
 
     public void toMenu(){
@@ -178,6 +188,7 @@ public class CatFragment extends Fragment {
 
     }
 
+
     /**
      *receive broadcasted value from service and put into relevant field
      * TODO: wyświetlanie dialogu w zależności od humoru i geofence;
@@ -190,6 +201,7 @@ public class CatFragment extends Fragment {
 
             DecimalFormat formatter = new DecimalFormat("###.#");
             double result = intent.getDoubleExtra("SERVICE_BROADCAST", 0);
+
             /*
             double prevResult = ((CatActivity) getActivity()).getResult();
 
@@ -208,11 +220,7 @@ public class CatFragment extends Fragment {
 
             String output = formatter.format(result);
             Log.i("CAT_FRAGMENT_RECEIVER", output);
-            venueID = intent.getIntExtra("REQ_ID",0);
-            if(venueID!=0) {
-                Log.i("GEOFENCES_RECEIVER", "" + venueID); //get value of geofence id not equal to 0
-                //catDialogTop.setText("" + venueID);
-            }
+
             catDialogBottom.setText(output);
 
         }
@@ -258,4 +266,18 @@ public class CatFragment extends Fragment {
             }
         }
     };
+
+    private BroadcastReceiver broadcastReceiver1 = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String id = intent.getStringExtra(Tags.REQ_ID);
+
+            String name = VenuesDevelopmentMode.sampleVenues().get(Integer.parseInt(id)-1).getName();
+            dialog.setText("I'm in "+name);
+            Log.i("GEOFENCE_ID",id+name);
+        }
+    };
+
+
+
 }
