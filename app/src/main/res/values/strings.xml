@@ -9,4 +9,5 @@
     <string name="apikey_debug">AIzaSyBS242OGEslXRnM9pvxmvVxsAj9PBUHYQo</string>
     <string name="apikey_release">AIzaSyDYMirPMcI0nBt9kE2YN3K7xZQbLFqjqLM</string>
     <string name="title_activity_intro">IntroActivity</string>
+    <string name="title_activity_tutorial">TutorialActivity</string>
 </resources>

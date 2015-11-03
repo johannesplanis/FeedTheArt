@@ -26,14 +26,13 @@
         android:allowBackup="true"
         android:icon="@drawable/logo"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme"
-        android:screenOrientation="portrait">
+        android:screenOrientation="portrait"
+        android:theme="@style/AppTheme" >
         <activity
             android:name="menuactivity.MenuActivity"
             android:configChanges="orientation|screenSize"
-            android:screenOrientation="portrait"
-
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -43,8 +42,8 @@
         <activity
             android:name="catactivity.CatActivity"
             android:configChanges="orientation|screenSize"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_cat" >
+            android:label="@string/title_activity_cat"
+            android:screenOrientation="portrait" >
         </activity>
 
         <meta-data
@@ -88,7 +87,6 @@
         <receiver
             android:name="backgroundcat.ScoreIncrementReceiver"
             android:exported="false" >
-
             <intent-filter>
                 <action android:name="SCORE_INCREMENT" />
             </intent-filter>
@@ -102,16 +100,23 @@
              sign the APK for publishing.
              You can define the keys for the debug and release targets in src/debug/ and src/release/.
         -->
-<!--
+        <!--
         <activity
             android:name="com.planis.johannes.feedtheart.intro.IntroActivity"
             android:label="@string/title_activity_intro"
             android:theme="@style/AppTheme.NoActionBar" >
-        </activity>-->
+        </activity>
+        -->
         <activity
             android:name="intro.IntroActivity"
             android:label="@string/title_activity_intro"
             android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
+        <activity
+            android:name="tutorial.TutorialActivity"
+            android:label="@string/title_activity_tutorial"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
         </activity>
     </application>
 

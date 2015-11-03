@@ -32,6 +32,7 @@ import controllers.BitmapController;
 import controllers.SettingsController;
 import controllers.SharedPreferencesController;
 import modules.BusModule;
+import tutorial.TutorialActivity;
 
 /*
 * ISSUE 1: one fragment after being replaced by another, remains clickable
@@ -69,6 +70,14 @@ public class MenuActivity extends FragmentActivity implements SeekBar.OnSeekBarC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
+        //if first run...
+        /*
+        Intent tutorial=new Intent(MenuActivity.this, TutorialActivity.class);
+        startActivity(tutorial);
+        finish();
+        */
+        //----
+
         //dependency injection games
         BusModule.getObjectGraph().inject(this);
 
@@ -91,6 +100,7 @@ public class MenuActivity extends FragmentActivity implements SeekBar.OnSeekBarC
 
        //mPlaceholderBitmap = BitmapFactory.decodeResource(getResources(),R.drawable.image_placeholder);
        //bc = new BitmapController(getApplicationContext());
+
     }
 
     @Override
@@ -289,6 +299,7 @@ public class MenuActivity extends FragmentActivity implements SeekBar.OnSeekBarC
      * navigate to tutorial
      */
     public void toTutorial(){
+        /*
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         tuf = new TutorialFragment();
         if(tuf.isAdded()){
@@ -302,6 +313,11 @@ public class MenuActivity extends FragmentActivity implements SeekBar.OnSeekBarC
         }
         ft.addToBackStack(Tags.TUTORIAL_FRAGMENT);
         ft.commit();
+        */
+        Intent tutorial=new Intent(MenuActivity.this, TutorialActivity.class);
+        startActivity(tutorial);
+        //finish();
+
     }
     public void toSettings(){
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
