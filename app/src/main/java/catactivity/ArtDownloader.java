@@ -28,7 +28,7 @@ public class ArtDownloader {
      internal/external storage
      */
     Context context;
-    ArtDownloader(Context context){
+    public ArtDownloader(Context context){
         this.context = context;
     }
 

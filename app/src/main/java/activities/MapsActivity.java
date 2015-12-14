@@ -1,8 +1,6 @@
-package catactivity;
+package activities;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,16 +11,14 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
+import android.widget.ImageView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
@@ -36,11 +32,7 @@ import java.util.ArrayList;
 import geofencing.VenueObject;
 import geofencing.VenuesDevelopmentMode;
 
-/**
- * Created by JOHANNES on 8/5/2015.
- */
-public class CatMapFragment extends Fragment implements OnMapReadyCallback {
-    private GoogleMap map;
+public class MapsActivity extends BaseActivity implements OnMapReadyCallback,View.OnClickListener{
     private Marker marker;
     //private String markerInfo;
     private FragmentActivity myContext;
@@ -55,80 +47,38 @@ public class CatMapFragment extends Fragment implements OnMapReadyCallback {
     private int mStrokeColor = Color.CYAN;
     private int mFillColor = Color.parseColor("#30E0FFFF"); //grey-cyan with 30% opacity
     private float mStrokeWidth = 4.0f;
+
+    ImageView backButton;
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
-        counter = 0;
-        view = inflater.inflate(R.layout.cat_map_fragment,
-                container, false);
-        initMaps();
-        /*if(view!=null){
-            ViewGroup parent = (ViewGroup) view.getParent();
-            if(parent!=null){
-                parent.removeView(view);
-            }
-        }
-
-        try{
-
-        } catch(InflateException e){
-
-        }
-        */
-
-        Button menuButton = (Button) view.findViewById(R.id.cat_map_back_button);
-
-        menuButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toCat();
-            }
-        });
-
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_maps);
+        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.google_map);
+        mapFragment.getMapAsync(this);
+        backButton = (ImageView) findViewById(R.id.cat_map_back_button);
+        backButton.setOnClickListener(this);
         vo = VenuesDevelopmentMode.sampleVenues();
-        //for tests of async loading of pins
-
-
-
-        return view;
 
     }
 
-    private void initMaps() {
-        LocationManager lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+
+
+    private void initMaps(final GoogleMap map) {
+        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         boolean gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
         if (!gps_enabled) {
-            AlertDialog alert = new AlertDialog.Builder(getActivity()).setTitle("Nie spełniasz wymagań aplikacji!").setCancelable(false).setNegativeButton("Zamknij", new DialogInterface.OnClickListener() {
+            AlertDialog alert = new AlertDialog.Builder(this).setTitle("Nie spełniasz wymagań aplikacji!").setCancelable(false).setNegativeButton("Zamknij", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                     startActivity(intent);
-                    toCat();
+                    toCat("NOTIFICATION");
                 }
             }).setMessage("Ta część aplikacji wymaga dostępu do Twojej aktualnej lokalizacji. Sprawdź, czy masz włączoną funkcje lokalizacja w ustawieniach systemowych. Po tym wróć i kontynuuj wykonywanie tej operacji.").show();
         } else {
 
-            if (map == null) {
-
-                // Try to obtain the map from the SupportMapFragment.
-
-                map = ((SupportMapFragment) myContext.getSupportFragmentManager().findFragmentById(R.id.google_maps_fragment)).getMap();
-
-
-
-                /*
-
-
-                SupportMapFragment mMapFragment = SupportMapFragment.newInstance();
-                map = mMapFragment.getMap();
-                android.support.v4.app.FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-                transaction.add(R.id.cat_map_container,mMapFragment).commit();
-*/
-                // Check if we were successful in obtaining the map.
-                if (map != null) {
-                    //mMap.animateCamera(CameraUpdateFactory.zoomBy(10));
+           //mMap.animateCamera(CameraUpdateFactory.zoomBy(10));
                     map.setMyLocationEnabled(true);
                     map.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
                         @Override
@@ -157,16 +107,14 @@ public class CatMapFragment extends Fragment implements OnMapReadyCallback {
                         public void run() {
                             for (VenueObject v : vo) {
 
-                                addPlace(v);
+                                addPlace(v,map);
                             }
                         }
                     }, 1000);
                 }
             }
-        }
-    }
 
-    private void addPlace(VenueObject v) {
+    private void addPlace(VenueObject v, GoogleMap map) {
         Log.i("VENUES ON MAP", "" + v.getmId() + " " + v.getmLatitude() + ", " + v.getmLongitude() + ", " + v.getName());
         LatLng latLng = new LatLng(v.getmLatitude(),v.getmLongitude());
         String name = v.getName();
@@ -179,31 +127,29 @@ public class CatMapFragment extends Fragment implements OnMapReadyCallback {
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
                 .flat(true);
         Marker eMarker = map.addMarker(markerOptions);
-        new GeofenceCircle(latLng,radius);
-    }
-
-    public void toCat() {
-        Activity act = getActivity();
-        if (act instanceof CatActivity)
-            ((CatActivity) act).toCat();
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        myContext=(FragmentActivity) activity;
-        super.onAttach(activity);
+        new GeofenceCircle(latLng,radius, map);
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        initMaps(googleMap);
+    }
 
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.cat_map_back_button:
+                toCat("NOTIFICATION");
+                break;
+        }
     }
 
     private class GeofenceCircle {
 
         private final Circle circle;
         private double radius;
-        public GeofenceCircle(LatLng center, double radius) {
+        public GeofenceCircle(LatLng center, double radius, GoogleMap map) {
             this.radius = radius;
 
             circle = map.addCircle(new CircleOptions()
@@ -213,7 +159,7 @@ public class CatMapFragment extends Fragment implements OnMapReadyCallback {
                     .strokeColor(mStrokeColor)
                     .fillColor(mFillColor));
         }
-        public GeofenceCircle(LatLng center, LatLng radiusLatLng) {
+        public GeofenceCircle(LatLng center, LatLng radiusLatLng, GoogleMap map) {
             this.radius = toRadiusMeters(center, radiusLatLng);
 
             circle = map.addCircle(new CircleOptions()

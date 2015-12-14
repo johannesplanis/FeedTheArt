@@ -6,7 +6,7 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
-import cat.Constants;
+import model.Constants;
 
 /**
  * Created by JOHANNES on 8/13/2015.

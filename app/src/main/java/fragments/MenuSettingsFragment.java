@@ -1,4 +1,4 @@
-package menuactivity;
+package fragments;
 
 import android.app.Activity;
 import android.content.res.Configuration;
@@ -17,9 +17,10 @@ import android.widget.TextView;
 
 import com.planis.johannes.feedtheart.bambino.R;
 
+import activities.MenuActivity;
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import cat.Tags;
+import model.Tags;
 import controllers.SettingsController;
 
 /**

@@ -1,4 +1,4 @@
-package cat;
+package model;
 
 /**
  * flags for accessing storage, fragment manipulation

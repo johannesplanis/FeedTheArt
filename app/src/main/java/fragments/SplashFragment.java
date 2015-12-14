@@ -1,9 +1,9 @@
-package catactivity;
+package fragments;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +15,7 @@ import com.planis.johannes.feedtheart.bambino.R;
 /**
  * Created by JOHANNES on 8/5/2015.
  */
-public class CatSplashFragment extends Fragment{
+public class SplashFragment extends Fragment{
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -30,7 +30,7 @@ public class CatSplashFragment extends Fragment{
         //http://stackoverflow.com/questions/27588965/how-to-use-custom-font-in-android-studio
         Typeface customFont = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/AustieBostKittenKlub.ttf");
         tv.setText("Feed The Art!");
-        tv.setTypeface(customFont);
+        //tv.setTypeface(customFont);
         return view;
 
 

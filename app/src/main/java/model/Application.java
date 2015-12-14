@@ -1,4 +1,4 @@
-package cat;
+package model;
 
 /**
  * Created by JOHANNES on 10/1/2015.

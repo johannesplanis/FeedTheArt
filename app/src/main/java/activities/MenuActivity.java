@@ -1,6 +1,6 @@
 
 
-package menuactivity;
+package activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,7 +9,6 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.widget.ImageView;
@@ -25,14 +24,18 @@ import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
 
-import cat.Cat;
-import cat.Tags;
-import catactivity.CatActivity;
 import controllers.BitmapController;
 import controllers.SettingsController;
 import controllers.SharedPreferencesController;
+import fragments.MenuFragment;
+import fragments.MenuSettingsFragment;
+import fragments.NewcatChooseFragment;
+import fragments.NewcatNameFragment;
+import fragments.SplashFragment;
+import fragments.TutorialFragment;
+import model.Cat;
+import model.Tags;
 import modules.BusModule;
-import tutorial.TutorialActivity;
 
 /*
 * ISSUE 1: one fragment after being replaced by another, remains clickable
@@ -41,7 +44,7 @@ import tutorial.TutorialActivity;
 * Why ?!? Probably it removes all background fragments' clickability.
 * */
 
-public class MenuActivity extends FragmentActivity implements SeekBar.OnSeekBarChangeListener {
+public class MenuActivity extends BaseActivity implements SeekBar.OnSeekBarChangeListener {
     public SplashFragment spf;
     public MenuFragment mef;
     public TutorialFragment tuf;
@@ -408,9 +411,7 @@ public class MenuActivity extends FragmentActivity implements SeekBar.OnSeekBarC
     Navigate to cat Activity
      */
     public void toCatActivity(){
-        Intent intent = new Intent(getApplicationContext(), CatActivity.class);
-        intent.putExtra("START_MODE", "MENU_ACTIVITY");
-        startActivity(intent);
+        toCat("MENU_ACTIVITY");
     }
 
     /*

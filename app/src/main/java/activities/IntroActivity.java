@@ -1,4 +1,4 @@
-package intro;
+package activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,8 +6,8 @@ import android.view.View;
 
 import com.github.paolorotolo.appintro.AppIntro2;
 
-import menuactivity.MenuActivity;
-import menuactivity.SplashFragment;
+import activities.MenuActivity;
+import fragments.SplashFragment;
 
 public class IntroActivity extends AppIntro2 {
 

@@ -1,4 +1,4 @@
-package catactivity;
+package activities;
 
 import android.app.FragmentTransaction;
 import android.app.PendingIntent;
@@ -13,9 +13,9 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -43,20 +43,26 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import backgroundcat.BackgroundAlarmManager;
-import cat.Cat;
-import cat.Constants;
-import cat.Tags;
+import catactivity.ArtDownloadRestClient;
+import catactivity.ArtDownloader;
+import catactivity.ArtObject;
 import controllers.BitmapController;
 import controllers.SettingsController;
 import controllers.SharedPreferencesController;
+import fragments.CatArtFragment;
+import fragments.CatFragment;
+import fragments.CatMapFragment;
+import fragments.CatSplashFragment;
 import geofencing.GeofenceStore;
 import geofencing.GeofencesIntentService;
 import geofencing.VenueGeofence;
 import geofencing.VenueObject;
 import geofencing.VenuesDevelopmentMode;
-import menuactivity.MenuActivity;
+import model.Cat;
+import model.Constants;
+import model.Tags;
 
-public class CatActivity extends FragmentActivity implements CatArtFragment.OnRefreshCatArtListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class CatActivity extends BaseActivity implements CatArtFragment.OnRefreshCatArtListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
 
     public CatFragment catf;
     public CatArtFragment artf;
@@ -97,13 +103,7 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
     List<Geofence> mGeofenceList;
 
     // These will store hard-coded geofences in this sample app.
-    private VenueGeofence mRetorykaGeofence;
-    private VenueGeofence mMuzeumNarodoweGeofence;
-    private VenueGeofence mMuzeumWitrazuGeofence;
-    private VenueGeofence mMicroscupGeofence;
-    private VenueGeofence mPNGeofence;
-    private VenueGeofence mMakowaGeofence;
-    private VenueGeofence mAuditoriumMaximumGeofence;
+
 
     // Persistent storage for geofences.
     private GeofenceStore mGeofenceStorage;
@@ -113,6 +113,14 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
     // Stores the PendingIntent used to request geofence monitoring.
     private PendingIntent mGeofenceRequestIntent;
     private GoogleApiClient mApiClient;
+
+    @Override
+    public void onClick(View v) {
+        switch(v.getId()){
+
+        }
+    }
+
     private enum REQUEST_TYPE {ADD}
     private REQUEST_TYPE mRequestType;
     JSONObject artJSON;
@@ -150,9 +158,7 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
         bam = new BackgroundAlarmManager(getApplicationContext());
 
         getJSON(Constants.relativeApiUrl);
-        //VenueStorageController vsc = new VenueStorageController();
-        //vo = VenuesDevelopmentMode.sampleVenues();
-        //vsc.putVenues(getApplicationContext(),vo);
+
 
 
     }
@@ -218,7 +224,7 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
                     }
                 }); // Result processed in onResult().
             }
-        }, 500);
+        }, 1000);
 
     }
 
@@ -246,7 +252,7 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
          * if you press back from art, feed the cat
          *
          */
-        artf = (CatArtFragment) getFragmentManager().findFragmentByTag("ARTF");
+        artf = (CatArtFragment) getFragmentManager().findFragmentByTag(Constants.ART_FRAGMENT);
         if(artf!=null&&!artf.isHidden()){
             Handler handler = new Handler();
             handler.post(new Runnable() {
@@ -286,7 +292,7 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                CatArtFragment catFrag = (CatArtFragment) getFragmentManager().findFragmentByTag("ARTF");
+                CatArtFragment catFrag = (CatArtFragment) getFragmentManager().findFragmentByTag(Constants.ART_FRAGMENT);
                 if (catFrag != null) {
                     //update art
                     if (artObject == null) {
@@ -309,7 +315,7 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
      */
     public void startup(String startMode){
 
-        if(startMode.equals("NOTIFICATION")){
+        if(startMode!=null&&startMode.equals("NOTIFICATION")){
             toCat();
         } else{
             FragmentTransaction ft = getFragmentManager().beginTransaction();
@@ -390,29 +396,27 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
      */
     public void toCat(){
 
-
-
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         catf = new CatFragment();
 
         if(catf.isAdded()){
             ft.show(catf);
         } else{
-            ft.add(R.id.cat_container, catf, "CATF");
+            ft.add(R.id.cat_container, catf, Constants.CAT_FRAGMENT);
         }
 
-        mapf = (CatMapFragment) getFragmentManager().findFragmentByTag("MAPF");
+        mapf = (CatMapFragment) getFragmentManager().findFragmentByTag(Constants.MAP_FRAGMENT);
         if(mapf!=null){
             ft.hide(mapf);
         }
 
 
-        artf = (CatArtFragment) getFragmentManager().findFragmentByTag("ARTF");
+        artf = (CatArtFragment) getFragmentManager().findFragmentByTag(Constants.ART_FRAGMENT);
         if(artf!=null){
             ft.hide(artf);
         }
 
-        splash = (CatSplashFragment) getFragmentManager().findFragmentByTag("SPLASH");
+        splash = (CatSplashFragment) getFragmentManager().findFragmentByTag(Constants.SPLASH_FRAGMENT);
         if(splash!=null){
             ft.hide(splash);
         }
@@ -438,10 +442,10 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
         if(catf.isAdded()){
             ft.show(catf);
         } else{
-            ft.add(R.id.cat_container, catf, "CATF");
+            ft.add(R.id.cat_container, catf, Constants.CAT_FRAGMENT);
         }
 
-        artf = (CatArtFragment) getFragmentManager().findFragmentByTag("ARTF");
+        artf = (CatArtFragment) getFragmentManager().findFragmentByTag(Constants.ART_FRAGMENT);
         if(artf!=null){
             ft.hide(artf);
         }
@@ -464,25 +468,6 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
 
     }
 
-    /**
-     * navigate to map
-     */
-    public void toMap(){
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        //android.support.v4.app.FragmentTransaction sft = getSupportFragmentManager().beginTransaction();
-        mapf = new CatMapFragment();
-        if(mapf.isAdded()){
-            ft.show(mapf);
-        } else{
-            ft.add(R.id.cat_container, mapf, "MAPF");
-        }
-        catf = (CatFragment) getFragmentManager().findFragmentByTag("CATF");
-        if(catf!=null){
-            ft.hide(catf);
-        }
-        ft.addToBackStack("MAP");
-        ft.commit();
-    }
 
     /**
      * navigate to art
@@ -495,9 +480,9 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
         if(artf.isAdded()){
             ft.show(artf);
         } else{
-            ft.add(R.id.cat_container, artf, "ARTF");
+            ft.add(R.id.cat_container, artf, Constants.ART_FRAGMENT);
         }
-        catf = (CatFragment) getFragmentManager().findFragmentByTag("CATF");
+        catf = (CatFragment) getFragmentManager().findFragmentByTag(Constants.CAT_FRAGMENT);
         if(catf!=null){
             ft.hide(catf);
         }
@@ -569,7 +554,7 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
 
                 try {
                     String url = response.getString("image_url");
-                    Log.i("JSON OBJECT URL",""+url);
+                    Log.i("JSON OBJECT URL", "" + url);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -581,7 +566,7 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
                     e.printStackTrace();
                 }
                 String jsonString = artJSON.toString();
-                artObject = gson.fromJson(jsonString,ArtObject.class);
+                artObject = gson.fromJson(jsonString, ArtObject.class);
 
                 /* old API
                 String jsonString = response.toString();
@@ -591,9 +576,9 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
                 spcLocal.putArt(Tags.ART_CACHE, artObject);
                 @Deprecated
                 //cacheObject(artObject, STORAGE_KEY);
-                String prettyJson = gson.toJson(response);
-                Log.i("REST Api",prettyJson);
-                Log.i("ART OBJECT", ""+jsonString);
+                        String prettyJson = gson.toJson(response);
+                Log.i("REST Api", prettyJson);
+                Log.i("ART OBJECT", "" + jsonString);
             }
 
             @Override
@@ -607,12 +592,13 @@ public class CatActivity extends FragmentActivity implements CatArtFragment.OnRe
                 }
 
 
-
             }
+
             @Override
             public void onFailure(int statusCode, Header[] headers, String res, Throwable t) {
                 //Toast.makeText(getApplicationContext(), "Unable to download now", Toast.LENGTH_LONG).show();
             }
+
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable t, JSONObject json) {
                 Toast.makeText(getApplicationContext(), "Unable to download now", Toast.LENGTH_SHORT).show();

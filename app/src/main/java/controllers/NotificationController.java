@@ -10,7 +10,7 @@ import android.support.v4.app.NotificationCompat;
 
 import com.planis.johannes.feedtheart.bambino.R;
 
-import catactivity.CatActivity;
+import activities.CatActivity;
 
 /**
  * TODO builder?

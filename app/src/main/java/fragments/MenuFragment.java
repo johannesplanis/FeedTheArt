@@ -1,4 +1,4 @@
-package menuactivity;
+package fragments;
 
 import android.app.Activity;
 import android.graphics.Typeface;
@@ -12,7 +12,8 @@ import android.widget.TextView;
 
 import com.planis.johannes.feedtheart.bambino.R;
 
-import cat.Tags;
+import activities.MenuActivity;
+import model.Tags;
 import controllers.SharedPreferencesController;
 
 /**

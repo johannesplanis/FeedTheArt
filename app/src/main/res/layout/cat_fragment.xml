@@ -8,96 +8,88 @@ http://design-seeds.com/home/entry/pinwheel-color
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true"
-    android:background="@color/overall_background">
+    android:background="@color/overall_background"
+    android:weightSum="10">
 
-    <LinearLayout
-        android:orientation="horizontal"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:weightSum="1"
-        android:gravity="center_vertical">
+        android:gravity="center">
 
-        <Button
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+        <ImageView
             android:id="@+id/cat_menu_button"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:enabled="true"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp"
-            android:background="@drawable/ic_menu" />
+            android:src="@drawable/ic_menu"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/cat_feedme_textz"
-            android:visibility="invisible"
-            android:textSize="32dp"
-            android:text="buttock"
-            android:layout_marginTop="7dp"
-            android:layout_marginBottom="7dp" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="NewButt"
-            android:id="@+id/button2"
-            android:visibility="invisible"
-            android:background="#ededda" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:id="@+id/cat_feedme_text"
-            android:src="@drawable/battery_low"
-            android:layout_gravity="right"
-            android:padding="5dp"
             android:textColor="@color/overall_font"
-            android:textSize="32dp"
-            android:text=".." />
+            android:textSize="32sp"
+            android:text="@string/two_dots"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+             />
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1">
+        android:layout_height="0dp"
+        android:layout_weight="8"
+        android:weightSum="10">
 
         <TextView
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:id="@+id/cat_name_field"
             android:layout_gravity="center"
-            android:textSize="24dp"
+            android:textSize="24sp"
             android:focusable="false"
             android:enabled="true"
             android:textColor="#000000"
             android:typeface="serif"
             android:src="@drawable/cat_dialogbox"
-            android:layout_weight="2"
+            android:layout_weight="3"
             android:layout_marginBottom="-30dp"
             android:background="@drawable/cat_dialogbox"
-            android:text="I&apos;m starving, feed me!"
-            android:paddingLeft="25dp"
+            android:text="@string/cat_dialog_starving"
+            android:paddingLeft="30dp"
             android:paddingRight="25dp"
-            android:paddingTop="15dp"
+            android:paddingTop="20dp"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
             android:layout_marginLeft="30dp"
-            android:layout_marginRight="25dp" />
+            android:layout_marginStart="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginEnd="25dp"/>
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             android:layout_gravity="center_horizontal"
-            android:layout_weight="1"
+            android:layout_weight="7"
             android:id="@+id/cat_container"
             android:layout_marginBottom="10dp">
 
             <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="fill_parent"
                 android:id="@+id/cat_placeholder_image_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:src="@drawable/cat_basic"
                 android:paddingLeft="30dp"
@@ -110,45 +102,43 @@ http://design-seeds.com/home/entry/pinwheel-color
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:baselineAligned="false"
-        android:layout_gravity="center_horizontal">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:weightSum="3"
+        android:gravity="center">
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="MAP"
+        <TextView
             android:id="@+id/cat_map_button"
-            android:background="#2cd1a0"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:text="@string/cat_map"
+            android:background="@color/button_greenish"
             android:layout_weight="1"
-            style="?android:attr/borderlessButtonStyle"
             android:textColor="@color/overall_font"
-            android:typeface="serif"
-            android:textSize="18dp" />
+            style="@style/CatStyle"
+            android:textSize="@dimen/text_medium" />
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="ART"
+        <TextView
             android:id="@+id/cat_art_button"
-            android:background="#d44846"
-            android:textColor="#ededda"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:text="@string/cat_art"
+            android:background="@color/button_red"
+            android:textColor="@color/sand"
             android:layout_weight="1"
-            style="?android:attr/borderlessButtonStyle"
-            android:typeface="serif"
-            android:textSize="18dp" />
+            style="@style/CatStyle"
+            android:textSize="@dimen/text_medium" />
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="EXTRA"
+        <TextView
             android:id="@+id/cat_extra_button"
-            android:background="#614687"
-            android:textColor="#ffd333"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:text="@string/cat_extra"
+            android:background="@color/button_violet"
+            android:textColor="@color/text_gold"
             android:layout_weight="1"
-            style="?android:attr/borderlessButtonStyle"
-            android:typeface="serif"
-            android:textSize="18dp" />
+            style="@style/CatStyle"
+            android:textSize="@dimen/text_medium" />
     </LinearLayout>
 
 </LinearLayout>

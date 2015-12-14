@@ -13,7 +13,7 @@ import com.planis.johannes.feedtheart.bambino.R;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import cat.Constants;
+import model.Constants;
 
 /**
  * TODO handle image loading on orientation change

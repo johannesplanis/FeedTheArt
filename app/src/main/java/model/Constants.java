@@ -1,4 +1,4 @@
-package cat;
+package model;
 
 import android.net.Uri;
 
@@ -160,6 +160,10 @@ public class Constants {
     public static final String NUDGE_REACTION = "Human, I'm getting hungry!";
     public static final String STARVING_REACTION = "Human, I'm starving!";
     public static final String FEEDING_REACTION = "I'm so happy!";
+    public static final String CAT_FRAGMENT = "CATF";
+    public static final String MAP_FRAGMENT = "MAPF";
+    public static final String ART_FRAGMENT = "ARTF";
+    public static final String SPLASH_FRAGMENT = "SPLASH";
     //Fragments management
 
     private Constants() {

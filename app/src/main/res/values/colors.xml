@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <item name="sand" type="color">#FFEDEDDA</item>
+    <item name="sand" type="color">#EDEDDA</item>
 <!--http://colorhunt.co/#004182118df0fbffa3ff4b68 -->
     <item name="yellow1" type="color">#fbffa3</item>
     <item name="blue1" type="color">#118df0</item>
@@ -15,5 +15,9 @@
 
     <item name="overall_font" type="color">#ffffff</item>
 
+    <item name="button_violet" type="color">#614687</item>
+    <item name="button_red" type="color">#d44846</item>
+    <item name="button_greenish" type="color">#2cd1a0</item>
+    <item name="text_gold" type="color">#ffd333</item>
 
 </resources>

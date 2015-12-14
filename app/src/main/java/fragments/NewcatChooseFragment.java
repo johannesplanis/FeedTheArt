@@ -1,4 +1,4 @@
-package menuactivity;
+package fragments;
 
 import android.app.Activity;
 import android.content.res.Configuration;
@@ -15,9 +15,11 @@ import com.squareup.otto.Bus;
 
 import javax.inject.Inject;
 
+import activities.MenuActivity;
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import cat.Constants;
+import model.Constants;
+import menuactivity.CharacterPagerAdapter;
 
 /**
  * Created by JOHANNES on 8/5/2015.

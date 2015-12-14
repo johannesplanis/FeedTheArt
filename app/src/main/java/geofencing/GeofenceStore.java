@@ -3,7 +3,7 @@ package geofencing;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import cat.Constants;
+import model.Constants;
 
 /**
  * Created by JOHANNES on 9/11/2015.

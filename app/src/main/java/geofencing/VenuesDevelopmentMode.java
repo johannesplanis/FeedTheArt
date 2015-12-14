@@ -6,7 +6,7 @@ import com.google.android.gms.location.Geofence;
 
 import java.util.ArrayList;
 
-import cat.Constants;
+import model.Constants;
 
 /**
  * Created by JOHANNES on 10/5/2015.

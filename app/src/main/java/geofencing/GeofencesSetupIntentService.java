@@ -19,7 +19,7 @@ import com.google.android.gms.location.LocationServices;
 import java.util.ArrayList;
 import java.util.List;
 
-import cat.Constants;
+import model.Constants;
 
 /**
  * Created by JOHANNES on 9/28/2015.
