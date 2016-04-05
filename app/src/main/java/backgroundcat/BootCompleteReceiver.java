@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import cat.Constants;
+import model.Constants;
 
 /**
  * start working just after boot

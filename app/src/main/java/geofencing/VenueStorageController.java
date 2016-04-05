@@ -7,7 +7,7 @@ import com.google.android.gms.location.Geofence;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import cat.Tags;
+import model.Tags;
 import controllers.SharedPreferencesController;
 
 /**

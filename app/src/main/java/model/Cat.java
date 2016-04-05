@@ -1,4 +1,4 @@
-package cat;
+package model;
 
 import android.content.Context;
 import android.content.Intent;

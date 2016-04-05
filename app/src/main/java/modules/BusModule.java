@@ -8,10 +8,10 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.ObjectGraph;
 import dagger.Provides;
-import menuactivity.MenuActivity;
-import menuactivity.NewcatChooseFragment;
-import menuactivity.NewcatNameFragment;
-import menuactivity.TutorialFragment;
+import activities.MenuActivity;
+import fragments.NewcatChooseFragment;
+import fragments.NewcatNameFragment;
+import fragments.TutorialFragment;
 
 /**
  * Created by JOHANNES on 8/19/2015.

@@ -1,4 +1,4 @@
-package catactivity;
+package fragments;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -14,6 +14,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.planis.johannes.feedtheart.bambino.R;
+
+import activities.CatActivity;
+import catactivity.ArtObject;
 
 /**
  * Created by JOHANNES on 8/5/2015.

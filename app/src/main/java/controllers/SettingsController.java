@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import cat.Cat;
+import model.Cat;
 
 /**
  * Created by JOHANNES on 9/25/2015.

@@ -1,4 +1,4 @@
-package menuactivity;
+package fragments;
 
 import android.app.Activity;
 import android.content.Context;
@@ -22,6 +22,7 @@ import com.squareup.otto.Bus;
 
 import javax.inject.Inject;
 
+import activities.MenuActivity;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import modules.BusModule;

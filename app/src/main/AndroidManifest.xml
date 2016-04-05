@@ -27,9 +27,9 @@
         android:icon="@drawable/logo"
         android:label="@string/app_name"
         android:screenOrientation="portrait"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme.NoActionBar" >
         <activity
-            android:name="menuactivity.MenuActivity"
+            android:name="activities.MenuActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
@@ -40,7 +40,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="catactivity.CatActivity"
+            android:name="activities.CatActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_cat"
             android:screenOrientation="portrait" >
@@ -102,21 +102,28 @@
         -->
         <!--
         <activity
-            android:name="com.planis.johannes.feedtheart.intro.IntroActivity"
+            android:name="com.planis.johannes.feedtheart.activities.IntroActivity"
             android:label="@string/title_activity_intro"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
         -->
         <activity
-            android:name="intro.IntroActivity"
+            android:name="activities.IntroActivity"
             android:label="@string/title_activity_intro"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
         <activity
-            android:name="tutorial.TutorialActivity"
+            android:name="activities.TutorialActivity"
             android:label="@string/title_activity_tutorial"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
+        </activity>
+        <activity
+            android:name="activities.MapsActivity"
+            android:label="@string/title_activity_maps"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
+        <activity android:name="activities.BaseActivity" >
         </activity>
     </application>
 

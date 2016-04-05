@@ -8,7 +8,7 @@ import com.google.gson.Gson;
 
 import java.util.HashSet;
 
-import cat.Cat;
+import model.Cat;
 import catactivity.ArtObject;
 import geofencing.VenueObject;
 

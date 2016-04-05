@@ -11,8 +11,8 @@ import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingEvent;
 
 import controllers.NotificationController;
-import cat.Constants;
-import cat.Tags;
+import model.Constants;
+import model.Tags;
 import controllers.SharedPreferencesController;
 import controllers.SettingsController;
 
