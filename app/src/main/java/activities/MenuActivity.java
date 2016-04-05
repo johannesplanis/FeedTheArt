@@ -38,13 +38,8 @@ import model.Tags;
 * */
 
 public class MenuActivity extends BaseActivity implements SeekBar.OnSeekBarChangeListener {
-    public SplashFragment spf;
-    public MenuFragment mef;
-    public NewcatChooseFragment ncf;
-    public NewcatNameFragment nnf;
-    public MenuSettingsFragment msf;
+
     private SharedPreferencesController spc;
-    private int COUNT;
     private Handler handler = new Handler();
 
     private static final int SPLASH = 1;
@@ -109,10 +104,9 @@ public class MenuActivity extends BaseActivity implements SeekBar.OnSeekBarChang
         super.onResume();
         Intent intent = getIntent();
         exit = intent.getBooleanExtra("EXIT", false);
-        System.out.println(exit);
-        checkPermissions();
-        setupPreferences();
 
+        setupPreferences();
+        startup();
     }
 
     private void checkPermissions() {
@@ -121,16 +115,12 @@ public class MenuActivity extends BaseActivity implements SeekBar.OnSeekBarChang
                 != PackageManager.PERMISSION_GRANTED) {
 
             ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.READ_CONTACTS},
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     Constants.MY_PERMISSIONS_REQUEST_LOCATION);
 
         } else {
-            if (exit) {
-                finish();
-                System.out.println("Trouble!");
-            } else {
-                startup();
-            }
+            toCat("MENU_ACTIVITY");
+
         }
     }
 
@@ -146,7 +136,8 @@ public class MenuActivity extends BaseActivity implements SeekBar.OnSeekBarChang
                         finish();
                         System.out.println("Trouble!");
                     } else {
-                        startup();
+                        toCat("MENU_ACTIVITY");
+
                     }
                 }
             }
@@ -192,23 +183,10 @@ public class MenuActivity extends BaseActivity implements SeekBar.OnSeekBarChang
      */
     public void startup() {
         spc = new SharedPreferencesController(getApplicationContext());
-        Intent intent = getIntent();
-        String type = intent.getStringExtra("TYPE");
-        COUNT = spc.getInt(Tags.CAT_INSTANCES_COUNT, 0);
 
-        /*
-        Handling different cases of first launch, non-first launch, going back to menu from Cat Activity
-         */
-        if (COUNT == 0 && !APP.equals(type)) {
 
-            splashStartup();
-        } else if (COUNT != 0 && APP.equals(type)) {
-            toMenu();
-        } else if (COUNT != 0 && !APP.equals(type)) {
-            toCatActivity();
-        } else {
-            System.out.println("Error! Impossible test case!");
-        }
+        toMenu();
+
     }
 
     /**
@@ -302,9 +280,6 @@ public class MenuActivity extends BaseActivity implements SeekBar.OnSeekBarChang
         if (inputName != null && !inputName.isEmpty() && !inputName.equals("SAY MY NAME!")) {
             setName(inputName);
 
-        /*
-        Indicate that new game was already created. Preference used in MenuFragment and startup();
-         */
             SharedPreferences.Editor editor = getSharedPreferences("INSTANCES_COUNT", MODE_PRIVATE).edit();
             editor.putInt("COUNT", 1);
             editor.commit();
@@ -317,9 +292,13 @@ public class MenuActivity extends BaseActivity implements SeekBar.OnSeekBarChang
             cat.setCharacter(character);
             Log.i("CREATOR", "5");
             spc.putCat(Tags.CURRENT_GAME_INSTANCE, cat);
-            Log.i("CREATOR", "6");
+
+
+
+
             toCatActivity();
-            Log.i("CREATOR", "7");
+
+
         } else {
             Toast.makeText(this, "Put something here!", Toast.LENGTH_LONG).show();
         }
@@ -329,9 +308,9 @@ public class MenuActivity extends BaseActivity implements SeekBar.OnSeekBarChang
     Navigate to cat Activity
      */
     public void toCatActivity() {
-        toCat("MENU_ACTIVITY");
-    }
 
+        checkPermissions();
+    }
 
     public int getCharacter() {
         return character;

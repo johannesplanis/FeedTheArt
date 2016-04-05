@@ -62,9 +62,7 @@ public class MenuSettingsFragment extends Fragment implements SeekBar.OnSeekBarC
         Activity act = getActivity();
         if (act instanceof MenuActivity) {
             ((MenuActivity) act).toMenu();
-            ((MenuActivity) act).popBackstack();
         }
-
     }
 
     @Override

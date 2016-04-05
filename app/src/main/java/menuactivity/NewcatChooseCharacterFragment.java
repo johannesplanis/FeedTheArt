@@ -2,13 +2,13 @@ package menuactivity;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.planis.johannes.feedtheart.bambino.R;
 
 import butterknife.Bind;
@@ -59,8 +59,7 @@ public class NewcatChooseCharacterFragment extends Fragment {
         final int resId = Constants.catImageResIds0[id];
         final String resName = Constants.catsNames[id];
 
-        //Glide has better performance than Picasso and Google's example for handling bitmaps
-        Glide.with(this).load(resId).into(imageView);
+        imageView.setImageDrawable(ContextCompat.getDrawable(getActivity(),resId));
         chooseHeader.setText(resName);
     }
 }

@@ -86,7 +86,7 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Vi
                     @Override
                     public void onClick(View v) {
                         ActivityCompat.requestPermissions(MapsActivity.this,
-                                new String[]{Manifest.permission.READ_CONTACTS},
+                                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                                 Constants.MY_PERMISSIONS_REQUEST_LOCATION);
                     }
                 }).show();
@@ -95,7 +95,7 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Vi
                 // No explanation needed, we can request the permission.
 
                 ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.READ_CONTACTS},
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         Constants.MY_PERMISSIONS_REQUEST_LOCATION);
             }
         } else {
@@ -169,7 +169,7 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Vi
                 .snippet(snippet)
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
                 .flat(true);
-        Marker eMarker = map.addMarker(markerOptions);
+        map.addMarker(markerOptions);
         new GeofenceCircle(latLng, radius, map);
     }
 
@@ -200,7 +200,7 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Vi
                     .center(center)
                     .radius(radius)
                     .strokeWidth(mStrokeWidth)
-                    .strokeColor(ContextCompat.getColor(MapsActivity.this,Color.CYAN))
+                    .strokeColor(ContextCompat.getColor(MapsActivity.this,R.color.button_greenish))
                     .fillColor(ContextCompat.getColor(MapsActivity.this,R.color.grey_cyan)));
         }
 

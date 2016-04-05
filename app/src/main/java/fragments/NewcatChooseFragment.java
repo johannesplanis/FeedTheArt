@@ -1,7 +1,6 @@
 package fragments;
 
 import android.app.Activity;
-import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -56,13 +55,6 @@ public class NewcatChooseFragment extends android.support.v4.app.Fragment {
         super.onDestroyView();
         ButterKnife.unbind(this);
     }
-    @Override
-    public void onConfigurationChanged(Configuration newConfig){
-        super.onConfigurationChanged(newConfig);
-        LayoutInflater inflater = LayoutInflater.from(getActivity());
-        populateViewForOrientation(inflater, (ViewGroup) getView());
-    }
-
 
 
     @Override

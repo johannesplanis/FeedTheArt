@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.planis.johannes.feedtheart.bambino.R;
 
 import java.text.DecimalFormat;
@@ -138,7 +138,7 @@ public class CatFragment extends Fragment {
         int character = activity.getCharacter();
         int resId = Constants.catImageResIds[character + humour];
 
-        Glide.with(this).load(resId).into(imageView);
+        imageView.setImageDrawable(ContextCompat.getDrawable(getActivity(),resId));
     }
 
 
@@ -180,14 +180,14 @@ public class CatFragment extends Fragment {
                 Log.i("HUMOUR", "hungring");
                 int type = activity.getCharacter();
                 int resId = Constants.catImageResIds[type + 3];
-                Glide.with(CatFragment.this).load(resId).into(imageView);
+                imageView.setImageDrawable(ContextCompat.getDrawable(getActivity(),resId));
                 dialog.setText(Constants.NUDGE_REACTION);
             } else if (humour.equals("FEEDING")) {
 
                 Log.i("HUMOUR", "feeding");
                 int type = activity.getCharacter();
                 int resId = Constants.catImageResIds[type];
-                Glide.with(CatFragment.this).load(resId).into(imageView);
+                imageView.setImageDrawable(ContextCompat.getDrawable(getActivity(),resId));
                 dialog.setText(Constants.FEEDING_REACTION);
             } else if (humour.equals("FEEDING_FROM_STARVE")) {
                 dialog.setText(Constants.NUDGE_REACTION);
@@ -196,7 +196,7 @@ public class CatFragment extends Fragment {
                 Log.i("HUMOUR", "starving");
                 int type = activity.getCharacter();
                 int resId = Constants.catImageResIds[type + 3];
-                Glide.with(CatFragment.this).load(resId).into(imageView);
+                imageView.setImageDrawable(ContextCompat.getDrawable(getActivity(),resId));
                 dialog.setText(Constants.STARVING_REACTION);
             } else {
                 Log.i("HUMOUR", "none");

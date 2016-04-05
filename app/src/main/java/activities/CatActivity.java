@@ -7,15 +7,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.IntentSender;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
@@ -29,25 +24,20 @@ import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.LocationServices;
 import com.planis.johannes.feedtheart.bambino.R;
 
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import backgroundcat.BackgroundAlarmManager;
-import catactivity.ArtDownloader;
 import catactivity.ArtObject;
 import controllers.SettingsController;
 import controllers.SharedPreferencesController;
 import fragments.CatArtFragment;
 import fragments.CatFragment;
-import fragments.CatSplashFragment;
 import geofencing.GeofenceStore;
 import geofencing.GeofencesIntentService;
 import geofencing.VenueGeofence;
-import geofencing.VenueObject;
 import geofencing.VenuesDevelopmentMode;
 import model.Cat;
 import model.Constants;
@@ -55,42 +45,23 @@ import model.Tags;
 
 public class CatActivity extends BaseActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
-    public CatFragment catf;
-    public CatArtFragment artf;
-    public CatSplashFragment splash;
-    public ArtDownloader ad;
     public ArtObject artObject;
-    public JSONObject jsonObject;
-    public SharedPreferences prefs;
+
     SharedPreferencesController spc;
     SettingsController sc;
 
-    Bitmap bitmap;
     public Cat cat;
     private String name;
     public BackgroundAlarmManager bam;
 
     public double starvingSpeed;
 
-
     Timer timer;
 
-    public static final String STORAGE_KEY = "SHARED_PREFERENCES_KEY";
-
-    /**
-     * Geofencing variables
-     */
-    // Internal List of Geofence objects. In a real app, these might be provided by an API based on
-    // locations within the user's proximity.
     List<Geofence> mGeofenceList;
 
-    // These will store hard-coded geofences in this sample app.
-
-
-    // Persistent storage for geofences.
     private GeofenceStore mGeofenceStorage;
     public ArrayList<VenueGeofence> vg;
-    public ArrayList<VenueObject> vo;
     // Stores the PendingIntent used to request geofence monitoring.
     private PendingIntent mGeofenceRequestIntent;
     private GoogleApiClient mApiClient;
@@ -101,24 +72,18 @@ public class CatActivity extends BaseActivity implements GoogleApiClient.Connect
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cat);
-        checkPermissions();
-
-        Intent intent = getIntent();
-        String startMode = intent.getStringExtra("START_MODE");
-
 
         //Setup controllers
         spc = new SharedPreferencesController(getApplicationContext());
         sc = new SettingsController(getApplicationContext());
-        //Setup settings
+
         updateSettings();
-        //load cat from sp
+
         loadGameInstance();
-        //setup view
+
         startup();
 
         artObject = new ArtObject();
-        ad = new ArtDownloader(getApplicationContext());
         bam = new BackgroundAlarmManager(getApplicationContext());
 
     }
@@ -138,40 +103,7 @@ public class CatActivity extends BaseActivity implements GoogleApiClient.Connect
         }
     }
 
-    private void checkPermissions() {
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
 
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.ACCESS_FINE_LOCATION)) {
-
-            }
-
-
-                // No explanation needed, we can request the permission.
-
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.READ_CONTACTS},
-                        Constants.MY_PERMISSIONS_REQUEST_LOCATION);
-
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case Constants.MY_PERMISSIONS_REQUEST_LOCATION: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                }else{
-                    finish();
-                }
-            }
-        }
-    }
 
     @Override
     public void onResume() {
@@ -237,8 +169,6 @@ public class CatActivity extends BaseActivity implements GoogleApiClient.Connect
 
     }
 
-
-
     @Override
     public void onBackPressed() {
 
@@ -252,8 +182,6 @@ public class CatActivity extends BaseActivity implements GoogleApiClient.Connect
              break;
      }
     }
-
-
 
     /**
      startup methods, navigate to cat
@@ -325,48 +253,6 @@ public class CatActivity extends BaseActivity implements GoogleApiClient.Connect
         });
         Log.i("SETTINGS", "COEFF: " + String.valueOf(new SettingsController(this).getStarvingSpeed()));
     }
-
-
-    /**
-     * Asynchronously download today's art
-     */
-    private class LoadImage extends AsyncTask<String, String, Bitmap> {
-        protected Bitmap doInBackground(String... args) {
-            try {
-                bitmap = ad.getBitmapFromDirectURL(args[0]);
-                System.out.println("File downloaded!");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return bitmap;
-        }
-
-        protected void onPostExecute(Bitmap image) {
-            if (bitmap != null) {
-                String path = ad.saveImageToStorage(bitmap);
-                SharedPreferences.Editor editor = getSharedPreferences(STORAGE_KEY, MODE_PRIVATE).edit();
-                editor.putString("STORAGE_PATH", path);
-                editor.commit();
-                System.out.println("Saved image asynchronously!");
-            }
-        }
-    }
-
-    public ArtObject getArtObject() {
-        spc = new SharedPreferencesController(getApplicationContext());
-
-        if (spc.getArtObject(Tags.ART_CACHE, null) == null) {
-            System.out.println("From current object in memory");
-            return this.artObject;
-        } else {
-            System.out.println("From cache");
-            spc = new SharedPreferencesController(getApplicationContext());
-            return spc.getArtObject(Tags.ART_CACHE, null);
-        }
-    }
-
-
-
 
     /**
      * receive increment from geofences while in foreground
