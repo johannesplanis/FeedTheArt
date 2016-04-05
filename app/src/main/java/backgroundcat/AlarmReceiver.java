@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import controllers.PermissionsHelper;
 import geofencing.GeofencesSetupIntentService;
 import controllers.SettingsController;
 
@@ -28,8 +29,9 @@ public class AlarmReceiver extends BroadcastReceiver{
         Intent alarmIntent = new Intent(context, FoodLevelUpdateService.class);
         alarmIntent.putExtra("STARVING_SPEED", coeff);
         context.startService(alarmIntent);
-
-        Intent intent2 = new Intent(context, GeofencesSetupIntentService.class);
-        context.startService(intent2);
+        if (PermissionsHelper.checkLocationPermissions(context)){
+            Intent intent2 = new Intent(context, GeofencesSetupIntentService.class);
+            context.startService(intent2);
+        }
     }
 }

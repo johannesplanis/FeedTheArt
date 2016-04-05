@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 
 import fragments.CatArtFragment;
 import fragments.CatFragment;
-import fragments.CatMapFragment;
 import fragments.CatSplashFragment;
 import model.Constants;
 
@@ -45,8 +44,6 @@ public class BaseActivity extends AppCompatActivity {
         switch (tag){
             case Constants.ART_FRAGMENT:
                 return new CatArtFragment();
-            case Constants.MAP_FRAGMENT:
-                return new CatMapFragment();
             case Constants.CAT_FRAGMENT:
                 return new CatFragment();
             case Constants.SPLASH_FRAGMENT:

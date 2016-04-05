@@ -18,14 +18,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.planis.johannes.feedtheart.bambino.R;
-import com.squareup.otto.Bus;
-
-import javax.inject.Inject;
 
 import activities.MenuActivity;
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import modules.BusModule;
 
 /**
  * Created by JOHANNES on 8/5/2015.
@@ -43,8 +39,6 @@ public class NewcatNameFragment extends Fragment {
 
 
 
-    @Inject
-    protected Bus bus;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -102,7 +96,6 @@ public class NewcatNameFragment extends Fragment {
     public void onCreate(Bundle savedState){
         super.onCreate(savedState);
         //dependency injection games
-        BusModule.getObjectGraph().inject(this);
         int character = getCharacter();
 
 

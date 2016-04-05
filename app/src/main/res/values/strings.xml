@@ -15,4 +15,7 @@
     <string name="cat_art">ART</string>
     <string name="cat_extra">EXTRA</string>
     <string name="cat_dialog_starving">I\'m starving, feed me!</string>
+    <string name="location_rationale">Ta część aplikacji wymaga dostępu do Twojej aktualnej lokalizacji. Sprawdź, czy masz włączoną funkcje lokalizacja w ustawieniach systemowych. Po tym wróć i kontynuuj wykonywanie tej operacji.</string>
+    <string name="location_rationale_title">Nie spełniasz wymagań aplikacji!</string>
+    <string name="feed_the_art_i">Feed The Art!</string>
 </resources>

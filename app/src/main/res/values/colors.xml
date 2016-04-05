@@ -20,4 +20,5 @@
     <item name="button_greenish" type="color">#2cd1a0</item>
     <item name="text_gold" type="color">#ffd333</item>
 
+    <item name="grey_cyan" type="color">#30E0FFFF</item>
 </resources>

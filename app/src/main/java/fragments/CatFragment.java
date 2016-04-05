@@ -1,12 +1,10 @@
 package fragments;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
@@ -38,8 +36,8 @@ import model.Tags;
 
 public class CatFragment extends Fragment {
 
-   // @Bind(R.id.cat_name_field)
-   // TextView catDialogTop;
+    // @Bind(R.id.cat_name_field)
+    // TextView catDialogTop;
     @Bind(R.id.cat_feedme_text)
     TextView catDialogBottom;
     @Bind(R.id.cat_menu_button)
@@ -55,44 +53,44 @@ public class CatFragment extends Fragment {
     @Bind(R.id.cat_name_field)
     TextView dialog;
 
+    CatActivity activity;
+
+
     String venueID;
     double value;
     public String catName;
     public Bitmap placeholderBitmap;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         final View view = inflater.inflate(R.layout.cat_fragment, container, false);
         ButterKnife.bind(this, view);
+        activity = (CatActivity) getActivity();
         setupLayout();
-        CatFragment frCtxt=this;
+
         return view;
 
     }
+
     @Override
-    public void onDestroyView(){
+    public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
     }
-    @Override
-    public void onConfigurationChanged(Configuration newConfig){
-        super.onConfigurationChanged(newConfig);
-        LayoutInflater inflater = LayoutInflater.from(getActivity());
-        populateViewForOrientation(inflater, (ViewGroup) getView());
-    }
+
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, new IntentFilter(Tags.UPDATE_FOODLEVEL_ACTION));
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(humourBroadcastReceiver, new IntentFilter("HUMOUR"));
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver1, new IntentFilter(Tags.REQ_ID));
-
-
     }
+
     @Override
-    public void onPause(){
+    public void onPause() {
         super.onPause();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(humourBroadcastReceiver);
@@ -100,64 +98,55 @@ public class CatFragment extends Fragment {
     }
 
 
-    private void populateViewForOrientation(LayoutInflater inflater,ViewGroup viewGroup){
-        viewGroup.removeAllViewsInLayout();
-        View subview = inflater.inflate(R.layout.cat_fragment, viewGroup);
-        ButterKnife.bind(this,subview);
-        setupLayout();
-    }
-    /**
-     * setup listeners to buttons
-    **/
-    @OnClick(R.id.cat_menu_button) void toMenuPlz(){
-        Activity act = getActivity(); if (act instanceof CatActivity)
-            ((CatActivity) act).toMenu();    }
-    @OnClick(R.id.cat_map_button) void toMapPlz(){
-        Activity act = getActivity(); if (act instanceof CatActivity)
-            ((CatActivity) act).toMap();
-    }
-    @OnClick(R.id.cat_art_button) void toArtPlz(){
-        Activity act = getActivity(); if (act instanceof CatActivity)
-            ((CatActivity) act).toArt();
-    }
-    @OnClick(R.id.cat_extra_button) void toExtraPlz(){
-        Activity act = getActivity(); if (act instanceof CatActivity)
-            ((CatActivity) act).toExtra();
+    @OnClick(R.id.cat_menu_button)
+    void toMenu() {
+        activity.toMenu();
     }
 
-    public void setupLayout(){
+    @OnClick(R.id.cat_map_button)
+    void toMap() {
+        activity.toMap();
+    }
+
+    @OnClick(R.id.cat_art_button)
+    void toArt() {
+        activity.toArt();
+    }
+
+    @OnClick(R.id.cat_extra_button)
+    void toExtra() {
+        activity.toExtra();
+    }
+
+    public void setupLayout() {
 
         int humour;
-        Activity act = getActivity(); if (act instanceof  CatActivity)
-            catName = ((CatActivity) act).getName();
-            value = ((CatActivity) act).getResult();
+        activity.getName();
+        activity.getResult();
 
-        if(value>= Cat.ALARM_LEVEL){
+        if (value >= Cat.ALARM_LEVEL) {
             humour = 0;
             dialog.setText(Constants.FEEDING_REACTION);
-        } else if(value>=Cat.CRITICAL_LEVEL&&value<Cat.ALARM_LEVEL){
+        } else if (value >= Cat.CRITICAL_LEVEL && value < Cat.ALARM_LEVEL) {
             humour = 3;
             dialog.setText(Constants.NUDGE_REACTION);
-        } else{
+        } else {
             humour = 3;
             dialog.setText(Constants.STARVING_REACTION);
         }
 
-        int character = ((CatActivity) getActivity()).getCharacter();
-        //int humour = ((CatActivity) getActivity()).getHumour();
-        int resId = Constants.catImageResIds[character+humour];
+        int character = activity.getCharacter();
+        int resId = Constants.catImageResIds[character + humour];
 
         Glide.with(this).load(resId).into(imageView);
-
-
     }
 
 
     /**
-     *receive broadcasted value from service and put into relevant field
+     * receive broadcasted value from service and put into relevant field
      * TODO: wyświetlanie dialogu w zależności od humoru i geofence;
      */
-     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
 
@@ -177,41 +166,40 @@ public class CatFragment extends Fragment {
 
     /**
      * broadcast receiver to change layout according to changing humour
-*/
+     */
     private BroadcastReceiver humourBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
 
             imageView.requestLayout();
             dialog.requestLayout();
-            int character = ((CatActivity) getActivity()).getCharacter();
+            int character = activity.getCharacter();
             String humour = intent.getStringExtra("HUMOUR");
-            Log.i("HUMOUR","received");
-            if(humour.equals("HUNGRING")){
+            Log.i("HUMOUR", "received");
+            if (humour.equals("HUNGRING")) {
                 Log.i("HUMOUR", "hungring");
-                int type = ((CatActivity) getActivity()).getCharacter();
-                int resId = Constants.catImageResIds[type+3];
+                int type = activity.getCharacter();
+                int resId = Constants.catImageResIds[type + 3];
                 Glide.with(CatFragment.this).load(resId).into(imageView);
                 dialog.setText(Constants.NUDGE_REACTION);
-            }else if(humour.equals("FEEDING")){
+            } else if (humour.equals("FEEDING")) {
 
                 Log.i("HUMOUR", "feeding");
-                int type = ((CatActivity) getActivity()).getCharacter();
+                int type = activity.getCharacter();
                 int resId = Constants.catImageResIds[type];
                 Glide.with(CatFragment.this).load(resId).into(imageView);
                 dialog.setText(Constants.FEEDING_REACTION);
-            }else if(humour.equals("FEEDING_FROM_STARVE")) {
+            } else if (humour.equals("FEEDING_FROM_STARVE")) {
                 dialog.setText(Constants.NUDGE_REACTION);
 
-            }else if(humour.equals("STARVING")){
+            } else if (humour.equals("STARVING")) {
                 Log.i("HUMOUR", "starving");
-                int type = ((CatActivity) getActivity()).getCharacter();
-                int resId = Constants.catImageResIds[type+3];
+                int type = activity.getCharacter();
+                int resId = Constants.catImageResIds[type + 3];
                 Glide.with(CatFragment.this).load(resId).into(imageView);
                 dialog.setText(Constants.STARVING_REACTION);
-            }
-            else{
-                Log.i("HUMOUR","none");
+            } else {
+                Log.i("HUMOUR", "none");
             }
         }
     };
@@ -220,10 +208,9 @@ public class CatFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             String id = intent.getStringExtra(Tags.REQ_ID);
-
-            String name = VenuesDevelopmentMode.sampleVenues().get(Integer.parseInt(id)-1).getName();
-            dialog.setText("I'm in "+name);
-            Log.i("GEOFENCE_ID",id+name);
+            String name = VenuesDevelopmentMode.sampleVenues().get(Integer.parseInt(id) - 1).getName();
+            dialog.setText("I'm in " + name);
+            Log.i("GEOFENCE_ID", id + name);
         }
     };
 

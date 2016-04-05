@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 public class ArtObject {
 
     private int ID;
+    private String day;
     private double factor;
     private String image_url;
     private String name;
@@ -16,7 +17,6 @@ public class ArtObject {
     private String type;
     private String location;
     private String description;
-    private String storageUri;
 
     public ArtObject(){
 
@@ -45,13 +45,22 @@ public class ArtObject {
     }
 
 
-    public String getStorageUri() {
-        return storageUri;
+
+    @Override
+    public String toString() {
+        return "ArtObject{" +
+                "ID=" + ID +
+                ", factor=" + factor +
+                ", image_url='" + image_url + '\'' +
+                ", name='" + name + '\'' +
+                ", year='" + year + '\'' +
+                ", author='" + author + '\'' +
+                ", type='" + type + '\'' +
+                ", location='" + location + '\'' +
+                ", description='" + description + '\'' +
+                '}';
     }
 
-    public void setStorageUri(String storageUri) {
-        this.storageUri = storageUri;
-    }
     public String getImage_url() {
         return image_url;
     }

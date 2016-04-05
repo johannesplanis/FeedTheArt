@@ -11,23 +11,18 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.planis.johannes.feedtheart.bambino.R;
-import com.squareup.otto.Bus;
-
-import javax.inject.Inject;
 
 import activities.MenuActivity;
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import model.Constants;
 import menuactivity.CharacterPagerAdapter;
+import model.Constants;
 
 /**
  * Created by JOHANNES on 8/5/2015.
  */
 public class NewcatChooseFragment extends android.support.v4.app.Fragment {
 
-    @Inject
-    protected Bus bus;
     @Bind(R.id.newcat_choose_pager)
     ViewPager viewPager;
     @Bind(R.id.newcat_choose_next)

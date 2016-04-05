@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.planis.johannes.feedtheart.bambino" >
+    package="com.planis.johannes.feedtheart.bambino">
 
     <uses-sdk
         android:maxSdkVersion="23"
-        android:minSdkVersion="14"
-        android:targetSdkVersion="22" />
+         />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -26,13 +25,12 @@
         android:allowBackup="true"
         android:icon="@drawable/logo"
         android:label="@string/app_name"
-        android:screenOrientation="portrait"
-        android:theme="@style/AppTheme.NoActionBar" >
+        android:theme="@style/AppTheme.NoActionBar">
         <activity
             android:name="activities.MenuActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/app_name"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -41,29 +39,17 @@
         </activity>
         <activity
             android:name="activities.CatActivity"
-            android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_cat"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait"/>
 
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-        <!--
-        no need to include this
-        <meta-data
-            android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyCcFOXwTNIemLIBSHpk_oupijPTSNnVzWY" />
-        -->
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
-        <!--
-        <activity
-            android:name=".MapsActivity"
-            android:label="@string/title_activity_maps" >
-        </activity>
-        -->
+
         <service
             android:name="backgroundcat.FoodLevelUpdateService"
             android:exported="false" />
@@ -79,52 +65,35 @@
             android:process=":remote" />
         <receiver
             android:name="backgroundcat.BootCompleteReceiver"
-            android:process=":remote" >
+            android:process=":remote">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
         <receiver
             android:name="backgroundcat.ScoreIncrementReceiver"
-            android:exported="false" >
+            android:exported="false">
             <intent-filter>
                 <action android:name="SCORE_INCREMENT" />
             </intent-filter>
         </receiver>
 
-        <!--
-             The API key for Google Maps-based APIs is defined as a string resource.
-             (See the file "res/values/google_maps_api.xml").
-             Note that the API key is linked to the encryption key used to sign the APK.
-             You need a different API key for each encryption key, including the release key that is used to
-             sign the APK for publishing.
-             You can define the keys for the debug and release targets in src/debug/ and src/release/.
-        -->
-        <!--
-        <activity
-            android:name="com.planis.johannes.feedtheart.activities.IntroActivity"
-            android:label="@string/title_activity_intro"
-            android:theme="@style/AppTheme.NoActionBar" >
-        </activity>
-        -->
+
         <activity
             android:name="activities.IntroActivity"
             android:label="@string/title_activity_intro"
-            android:theme="@style/AppTheme.NoActionBar" >
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name="activities.TutorialActivity"
             android:label="@string/title_activity_tutorial"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
-        </activity>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity
             android:name="activities.MapsActivity"
             android:label="@string/title_activity_maps"
-            android:theme="@style/AppTheme.NoActionBar" >
-        </activity>
-        <activity android:name="activities.BaseActivity" >
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name="activities.BaseActivity"/>
+        <activity android:name="activities.ArtActivity"/>
     </application>
 
 </manifest>

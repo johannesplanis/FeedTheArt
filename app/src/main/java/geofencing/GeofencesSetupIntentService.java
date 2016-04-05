@@ -1,11 +1,14 @@
 package geofencing;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.IntentService;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -40,9 +43,10 @@ public class GeofencesSetupIntentService extends IntentService implements Google
     private PendingIntent mGeofenceRequestIntent;
     private GoogleApiClient mApiClient;
 
-    public GeofencesSetupIntentService(){
+    public GeofencesSetupIntentService() {
         super("GeofencesSetupIntentService");
     }
+
     @Override
     protected void onHandleIntent(Intent intent) {
         /**
@@ -52,7 +56,7 @@ public class GeofencesSetupIntentService extends IntentService implements Google
             Log.e(Constants.APP_TAG, "Google Play services unavailable.");
             return;
         }
-        Log.i("GEOFENCE SETUP","in progress");
+        Log.i("GEOFENCE SETUP", "in progress");
         mGeofenceStorage = new GeofenceStore(this);
         mGeofenceList = new ArrayList<Geofence>();
         createGeofences(59 * 1000);
@@ -68,7 +72,7 @@ public class GeofencesSetupIntentService extends IntentService implements Google
 
 
         vg = VenuesDevelopmentMode.sampleVenueGeofences(timeout);
-        for(VenueGeofence v:vg){
+        for (VenueGeofence v : vg) {
             mGeofenceStorage.setGeofence(v);
         }
         mGeofenceList = VenuesDevelopmentMode.sampleGeofences(timeout);
@@ -80,6 +84,17 @@ public class GeofencesSetupIntentService extends IntentService implements Google
         // Get the PendingIntent for the geofence monitoring request.
         // Send a request to add the current geofences.
         mGeofenceRequestIntent = getGeofenceTransitionPendingIntent();
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
         LocationServices.GeofencingApi.addGeofences(mApiClient, mGeofenceList,
                 mGeofenceRequestIntent).setResultCallback(new ResultCallback<Status>() {
             @Override
@@ -87,6 +102,8 @@ public class GeofencesSetupIntentService extends IntentService implements Google
                 Log.i("GEOFENCE", "CONNECTED? " + status);
             }
         });
+
+
         //Toast.makeText(this, "GEOFENCE SERVICE STARTED", Toast.LENGTH_SHORT).show();
 
     }

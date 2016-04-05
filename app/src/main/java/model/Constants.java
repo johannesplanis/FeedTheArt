@@ -132,11 +132,11 @@ public class Constants {
     //cat art constants
     /*  old API
     public static final String baseApiUrl = "http://192.168.2.109:8080";
-    public static final String relativeApiUrl = "/art.json";
+    public static final String ENDPOINT = "/art.json";
     */
     //New API constants
-    public static final String baseApiUrl = "http://feedtheart.us.kkwm.pl/api";
-    public static final String relativeApiUrl = "/fta.php";
+    public static final String BASE_URL = "http://feedtheart.us.kkwm.pl/api/";
+    public static final String ENDPOINT = "fta.php";
 
     //notification colors
     public static final int APP_COLOR_SUCCESS = 0xFF40D211;
@@ -145,14 +145,6 @@ public class Constants {
     public static final int APP_COLOR_CRITICAL = 0xFFED1000;
 
 
-    //
-    public static final String TUTORIAL = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. " +
-            "Suspendisse nec ex eu lacus pulvinar sollicitudin. Fusce eu bibendum nibh, non vestibulum orci. " +
-            "Etiam gravida purus ex, eget convallis lacus consectetur et. Integer gravida nibh eu ipsum elementum porta. " +
-            "Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. " +
-            "Vestibulum suscipit facilisis ex, id bibendum sem sodales id. Vivamus mauris tellus, feugiat ac felis vel, fringilla efficitur quam. " +
-            "Ut consequat erat in condimentum vehicula. Nam suscipit leo ut turpis porttitor, auctor mollis turpis porta. " +
-            "Pellentesque leo odio, cursus sed nibh a, dictum mattis dui.";
 
     //fonts
     public static final String AUSTIE_BOST_KITTEN_KLUB_FONT = "fonts/AustieBostKittenKlub.ttf";
@@ -164,6 +156,7 @@ public class Constants {
     public static final String MAP_FRAGMENT = "MAPF";
     public static final String ART_FRAGMENT = "ARTF";
     public static final String SPLASH_FRAGMENT = "SPLASH";
+    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 11;
     //Fragments management
 
     private Constants() {

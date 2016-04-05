@@ -1,180 +1,184 @@
 package fragments;
 
-import android.app.Activity;
 import android.app.Fragment;
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
 import com.planis.johannes.feedtheart.bambino.R;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import activities.CatActivity;
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import catactivity.ArtObject;
+import events.ArtUpdatedEvent;
+import model.Art;
+import model.ArtApiEndpointInterface;
+import model.Constants;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by JOHANNES on 8/5/2015.
  */
-public class CatArtFragment extends Fragment{
+public class CatArtFragment extends Fragment {
     ArtObject object;
-    OnRefreshCatArtListener meaowCallback;
+    @Bind(R.id.cat_art_header)
+    TextView catArtHeader;
+    @Bind(R.id.cat_art_image_view)
+    ImageView catArtImageView;
+    @Bind(R.id.cat_art_container)
+    FrameLayout catArtContainer;
+    @Bind(R.id.cat_art_title)
+    TextView catArtTitle;
+    @Bind(R.id.cat_art_author)
+    TextView catArtAuthor;
+    @Bind(R.id.cat_art_year)
+    TextView catArtYear;
+    @Bind(R.id.cat_art_location)
+    TextView catArtLocation;
+    @Bind(R.id.cat_art_type)
+    TextView catArtType;
+    @Bind(R.id.cat_art_description)
+    TextView catArtDescription;
+
+    CatActivity activity;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-
-        Context context = getActivity().getApplicationContext();
         final View view = inflater.inflate(R.layout.cat_art_fragment,
                 container, false);
-        ImageButton menuButton = (ImageButton) view.findViewById(R.id.cat_art_back_button);
-        ImageButton shareButton = (ImageButton) view.findViewById(R.id.cat_art_share_button);
-        ImageView artContainer = (ImageView) view.findViewById(R.id.cat_art_image_view);
-        TextView title = (TextView) view.findViewById(R.id.cat_art_title);
-        TextView author = (TextView) view.findViewById(R.id.cat_art_author);
+        ButterKnife.bind(this, view);
+        activity = (CatActivity) getActivity();
 
-
-        object = ((CatActivity)this.getActivity()).getArtObject();
-
-
-        updateArt(object, view);
-
-        menuButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                toCat();
-            }
-        });
-        shareButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                shareArt();
-                refreshCatArt();
-            }
-        });
-
-
-        //artContainer.setImageBitmap(((CatActivity)getActivity()).bitmap);
+        downloadArt();
 
         return view;
 
     }
+
+
+    public void toCat() {
+
+        activity.toCatFromArt();
+    }
+
+
+    public void updateArt(Art art) {
+
+        catArtTitle.setText(art.getName());
+        catArtAuthor.setText(art.getAuthor());
+        catArtYear.setText(art.getYear());
+        catArtLocation.setText(art.getLocation());
+        catArtType.setText(art.getType());
+        catArtDescription.setText(art.getDescription());
+        Glide.with(this).load(art.getImageUrl()).into(catArtImageView);
+    }
+
+    public void updateArt(ArtObject art) {
+
+        catArtTitle.setText(art.getName());
+        catArtAuthor.setText(art.getAuthor());
+        catArtYear.setText(art.getYear());
+        catArtLocation.setText(art.getLocation());
+        catArtType.setText(art.getType());
+        catArtDescription.setText(art.getDescription());
+        Glide.with(this).load(art.getImage_url()).into(catArtImageView);
+    }
+
+
+    public void refreshCatArt() {
+        downloadArt();
+    }
+
     @Override
-    public void onAttach(Activity activity){
-        super.onAttach(activity);
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
+    }
 
-
-        // This makes sure that the container activity has implemented
-        // the callback interface. If not, it throws an exception
-        try {
-            meaowCallback = (OnRefreshCatArtListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnRefreshCatArtListener");
+    @OnClick({R.id.cat_art_back_button, R.id.cat_art_share_button})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.cat_art_back_button:
+                toCat();
+                break;
+            case R.id.cat_art_share_button:
+                refreshCatArt();
+                break;
         }
     }
 
-    public void toCat(){
 
-
-        Activity act = getActivity(); if (act instanceof CatActivity)
-            ((CatActivity) act).toCatFromArt();
+    @Subscribe
+    public void onEvent(ArtUpdatedEvent event) {
 
     }
-    public void shareArt(){
-        Activity act = getActivity(); if (act instanceof CatActivity)
-            ((CatActivity) act).shareArt();
-    }
-    /*
-    Update fields according to ArtObject received
-     */
 
-    //use in
-    public void updateArt(ArtObject art, View view){
 
-        //Context context = getActivity().getApplicationContext();
-        TextView title = (TextView) view.findViewById(R.id.cat_art_title);
-        TextView author = (TextView) view.findViewById(R.id.cat_art_author);
-        TextView year = (TextView) view.findViewById(R.id.cat_art_year);
-        TextView location = (TextView) view.findViewById(R.id.cat_art_location);
-        TextView type = (TextView) view.findViewById(R.id.cat_art_type);
-        TextView description = (TextView) view.findViewById(R.id.cat_art_description);
-        ImageView artContainer = (ImageView) view.findViewById(R.id.cat_art_image_view);
+    public void downloadArt() {
+        Log.d(TAG, "downloadArt: ");
+        final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-        title.setText(art.getName());
-        author.setText(art.getAuthor());
-        year.setText(art.getYear());
-        location.setText(art.getLocation());
-        type.setText(art.getType());
-        description.setText(art.getDescription());
-/*
-        //If the image is saved in device, load it, otherwise download it from url address, else you 're fucked
-        if (art.getStorageUri() != null && !art.getStorageUri().isEmpty()){
-            Bitmap bitmap;
-            ArtDownloader ad = new ArtDownloader(getActivity());
-            bitmap = ad.loadImageFromStorage(art.getStorageUri());
-            artContainer.setImageBitmap(bitmap);
-        }   else if(art.getImage_url() != null && !art.getImage_url().isEmpty()){
-            Picasso.with(context).load(art.getImage_url()).into(artContainer);
-        }   else{
-            System.out.println("No reference to image found!");
-        }
-        */
-        //Picasso.with(context).load(art.getImage_url()).into(artContainer);
-        Log.i("IMAGE URL",""+art.getImage_url());
-        Glide.with(this).load(art.getImage_url()).into(artContainer);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(Constants.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+
+        ArtApiEndpointInterface apiService = retrofit.create(ArtApiEndpointInterface.class);
+
+        Call<JsonElement> call = apiService.getArt();
+        call.enqueue(new Callback<JsonElement>() {
+            @Override
+            public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
+
+                JsonElement element = response.body();
+                String s  =element.toString();
+
+                try {
+                    JSONObject o = new JSONObject(s);
+                    JSONObject jsonObject = o.getJSONObject("dailyart");
+                    Art art = gson.fromJson(jsonObject.toString(),Art.class);
+                    updateArt(art);
+                    Log.d(TAG, "onResponse: "+art.toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonElement> call, Throwable t) {
+                // Log error here since request failed
+                Log.d(TAG, "onFailure: ");
+            }
+        });
+
     }
 
-    public void updateArt(ArtObject art){
+    public void loadLastArt() {
 
-        //Context context = getActivity().getApplicationContext();
-        TextView title = (TextView) getView().findViewById(R.id.cat_art_title);
-        TextView author = (TextView) getView().findViewById(R.id.cat_art_author);
-        TextView year = (TextView) getView().findViewById(R.id.cat_art_year);
-        TextView location = (TextView) getView().findViewById(R.id.cat_art_location);
-        TextView type = (TextView) getView().findViewById(R.id.cat_art_type);
-        TextView description = (TextView) getView().findViewById(R.id.cat_art_description);
-        ImageView artContainer = (ImageView) getView().findViewById(R.id.cat_art_image_view);
-
-        title.setText(art.getName());
-        author.setText(art.getAuthor());
-        year.setText(art.getYear());
-        location.setText(art.getLocation());
-        type.setText(art.getType());
-        description.setText(art.getDescription());
-        /*
-        //If the image is saved in device, load it, otherwise download it from url address,
-        if (art.getStorageUri() != null && !art.getStorageUri().isEmpty()){
-            Bitmap bitmap;
-            ArtDownloader ad = new ArtDownloader(getActivity());
-            bitmap = ad.loadImageFromStorage(art.getStorageUri());
-            artContainer.setImageBitmap(bitmap);
-        }   else if(art.getImage_url()!=null&&!art.getImage_url().isEmpty()){
-            Picasso.with(context).load(art.getImage_url()).into(artContainer);
-        }   else{
-            System.out.println("No reference to image found!");
-        }
-        try{
-            Picasso.with(context).load(art.getImage_url()).into(artContainer);
-        } catch(IllegalArgumentException e){
-            e.printStackTrace();
-        }
-*/      Log.i("IMAGE URL",""+art.getImage_url());
-        Glide.with(this).load(art.getImage_url()).into(artContainer);
     }
 
 
-    public void refreshCatArt(){
-        meaowCallback.onRefreshSelected();
-    }
+    private static final String TAG = "dama";
 
-    public interface OnRefreshCatArtListener{
-        public void onRefreshSelected();
-    }
+
 }
