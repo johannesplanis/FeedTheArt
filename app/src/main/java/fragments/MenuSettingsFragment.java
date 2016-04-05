@@ -1,7 +1,6 @@
 package fragments;
 
 import android.app.Activity;
-import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -20,8 +19,8 @@ import com.planis.johannes.feedtheart.bambino.R;
 import activities.MenuActivity;
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import model.Tags;
 import controllers.SettingsController;
+import model.Tags;
 
 /**
  * Created by JOHANNES on 8/6/2015.
@@ -95,26 +94,10 @@ public class MenuSettingsFragment extends Fragment implements SeekBar.OnSeekBarC
 
     }
 
-    //Handle orientation changes
-    @Override
-    public void onConfigurationChanged(Configuration newConfig){
-        super.onConfigurationChanged(newConfig);
-        LayoutInflater inflater = LayoutInflater.from(getActivity());
-        populateViewForOrientation(inflater, (ViewGroup) getView());
-    }
-
-    private void populateViewForOrientation(LayoutInflater inflater,ViewGroup viewGroup){
-        viewGroup.removeAllViewsInLayout();
-        View subview = inflater.inflate(R.layout.menu_settings_fragment, viewGroup);
-        ButterKnife.bind(this, subview);
-        setupLayout();
-    }
 
     private void setupLayout(){
 
-        //SeekBar mSeekBar = (SeekBar) getView().findViewById(R.id.settings_starving_speed);
         starvingSpeedBar.setOnSeekBarChangeListener(this);
-        //Switch mSwitch = (Switch) getView().findViewById(R.id.settings_notification_permission_switch);
         mSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

@@ -1,7 +1,6 @@
 package fragments;
 
 import android.app.Activity;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -13,8 +12,8 @@ import android.widget.TextView;
 import com.planis.johannes.feedtheart.bambino.R;
 
 import activities.MenuActivity;
-import model.Tags;
 import controllers.SharedPreferencesController;
+import model.Tags;
 
 /**
  * Created by JOHANNES on 8/5/2015.
@@ -66,9 +65,7 @@ public class MenuFragment extends Fragment {
             continueButton.setVisibility(View.INVISIBLE);
         }
         TextView tv = (TextView) view.findViewById(R.id.menu_title_text_field);
-        Typeface customFont = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/AustieBostKittenKlub.ttf");
         tv.setText("Feed The Art!");
-        //tv.setTypeface(customFont);
         return view;
     }
 

@@ -9,7 +9,6 @@ import com.google.gson.Gson;
 import java.util.HashSet;
 
 import model.Cat;
-import catactivity.ArtObject;
 import geofencing.VenueObject;
 
 /**
@@ -69,36 +68,7 @@ public class SharedPreferencesController {
         return cat;
     }
 
-    /**
-     * just primitives! otherwise use Instance Cretor
-     * http://howtodoinjava.com/2014/06/17/google-gson-tutorial-convert-java-object-to-from-json/
-     * @param key
-     * @param art
-     */
-    public void putArt(String key, ArtObject art){
-        if(!sp.getString(key,"").equals("")){
-            Log.i("SHARED PREFERENCES","not null w. key "+key+" and w. message: "+sp.getString(key,""));
-        }
-        ed = sp.edit();
-        Gson gson = new Gson();
-        String serialized = gson.toJson(art);
-        ed.putString(key, serialized);
-        ed.commit();
-}
 
-    public ArtObject getArtObject(String key, Object notReceived){
-        ArtObject art;
-        Gson gson = new Gson();
-        String serialized = gson.toJson(notReceived);
-        String json = sp.getString(key, serialized);
-        if(json!=serialized){
-            art = gson.fromJson(json,ArtObject.class);
-        }   else{
-            art = new ArtObject();
-            Log.i("CAT_SP","Read null value, returned default value");
-        }
-        return art;
-    }
 
     public void putString(String key,String message){
         if(!sp.getString(key,"").equals("")){

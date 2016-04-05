@@ -33,7 +33,6 @@ public class NotificationController {
             .setContentText(message)
             .setColor(color)
             .setVibrate(pattern);
-    //.setDefaults(NotificationCompat.DEFAULT_VIBRATE);
     Intent intent = new Intent(context, CatActivity.class);
     intent.putExtra("START_MODE","NOTIFICATION");
     PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,intent,PendingIntent.FLAG_UPDATE_CURRENT);

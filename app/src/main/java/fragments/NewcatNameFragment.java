@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -92,26 +91,6 @@ public class NewcatNameFragment extends Fragment {
         });
     }
 
-    @Override
-    public void onCreate(Bundle savedState){
-        super.onCreate(savedState);
-        //dependency injection games
-        int character = getCharacter();
-
-
-    }
-    @Override
-    public void onResume(){
-        super.onResume();
-        //bus.register(readEventHandler);
-
-    }
-    @Override
-    public void onPause(){
-        super.onPause();
-        //bus.unregister(readEventHandler);
-    }
-
     public void finishCreator(String name){
 
         Activity act = getActivity();
@@ -122,30 +101,6 @@ public class NewcatNameFragment extends Fragment {
     public void nameToChoose(){
         Activity act = getActivity(); if (act instanceof MenuActivity)
             ((MenuActivity) act).nameToChoose();
-    }
-
-    private void checkCharacter(int ID){
-        switch(ID){
-            case 0:
-                Log.i("Name: ","Sweet cat");
-                break;
-            case 1:
-                Log.i("Name: ","Evil cat");
-                break;
-            case 2:
-                Log.i("Name: ","Pirate cat");
-                break;
-            default:
-                Log.i("Name: ","noname");
-                break;
-        }
-    }
-    private int getCharacter(){
-        int character = 4;
-        Activity act = getActivity(); if (act instanceof MenuActivity)
-            character = ((MenuActivity) act).getCharacter();
-            checkCharacter(character);
-            return character;
     }
 
 

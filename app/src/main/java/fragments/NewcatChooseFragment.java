@@ -56,20 +56,9 @@ public class NewcatChooseFragment extends android.support.v4.app.Fragment {
         ButterKnife.unbind(this);
     }
 
-
-    @Override
-    public void onCreate(Bundle savedState){
-        super.onCreate(savedState);
-
-
-    }
-    /*
-    set adapter on last page visited
-     */
     @Override
     public void onResume(){
         super.onResume();
-        //bus.register(sendEventHandler);
         Activity act = getActivity(); if (act instanceof MenuActivity)
         character = ((MenuActivity) act).getCharacter();
         viewPager.setCurrentItem(character);
@@ -87,12 +76,6 @@ public class NewcatChooseFragment extends android.support.v4.app.Fragment {
         viewPager.setAdapter(adapterViewPager);
     }
 
-    private void populateViewForOrientation(LayoutInflater inflater,ViewGroup viewGroup){
-        viewGroup.removeAllViewsInLayout();
-        View subview = inflater.inflate(R.layout.menu_newcat_choose_fragment, viewGroup);
-        ButterKnife.bind(this,subview);
-        setupLayout();
-    }
 
     private void setupLayout(){
         nextButton.setOnClickListener(new View.OnClickListener() {
@@ -108,7 +91,6 @@ public class NewcatChooseFragment extends android.support.v4.app.Fragment {
             }
         });
         Typeface customFont = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/AustieBostKittenKlub.ttf");
-        //chooseCharacterHeader.setTypeface(customFont);
         swipeL.setTypeface(customFont);
         swipeR.setTypeface(customFont);
     }

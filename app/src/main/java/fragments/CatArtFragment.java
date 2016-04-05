@@ -16,7 +16,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.planis.johannes.feedtheart.bambino.R;
 
-import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -24,8 +23,6 @@ import activities.CatActivity;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import catactivity.ArtObject;
-import events.ArtUpdatedEvent;
 import model.Art;
 import model.ArtApiEndpointInterface;
 import model.Constants;
@@ -39,7 +36,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by JOHANNES on 8/5/2015.
  */
 public class CatArtFragment extends Fragment {
-    ArtObject object;
     @Bind(R.id.cat_art_header)
     TextView catArtHeader;
     @Bind(R.id.cat_art_image_view)
@@ -93,16 +89,7 @@ public class CatArtFragment extends Fragment {
         Glide.with(this).load(art.getImageUrl()).into(catArtImageView);
     }
 
-    public void updateArt(ArtObject art) {
 
-        catArtTitle.setText(art.getName());
-        catArtAuthor.setText(art.getAuthor());
-        catArtYear.setText(art.getYear());
-        catArtLocation.setText(art.getLocation());
-        catArtType.setText(art.getType());
-        catArtDescription.setText(art.getDescription());
-        Glide.with(this).load(art.getImage_url()).into(catArtImageView);
-    }
 
 
     public void refreshCatArt() {
@@ -128,10 +115,6 @@ public class CatArtFragment extends Fragment {
     }
 
 
-    @Subscribe
-    public void onEvent(ArtUpdatedEvent event) {
-
-    }
 
 
     public void downloadArt() {
@@ -173,9 +156,6 @@ public class CatArtFragment extends Fragment {
 
     }
 
-    public void loadLastArt() {
-
-    }
 
 
     private static final String TAG = "dama";

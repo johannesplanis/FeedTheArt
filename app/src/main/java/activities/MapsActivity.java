@@ -139,7 +139,6 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Vi
                         marker = map.addMarker(mOption);
                         counter = 1;
                     }
-                    //markerInfo = marker.getPosition().toString();
                 }
             });
 

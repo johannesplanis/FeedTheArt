@@ -23,7 +23,5 @@ public class CatSplashFragment extends Fragment{
         tv.setText(R.string.feed_the_art_i);
         tv.setTypeface(customFont);
         return view;
-
-
     }
 }

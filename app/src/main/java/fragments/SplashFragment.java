@@ -1,7 +1,5 @@
 package fragments;
 
-import android.app.Activity;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -27,27 +25,10 @@ public class SplashFragment extends Fragment{
                 container, false);
         TextView tv = (TextView) view.findViewById(R.id.splash_text_center);
 
-        //http://stackoverflow.com/questions/27588965/how-to-use-custom-font-in-android-studio
-        Typeface customFont = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/AustieBostKittenKlub.ttf");
         tv.setText("Feed The Art!");
-        //tv.setTypeface(customFont);
         return view;
 
 
     }
 
-    public interface OnItemSelectedListener {
-        public void onRssItemSelected(String link);
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-
-    }
-    @Override
-    public void onDetach() {
-        super.onDetach();
-
-    }
 }

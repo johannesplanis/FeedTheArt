@@ -30,7 +30,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import backgroundcat.BackgroundAlarmManager;
-import catactivity.ArtObject;
 import controllers.SettingsController;
 import controllers.SharedPreferencesController;
 import fragments.CatArtFragment;
@@ -45,7 +44,6 @@ import model.Tags;
 
 public class CatActivity extends BaseActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
-    public ArtObject artObject;
 
     SharedPreferencesController spc;
     SettingsController sc;
@@ -83,7 +81,6 @@ public class CatActivity extends BaseActivity implements GoogleApiClient.Connect
 
         startup();
 
-        artObject = new ArtObject();
         bam = new BackgroundAlarmManager(getApplicationContext());
 
     }

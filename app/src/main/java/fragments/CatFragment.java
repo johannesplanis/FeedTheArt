@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
@@ -36,8 +35,6 @@ import model.Tags;
 
 public class CatFragment extends Fragment {
 
-    // @Bind(R.id.cat_name_field)
-    // TextView catDialogTop;
     @Bind(R.id.cat_feedme_text)
     TextView catDialogBottom;
     @Bind(R.id.cat_menu_button)
@@ -54,12 +51,8 @@ public class CatFragment extends Fragment {
     TextView dialog;
 
     CatActivity activity;
-
-
-    String venueID;
     double value;
-    public String catName;
-    public Bitmap placeholderBitmap;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
