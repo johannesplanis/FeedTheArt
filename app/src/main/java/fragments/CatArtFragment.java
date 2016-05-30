@@ -10,11 +10,11 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.planis.johannes.feedtheart.bambino.R;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,11 +26,13 @@ import butterknife.OnClick;
 import model.Art;
 import model.ArtApiEndpointInterface;
 import model.Constants;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by JOHANNES on 8/5/2015.
@@ -86,10 +88,8 @@ public class CatArtFragment extends Fragment {
         catArtLocation.setText(art.getLocation());
         catArtType.setText(art.getType());
         catArtDescription.setText(art.getDescription());
-        Glide.with(this).load(art.getImageUrl()).into(catArtImageView);
+        Picasso.with(getActivity()).load(art.getImageUrl()).into(catArtImageView);
     }
-
-
 
 
     public void refreshCatArt() {
@@ -115,47 +115,50 @@ public class CatArtFragment extends Fragment {
     }
 
 
-
-
     public void downloadArt() {
         Log.d(TAG, "downloadArt: ");
         final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
         Retrofit retrofit = new Retrofit.Builder()
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .baseUrl(Constants.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
 
         ArtApiEndpointInterface apiService = retrofit.create(ArtApiEndpointInterface.class);
 
-        Call<JsonElement> call = apiService.getArt();
-        call.enqueue(new Callback<JsonElement>() {
-            @Override
-            public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
+        Observable<JsonElement> art = apiService.getArt();
 
-                JsonElement element = response.body();
-                String s  =element.toString();
+        art.subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<JsonElement>() {
+                    @Override
+                    public void onCompleted() {
 
-                try {
-                    JSONObject o = new JSONObject(s);
-                    JSONObject jsonObject = o.getJSONObject("dailyart");
-                    Art art = gson.fromJson(jsonObject.toString(),Art.class);
-                    updateArt(art);
-                    Log.d(TAG, "onResponse: "+art.toString());
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
+                    }
 
-            @Override
-            public void onFailure(Call<JsonElement> call, Throwable t) {
-                // Log error here since request failed
-                Log.d(TAG, "onFailure: ");
-            }
-        });
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(JsonElement jsonElement) {
+                        String s = jsonElement.toString();
+
+                        try {
+                            JSONObject o = new JSONObject(s);
+                            JSONObject jsonObject = o.getJSONObject("dailyart");
+                            Art art = gson.fromJson(jsonObject.toString(), Art.class);
+                            updateArt(art);
+                            Log.d(TAG, "onResponse: " + art.toString());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
 
     }
-
 
 
     private static final String TAG = "dama";

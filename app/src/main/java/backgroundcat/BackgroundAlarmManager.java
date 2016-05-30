@@ -8,7 +8,6 @@ import android.util.Log;
 
 /**
  *
- * class designed to deal with setting up and modifying Alarms inside the application
  *
  */
 public class BackgroundAlarmManager {
@@ -27,7 +26,6 @@ public class BackgroundAlarmManager {
         if (PendingIntent.getBroadcast(context, AlarmReceiver.CODE, intent, PendingIntent.FLAG_NO_CREATE)==null) {
 
             final PendingIntent pIntent =PendingIntent.getBroadcast(context, AlarmReceiver.CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-            //long firstTime = System.currentTimeMillis();
 
             AlarmManager alarm = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
@@ -37,6 +35,7 @@ public class BackgroundAlarmManager {
             Log.i("ALARM","ALREADY STARTED");
         }
     }
+
     //if alarm is existing, cancel it, cancel Pending Intent associated with it
     public void cancelAlarm(){
         Intent intent = new Intent(context,AlarmReceiver.class);

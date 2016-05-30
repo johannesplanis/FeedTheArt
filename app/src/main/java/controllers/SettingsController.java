@@ -52,13 +52,6 @@ public class SettingsController {
 
             this.notificationPermission = sp.getBoolean(SETTINGS_NOTIFICATION_PERMISSION,true);
 
-            //float coeff = sp.getFloat(SETTINGS_STARVING_SPEED_COEFF, DEFAULT_STARVING_SPEED);
-            //if (coeff >= 0f) {
-            //    this.starvingSpeed = coeff;
-            //} else {
-            //    this.starvingSpeed = DEFAULT_STARVING_SPEED;
-
-            //}
             this.sizeofLevelsArray = sp.getInt(SETTINGS_DEFAULT_ALARM_LEVELS_SIZE, DEFAULT_ALARM_LEVELS_SIZE);
 
             float[] helperArray = DEFAULT_ALARM_LEVELS;

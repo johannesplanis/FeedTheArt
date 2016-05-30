@@ -36,15 +36,10 @@ public class SharedPreferencesController {
         if(!sp.getString(key,"").equals("")){
             Log.i("SHARED PREFERENCES","not null w. key "+key+" and w. message: "+sp.getString(key,""));
         }
-        Log.i("CREATOR PUT","2");
         ed = sp.edit();
-        Log.i("CREATOR PUT","3");
         Gson gson = new Gson();
-        Log.i("CREATOR PUT","4");
         String serialized = gson.toJson(c);
-        Log.i("CREATOR PUT","5");
         ed.putString(key, serialized);
-        Log.i("CREATOR PUT", "6");
         ed.commit();
     }
 
@@ -63,7 +58,6 @@ public class SharedPreferencesController {
             cat = gson.fromJson(json,Cat.class);
         }   else{
             cat = new Cat();
-            Log.i("CAT_SP","Read null value, returned default value");
         }
         return cat;
     }

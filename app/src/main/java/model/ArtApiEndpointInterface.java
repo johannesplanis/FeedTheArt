@@ -2,8 +2,8 @@ package model;
 
 import com.google.gson.JsonElement;
 
-import retrofit2.Call;
 import retrofit2.http.GET;
+import rx.Observable;
 
 /**
  * Created by JOHANNES on 4/5/2016.
@@ -11,6 +11,6 @@ import retrofit2.http.GET;
 public interface ArtApiEndpointInterface {
 
     @GET("fta.php")
-    Call<JsonElement> getArt();
+    Observable<JsonElement> getArt();
 
 }
